@@ -1,0 +1,92 @@
+import 'dart:convert';
+
+import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../../core/storage/app_database.dart';
+import '../../../../core/storage/database_provider.dart';
+import '../../../../core/utils/result.dart';
+import '../../../../shared/domain/timeline_event_type.dart';
+import '../../domain/entities/new_medication.dart';
+import '../../domain/repositories/medications_repository.dart';
+
+class MedicationsRepositoryImpl implements MedicationsRepository {
+  MedicationsRepositoryImpl(this._db);
+
+  final AppDatabase _db;
+
+  static const _uuid = Uuid();
+
+  @override
+  Stream<List<Medication>> watchActive() =>
+      _db.medicationDao.watchActive();
+
+  @override
+  Stream<List<Medication>> watchEnded() => _db.medicationDao.watchEnded();
+
+  @override
+  Future<Result<void>> addManual(NewMedication medication) {
+    return Result.guard(() async {
+      await _db.transaction(() async {
+        await _db.medicationDao.upsert(MedicationsCompanion(
+          id: Value(_uuid.v4()),
+          name: Value(medication.name),
+          dose: Value(medication.name),
+          frequencyCode: Value(medication.frequencyCode),
+          purpose: Value(medication.purpose),
+          doctor: Value(medication.doctor),
+          scheduleGroup: Value(medication.scheduleGroup),
+          timingCuesJson: Value(jsonEncode(
+              [for (final cue in medication.timingCues) cue.name])),
+          scheduleNote: Value(medication.scheduleNote),
+          startDate: Value(medication.startDate),
+        ));
+        await _db.timelineDao.insert(TimelineEventsCompanion(
+          id: Value(_uuid.v4()),
+          type: const Value(TimelineEventType.medicationChange),
+          title: Value('Started ${medication.name}'),
+          subtitle: Value([
+            'Manual entry',
+            if (medication.doctor.isNotEmpty) medication.doctor,
+          ].join(' · ')),
+          occurredAt: Value(medication.startDate),
+        ));
+      });
+    });
+  }
+
+  @override
+  Future<Result<void>> endMedication(String id) {
+    return Result.guard(() async {
+      final active = await _db.medicationDao.watchActive().first;
+      final med = active.where((m) => m.id == id).firstOrNull;
+      if (med == null) return;
+      await _db.transaction(() async {
+        await _db.medicationDao.upsert(med
+            .toCompanion(false)
+            .copyWith(endDate: Value(DateTime.now())));
+        await _db.timelineDao.insert(TimelineEventsCompanion(
+          id: Value(_uuid.v4()),
+          type: const Value(TimelineEventType.medicationChange),
+          title: Value('Stopped ${med.name}'),
+          subtitle: const Value('Marked ended by caregiver'),
+          occurredAt: Value(DateTime.now()),
+        ));
+      });
+    });
+  }
+}
+
+final medicationsRepositoryProvider =
+    Provider<MedicationsRepository>((ref) {
+  return MedicationsRepositoryImpl(ref.watch(databaseProvider));
+});
+
+final activeMedicationsProvider = StreamProvider<List<Medication>>((ref) {
+  return ref.watch(medicationsRepositoryProvider).watchActive();
+});
+
+final endedMedicationsProvider = StreamProvider<List<Medication>>((ref) {
+  return ref.watch(medicationsRepositoryProvider).watchEnded();
+});

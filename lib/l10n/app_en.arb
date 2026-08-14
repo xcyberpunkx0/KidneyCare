@@ -1,0 +1,560 @@
+{
+  "@@locale": "en",
+  "appName": "KidneyCare",
+  "save": "Save",
+  "saving": "Saving…",
+  "preparing": "Preparing…",
+  "cancel": "Cancel",
+  "add": "Add",
+  "log": "Log",
+  "open": "Open",
+  "navHome": "Home",
+  "navLabs": "Labs",
+  "navDialysis": "Dialysis",
+  "navMedicines": "Medicines",
+  "navAsk": "Ask",
+  "captureDocument": "Capture a document",
+  "settingUpVault": "Setting up the vault…",
+  "switchToLightTheme": "Switch to light theme",
+  "switchToDarkTheme": "Switch to dark theme",
+  "openSettings": "Open settings",
+  "homeSearchHint": "Search reports, medicines, doctors…",
+  "needsAttention": "NEEDS ATTENTION · {count}",
+  "@needsAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todaysDoses": "Today's doses",
+  "dosesGiven": "{taken} of {total} given",
+  "@dosesGiven": {
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "folders": "Folders",
+  "allDocuments": "All documents",
+  "recentRecords": "Recent records",
+  "seeAll": "See all",
+  "nextDialysis": "NEXT DIALYSIS",
+  "notScheduled": "Not scheduled",
+  "inHours": "in {hours} h",
+  "@inHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "now": "now",
+  "addScheduleHint": "Add a dialysis schedule to see it here",
+  "lastSession": "last: {summary}",
+  "@lastSession": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "logSessionAction": "Log session",
+  "logSymptomAction": "Log symptom",
+  "doseTaken": "{medicine} at {time}, taken — tap to undo",
+  "@doseTaken": {
+    "placeholders": {
+      "medicine": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "doseMark": "{medicine} at {time}, tap to mark taken",
+  "@doseMark": {
+    "placeholders": {
+      "medicine": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "doseNext": "NEXT · {time}",
+  "@doseNext": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "folderFiles": "{count, plural, =1{1 file} other{{count} files}}",
+  "@folderFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderSemantics": "{name} folder, {count} files",
+  "@folderSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vitalDryWeight": "Dry weight",
+  "vitalHb": "Hb g/dL",
+  "vitalPotassium": "K⁺ mmol/L",
+  "vitalBpToday": "BP today",
+  "vitalAlbumin": "Albumin",
+  "vitalActiveMeds": "Active meds",
+  "attentionBelowRecheck": "below range — recheck due",
+  "attentionFallingMonths": "falling {months} months — recheck due",
+  "@attentionFallingMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "attentionAboveDiet": "above range — review diet with the care team",
+  "abnormalSemantics": "{label} {value}, abnormal",
+  "@abnormalSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "labs": "Labs",
+  "lastTest": "last test {date}",
+  "@lastTest": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "enterLabValuesManually": "Enter lab values manually",
+  "allValuesOn": "All values · {date}",
+  "@allValuesOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "noLabsTitle": "No lab results yet",
+  "noLabsMessage": "Capture a lab report, or type the values in yourself, to begin tracking trends.",
+  "enterValuesManually": "Enter values manually",
+  "labsUnavailableTitle": "Labs are unavailable",
+  "labsUnavailableMessage": "The stored lab history could not be read. Please restart the app.",
+  "belowRange": "below range",
+  "aboveRange": "above range",
+  "steady": "steady",
+  "rangeCaption": "{metric} · normal {min}–{max} · shaded = normal",
+  "@rangeCaption": {
+    "placeholders": {
+      "metric": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "noReadingsYet": "No readings yet",
+  "showMetricChart": "Show {metric} chart",
+  "@showMetricChart": {
+    "placeholders": {
+      "metric": {
+        "type": "String"
+      }
+    }
+  },
+  "enterLabValues": "Enter lab values",
+  "enterLabValuesCopy": "Type in the values from the report — leave anything blank that was not tested.",
+  "reportDate": "REPORT DATE",
+  "changeReportDate": "Change report date, currently {date}",
+  "@changeReportDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "kidneyFunction": "KIDNEY FUNCTION",
+  "bloodCounts": "BLOOD COUNTS",
+  "vitalsGroup": "VITALS",
+  "normalRangeHint": "normal {min}–{max} {unit}",
+  "@normalRangeHint": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "saveToTimeline": "Save to timeline",
+  "labValuesSaved": "Lab values saved to the timeline",
+  "invalidNumber": "One of the values is not a valid number.",
+  "medicines": "Medicines",
+  "nActive": "{count} active",
+  "@nActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "withFoodGroup": "WITH FOOD",
+  "byTheClockGroup": "BY THE CLOCK",
+  "endedMedicinesCollapsed": "Ended medicines ({count})  ▾",
+  "@endedMedicinesCollapsed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "endedMedicinesExpanded": "Ended medicines  ▴",
+  "endedOn": "Ended {date}",
+  "@endedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "ended": "Ended",
+  "noMedicinesTitle": "No medicines recorded",
+  "noMedicinesMessage": "Capture a prescription, or add medicines yourself, to build the list.",
+  "addMedicineManually": "Add a medicine manually",
+  "addAMedicine": "Add a medicine",
+  "addMedicineCopy": "For prescriptions given verbally or without a paper to photograph.",
+  "medicineStrength": "MEDICINE & STRENGTH",
+  "medicineStrengthHint": "e.g. Sevelamer 400 mg",
+  "pattern": "PATTERN",
+  "purpose": "PURPOSE",
+  "purposeHint": "e.g. Phosphate binder",
+  "prescribedBy": "PRESCRIBED BY",
+  "prescribedByHint": "e.g. Dr. Menon",
+  "whenTaken": "WHEN IS IT TAKEN?",
+  "timingCuesHint": "Timing cues (shown as icons on the card)",
+  "instructions": "INSTRUCTIONS",
+  "instructionsHint": "e.g. with every meal",
+  "addMedicineButton": "Add medicine",
+  "medicineAdded": "Medicine added",
+  "enterMedicineName": "Please enter the medicine name.",
+  "documents": "Documents",
+  "nScans": "{count} scans",
+  "@nScans": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "documentsSearchHint": "Search by hospital, doctor, tag…",
+  "filterAll": "All",
+  "noDocumentsTitle": "No documents found",
+  "noDocumentsMessage": "No reports match this view yet. Capture a prescription or lab report to begin building the patient's medical history.",
+  "documentsUnavailableTitle": "Documents are unavailable",
+  "documentsUnavailableMessage": "The stored library could not be read. Please restart the app.",
+  "documentNotFoundTitle": "Document not found",
+  "documentNotFoundMessage": "This record may have been removed from the vault.",
+  "extractedText": "EXTRACTED TEXT",
+  "fillFrame": "Fill the frame with the document",
+  "docInView": "prescription / lab report\nin view",
+  "pickFromLibrary": "Pick from photo library",
+  "takePhoto": "Take photo",
+  "adjustCorners": "Adjust the corners",
+  "retake": "Retake",
+  "usePhoto": "Use photo",
+  "preparingPhoto": "Preparing…",
+  "cropFailed": "The image could not be cropped. Please retake the photo.",
+  "readingDocument": "Reading the document",
+  "extractReassurance": "Medicines are checked against {name}'s history. Nothing is saved until you review it.",
+  "@extractReassurance": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "thePatient": "the patient",
+  "reviewExtraction": "Review extraction",
+  "fieldsRead": "{count} fields read",
+  "@fieldsRead": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fieldsNeedCheck": "{unchecked} of {total} fields need a check before saving",
+  "@fieldsNeedCheck": {
+    "placeholders": {
+      "unchecked": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "allFieldsChecked": "All fields checked — ready to save",
+  "pleaseVerifyField": "Please verify this field before saving.",
+  "checkedChip": "✓ checked",
+  "percentCheck": "{percent}% · check",
+  "@percentCheck": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "savedToTimeline": "Saved to the timeline",
+  "ask": "Ask",
+  "searchesAllDocuments": "searches all {count} documents",
+  "@searchesAllDocuments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "askIntro": "Ask anything about the medical history — medicines during an admission, lab trends, procedures. Answers cite the exact documents they come from.",
+  "askThinking": "Thinking…",
+  "askSuggestion1": "When was Hb above 10?",
+  "askSuggestion2": "What antibiotics were given during the June admission?",
+  "askSuggestion3": "Show all dialysis catheter procedures",
+  "sources": "SOURCES",
+  "openSource": "Open source: {title}",
+  "@openSource": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmWithDoctor": "Always confirm with the treating doctor before acting on this.",
+  "askInputHint": "Ask about the history…",
+  "sendQuestion": "Send question",
+  "timeline": "Timeline",
+  "timelineEmptyTitle": "The timeline is empty",
+  "timelineEmptyMessage": "No reports have been added yet. Capture your first prescription to begin building the patient's medical history.",
+  "search": "Search",
+  "globalSearchHint": "Reports, medicines, doctors, hospitals…",
+  "searchVaultTitle": "Search the whole vault",
+  "searchVaultMessage": "Medicines, doctors, hospitals, lab values and every scanned document — results appear as you type.",
+  "searchUnavailableTitle": "Search is unavailable",
+  "searchUnavailableMessage": "Something went wrong while searching. Please try again.",
+  "nothingFoundTitle": "Nothing found",
+  "nothingFoundMessage": "No records match this search yet.",
+  "sectionDocuments": "DOCUMENTS",
+  "sectionMedicines": "MEDICINES",
+  "sectionTimeline": "TIMELINE",
+  "settings": "Settings",
+  "patientDetails": "Patient details",
+  "patientDetailsSub": "Name, condition, dialysis schedule",
+  "emergencyCardTitle": "Emergency card",
+  "emergencyCardSub": "Condition, blood group, allergies — ready to show or send",
+  "reminders": "Reminders",
+  "remindersSub": "Dose times and two hours before dialysis",
+  "visitSummary": "Doctor-visit summary",
+  "visitSummarySub": "A one-page PDF of medicines, labs and recent events",
+  "exportBackup": "Export vault backup",
+  "exportBackupSub": "Share the full record as a JSON file",
+  "encryptionTitle": "On-device encryption",
+  "encryptionSub": "The vault database is encrypted with SQLCipher; the key never leaves this device",
+  "language": "Language",
+  "languageSub": "Follows the device unless you choose",
+  "languageSystem": "System",
+  "setUpVault": "Set up the vault",
+  "setUpVaultCopy": "A few details about the person you care for. Everything stays on this device, encrypted.",
+  "patientEditCopy": "Changes apply across the whole vault.",
+  "fullName": "FULL NAME",
+  "fullNameHint": "e.g. N. Ramachandran",
+  "age": "AGE",
+  "condition": "CONDITION",
+  "dialysisSchedule": "DIALYSIS SCHEDULE",
+  "tapTimeHint": "Tap a time to change it — each day can differ",
+  "sessionTimeOn": "Session time on {day}",
+  "@sessionTimeOn": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "changeSessionTime": "Change session time on {day}, currently {time}",
+  "@changeSessionTime": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dialysisCentre": "DIALYSIS CENTRE",
+  "dialysisCentreHint": "e.g. Nephron Centre",
+  "dryWeightKgLabel": "DRY WEIGHT (KG)",
+  "bloodGroup": "BLOOD GROUP",
+  "allergies": "ALLERGIES",
+  "allergiesHint": "e.g. Penicillin — leave blank if none",
+  "emergencyContact": "EMERGENCY CONTACT",
+  "emergencyContactHint": "e.g. Aditya (son) · 98xxxxxx21",
+  "createVault": "Create the vault",
+  "saveChanges": "Save changes",
+  "exploreSampleData": "Explore with sample data instead",
+  "fillNameAge": "Please fill in the name and a valid age.",
+  "dialysis": "Dialysis",
+  "nLogged": "{count} logged",
+  "@nLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionHistory": "Session history",
+  "noSessionsTitle": "No sessions logged yet",
+  "noSessionsMessage": "After each dialysis, log the session here — weights, fluid removed, and how it went.",
+  "logASession": "Log a session",
+  "logSessionCopy": "Today's dialysis, in the record. Fill what you know — everything except duration is optional.",
+  "duration": "DURATION",
+  "preWeightKgLabel": "PRE WEIGHT (KG)",
+  "postWeightKgLabel": "POST WEIGHT (KG)",
+  "ufRemoved": "UF REMOVED (L)",
+  "bpSys": "BP SYS",
+  "bpDia": "BP DIA",
+  "howDidItGo": "HOW DID IT GO?",
+  "orTypeNote": "or type a note…",
+  "saveSession": "Save session",
+  "sessionLogged": "Session logged",
+  "logged": "Logged",
+  "noteNoCramps": "no cramps",
+  "noteCramps": "cramps",
+  "noteBpDipped": "BP dipped",
+  "noteFeltWeak": "felt weak after",
+  "noteWentWell": "went well",
+  "logASymptom": "Log a symptom",
+  "logSymptomCopy": "What you notice between sessions matters at the next appointment. Ten seconds now saves a forgotten detail later.",
+  "observed": "OBSERVED",
+  "note": "NOTE",
+  "symptomNoteHint": "e.g. after climbing stairs, since yesterday evening…",
+  "notedOnTimeline": "Noted on the timeline",
+  "symptomFatigue": "Fatigue",
+  "symptomCramps": "Cramps",
+  "symptomSwelling": "Swelling",
+  "symptomBreathlessness": "Breathlessness",
+  "symptomNausea": "Nausea",
+  "symptomDizziness": "Dizziness",
+  "symptomLowBp": "Low BP",
+  "symptomFever": "Fever",
+  "symptomItching": "Itching",
+  "symptomPoorAppetite": "Poor appetite",
+  "symptomChestDiscomfort": "Chest discomfort",
+  "symptomAccessSitePain": "Access site pain",
+  "emergencyCardCopy": "For any hospital visit — the first minute of context, ready to show or send.",
+  "shareCard": "Share card",
+  "allergiesLabel": "ALLERGIES",
+  "noneKnown": "None known",
+  "dialysisCentreLabel": "DIALYSIS CENTRE",
+  "medicinesLabel": "MEDICINES",
+  "emergencyContactLabel": "EMERGENCY CONTACT",
+  "noPatientTitle": "No patient details yet",
+  "noPatientMessage": "Fill in the patient profile first.",
+  "docTypeLabReport": "Lab report",
+  "docTypePrescription": "Prescription",
+  "docTypeDischargeSummary": "Discharge summary",
+  "docTypeBill": "Bill",
+  "docTypeHandwrittenNote": "Handwritten note",
+  "docTypeScan": "Scan",
+  "eventAdmission": "Admission",
+  "eventProcedure": "Procedure",
+  "eventMedicationChange": "Medication change",
+  "eventDialysis": "Dialysis",
+  "eventLabReport": "Lab report",
+  "eventPrescription": "Prescription",
+  "eventDoctorVisit": "Doctor visit",
+  "eventBill": "Hospital bill",
+  "eventDischarge": "Discharge summary",
+  "eventSymptom": "Symptom",
+  "groupWithFood": "With food",
+  "groupByClock": "By the clock",
+  "groupWeekly": "Weekly",
+  "cueMorning": "Morning",
+  "cueNight": "Night",
+  "cueBeforeFood": "Before food",
+  "cueWithFood": "With food",
+  "cueDialysisDayOnly": "Dialysis day only",
+  "dayMon": "Mon",
+  "dayTue": "Tue",
+  "dayWed": "Wed",
+  "dayThu": "Thu",
+  "dayFri": "Fri",
+  "daySat": "Sat",
+  "daySun": "Sun",
+  "folderLabReports": "Lab reports",
+  "folderPrescriptions": "Prescriptions",
+  "folderDischarge": "Discharge",
+  "folderBills": "Bills",
+  "reportDateDialogTitle": "Report date",
+  "confidenceVerified": "Confidence {percent} percent, verified",
+  "confidenceNeedsCheck": "Confidence {percent} percent, needs verification",
+  "@confidenceVerified": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "@confidenceNeedsCheck": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "otherConditions": "OTHER CONDITIONS",
+  "otherConditionsHint": "anything else, comma separated",
+  "otherConditionsLabel": "OTHER CONDITIONS",
+  "comorbidityDiabetes": "Diabetes",
+  "comorbidityHypertension": "Hypertension",
+  "comorbidityHeartDisease": "Heart disease",
+  "comorbidityThyroid": "Thyroid disorder",
+  "comorbidityPancreatitis": "Chronic pancreatitis",
+  "geminiKeyTitle": "Gemini API key",
+  "geminiKeySubOn": "Key added — AI capture and Ask are on",
+  "geminiKeySubOff": "Paste your own key to turn on AI features",
+  "geminiKeyHint": "Paste your key here",
+  "geminiKeyHelp": "Free at aistudio.google.com. Stored only on this device, in secure storage.",
+  "geminiKeyRemove": "Remove key"
+}
