@@ -95,8 +95,10 @@ class ClaimsRepositoryImpl implements ClaimsRepository {
         await _db.claimDao.upsertClaim(claim
             .toCompanion(true)
             .copyWith(title: Value(title), policyId: Value(policyId)));
+        // One-shot read: a stream query would not emit until this
+        // transaction commits, deadlocking the transaction on itself.
         final current =
-            await _db.claimDao.watchDocumentsForClaim(claimId).first;
+            await _db.claimDao.getDocumentsForClaim(claimId);
         for (final doc in current) {
           if (!documentIds.contains(doc.id)) {
             await _db.claimDao.detachDocument(claimId, doc.id);

@@ -45,6 +45,17 @@ class ClaimDao extends DatabaseAccessor<AppDatabase> with _$ClaimDaoMixin {
         (rows) => rows.map((row) => row.readTable(documents)).toList());
   }
 
+  Future<List<Document>> getDocumentsForClaim(String claimId) async {
+    final query = select(documents).join([
+      innerJoin(
+          claimDocuments, claimDocuments.documentId.equalsExp(documents.id)),
+    ])
+      ..where(claimDocuments.claimId.equals(claimId))
+      ..orderBy([OrderingTerm.desc(documents.documentDate)]);
+    final rows = await query.get();
+    return rows.map((row) => row.readTable(documents)).toList();
+  }
+
   Stream<List<ClaimDocument>> watchAllLinks() =>
       select(claimDocuments).watch();
 
