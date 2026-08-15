@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_search_bar.dart';
 import '../../../../core/widgets/capture_button.dart';
 import '../../../../core/widgets/record_tile.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../../claims/presentation/widgets/claims_glance_card.dart';
 import '../../../patient/data/repository_impl/patient_repository_impl.dart';
 import '../controllers/home_providers.dart';
 import '../widgets/attention_card.dart';
@@ -77,6 +78,7 @@ class HomePage extends ConsumerWidget {
                   next: nextDialysis, last: lastDialysis),
             ),
             const QuickActionsRow(),
+            const ClaimsGlanceCard(),
             SectionHeader(
               title: l10n.todaysDoses,
               trailingNote: doses.isEmpty
