@@ -1009,6 +1009,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get claimsAction => 'क्लेम';
 
   @override
+  String get claimsEmptyTitle => 'अभी कोई क्लेम नहीं';
+
+  @override
   String get claimsEmpty =>
       'अभी कोई क्लेम नहीं। वॉल्ट के बिलों को एक क्लेम में जोड़ें और निपटान तक ट्रैक करें।';
 

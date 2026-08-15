@@ -303,6 +303,7 @@
   "eventClaim": "बीमा क्लेम",
   "claimsTitle": "क्लेम",
   "claimsAction": "क्लेम",
+  "claimsEmptyTitle": "अभी कोई क्लेम नहीं",
   "claimsEmpty": "अभी कोई क्लेम नहीं। वॉल्ट के बिलों को एक क्लेम में जोड़ें और निपटान तक ट्रैक करें।",
   "claimsYtdLine": "इस साल {claimed} क्लेम किया · {recovered} वापस मिला",
   "unclaimedBillsChip": "{count} बिना क्लेम {count, plural, =1{बिल} other{बिल}}",

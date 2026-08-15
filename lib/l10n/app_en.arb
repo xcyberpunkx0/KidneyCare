@@ -560,6 +560,7 @@
   "eventClaim": "Insurance claim",
   "claimsTitle": "Claims",
   "claimsAction": "Claims",
+  "claimsEmptyTitle": "No claims yet",
   "claimsEmpty": "No claims yet. Bundle bills from the vault into a claim and track it to settlement.",
   "claimsYtdLine": "{claimed} claimed · {recovered} recovered this year",
   "@claimsYtdLine": {

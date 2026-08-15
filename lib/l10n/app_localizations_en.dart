@@ -1014,6 +1014,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get claimsAction => 'Claims';
 
   @override
+  String get claimsEmptyTitle => 'No claims yet';
+
+  @override
   String get claimsEmpty =>
       'No claims yet. Bundle bills from the vault into a claim and track it to settlement.';
 

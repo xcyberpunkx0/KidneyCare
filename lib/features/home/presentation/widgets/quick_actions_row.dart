@@ -33,6 +33,14 @@ class QuickActionsRow extends StatelessWidget {
               onTap: () => context.pushNamed('symptomLog'),
             ),
           ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _ActionChip(
+              icon: Icons.receipt_long_outlined,
+              label: l10n.claimsAction,
+              onTap: () => context.pushNamed('claims'),
+            ),
+          ),
         ],
       ),
     );

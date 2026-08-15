@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/ask/presentation/pages/ask_page.dart';
 import '../../features/capture/presentation/pages/capture_flow_page.dart';
+import '../../features/claims/presentation/pages/claim_detail_page.dart';
+import '../../features/claims/presentation/pages/claim_edit_page.dart';
+import '../../features/claims/presentation/pages/claims_page.dart';
 import '../../features/dialysis/presentation/pages/dialysis_page.dart';
 import '../../features/dialysis/presentation/pages/log_session_page.dart';
 import '../../features/documents/presentation/pages/document_viewer_page.dart';
@@ -180,6 +183,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoutes.searchName,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const SearchPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.claims,
+        name: AppRoutes.claimsName,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ClaimsPage(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            name: 'claimEdit',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ClaimEditPage(
+              claimId: state.uri.queryParameters['id'],
+            ),
+          ),
+          GoRoute(
+            path: ':id',
+            name: 'claimDetail',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ClaimDetailPage(
+              claimId: state.pathParameters['id']!,
+            ),
+          ),
+        ],
       ),
     ],
   );

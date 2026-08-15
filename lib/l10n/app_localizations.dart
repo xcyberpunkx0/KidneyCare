@@ -1916,6 +1916,12 @@ abstract class AppLocalizations {
   /// **'Claims'**
   String get claimsAction;
 
+  /// No description provided for @claimsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No claims yet'**
+  String get claimsEmptyTitle;
+
   /// No description provided for @claimsEmpty.
   ///
   /// In en, this message translates to:
