@@ -4,15 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../shared/domain/claim_deadlines.dart';
 import '../storage/app_database.dart';
 import '../storage/database_provider.dart';
 import '../storage/preferences_provider.dart';
 
-/// Local reminders: one notification per pending dose today, and one
-/// two hours before the next dialysis session.
+/// Local reminders: one notification per pending dose today, one two
+/// hours before the next dialysis session, and one five days before an
+/// unclaimed bill's insurance claim window closes.
 ///
 /// Schedules are inexact (no exact-alarm permission needed) and are
-/// rebuilt whenever doses or the session change, so marking a dose taken
+/// rebuilt whenever doses, the session, or the unclaimed-bills/policies
+/// change, so marking a dose taken or attaching a bill to a claim
 /// silences its reminder.
 class ReminderService {
   ReminderService(this._plugin);
@@ -33,6 +36,15 @@ class ReminderService {
     channelDescription: 'Reminder before each dialysis session',
     importance: Importance.high,
     priority: Priority.high,
+  );
+
+  static const _claimChannel = AndroidNotificationDetails(
+    'claims',
+    'Insurance claim reminders',
+    channelDescription:
+        'A reminder before an unclaimed bill passes its claim window',
+    importance: Importance.defaultImportance,
+    priority: Priority.defaultPriority,
   );
 
   bool _initialized = false;
@@ -60,6 +72,7 @@ class ReminderService {
     required bool enabled,
     required List<Dose> todaysDoses,
     required DialysisSession? nextSession,
+    required List<BillReminder> billReminders,
   }) async {
     try {
       await initialize();
@@ -95,6 +108,18 @@ class ReminderService {
                 const NotificationDetails(android: _sessionChannel),
           );
         }
+      }
+
+      for (final reminder in billReminders) {
+        if (!reminder.at.isAfter(now)) continue;
+        await _schedule(
+          id: reminder.id,
+          at: reminder.at,
+          title: 'Bill not claimed yet — ${reminder.billTitle}',
+          body: '${reminder.daysLeft} days left in the claim window. '
+              'Attach it to a claim in KidneyCare.',
+          details: const NotificationDetails(android: _claimChannel),
+        );
       }
     } catch (error) {
       // Reminders are best-effort; a scheduling failure must never take
@@ -171,15 +196,41 @@ final _nextSessionProvider = StreamProvider<DialysisSession?>((ref) {
       .watchNextSession(DateTime.now());
 });
 
-/// Rebuilds the notification plan whenever doses, the next session, or
-/// the toggle change. Watched once from the app root.
+final _unclaimedBillsForRemindersProvider =
+    StreamProvider<List<Document>>((ref) {
+  return ref.watch(databaseProvider).claimDao.watchUnclaimedBills();
+});
+
+final _policiesForRemindersProvider =
+    StreamProvider<List<InsurancePolicy>>((ref) {
+  return ref.watch(databaseProvider).claimDao.watchPolicies();
+});
+
+/// Rebuilds the notification plan whenever doses, the next session, the
+/// unclaimed bills / policies, or the toggle change. Watched once from
+/// the app root.
 final reminderSyncProvider = Provider<void>((ref) {
   final enabled = ref.watch(remindersEnabledProvider);
   final doses = ref.watch(_todaysDosesProvider).value ?? const <Dose>[];
   final next = ref.watch(_nextSessionProvider).value;
+  final bills =
+      ref.watch(_unclaimedBillsForRemindersProvider).value ?? const [];
+  final policies =
+      ref.watch(_policiesForRemindersProvider).value ?? const [];
+  final billReminders = policies.isEmpty
+      ? const <BillReminder>[]
+      : planBillReminders(
+          bills: [
+            for (final bill in bills)
+              (title: bill.title, date: bill.documentDate),
+          ],
+          windowDays: policies.first.claimWindowDays,
+          now: DateTime.now(),
+        );
   Future.microtask(() => ref.read(reminderServiceProvider).sync(
         enabled: enabled,
         todaysDoses: doses,
         nextSession: next,
+        billReminders: billReminders,
       ));
 });
