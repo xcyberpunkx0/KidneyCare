@@ -11,6 +11,7 @@ import 'package:recora/core/storage/database_provider.dart';
 import 'package:recora/core/theme/app_theme.dart';
 import 'package:recora/features/claims/presentation/pages/claim_edit_page.dart';
 import 'package:recora/l10n/app_localizations.dart';
+import 'package:recora/shared/domain/claim_status.dart';
 import 'package:recora/shared/domain/document_type.dart';
 
 GoRouter _router() => GoRouter(
@@ -79,6 +80,16 @@ void main() {
     ));
   }
 
+  Future<void> addDraftClaim(String id, String title, {String? policyId}) {
+    return db.claimDao.upsertClaim(ClaimsCompanion.insert(
+      id: id,
+      policyId: policyId == null ? const Value.absent() : Value(policyId),
+      title: title,
+      status: ClaimStatus.draft,
+      createdAt: DateTime(2026, 8, 1),
+    ));
+  }
+
   Future<void> addBill(String id) {
     return db.documentDao.upsert(DocumentsCompanion(
       id: Value(id),
@@ -141,6 +152,36 @@ void main() {
     expect(links, hasLength(1));
     expect(links.first.documentId, 'bill-1');
     expect(links.first.claimId, claims.first.id);
+    await _unmount(tester);
+  });
+
+  testWidgets(
+      'editing a claim with no linked policy shows "none" selected even '
+      'when exactly one policy now exists, and choosing it persists the link',
+      (tester) async {
+    await addPolicy('p1', 'Star Health', 'POL-1');
+    await addDraftClaim('c1', 'August bundle', policyId: null);
+
+    await _pumpToClaimEditor(tester, db, claimId: 'c1');
+
+    // The dropdown must show "none" — never silently the sole policy —
+    // because the claim's stored policyId is actually null.
+    expect(find.text('No policy'), findsOneWidget);
+    expect(find.text('Star Health · POL-1'), findsNothing);
+
+    await tester.tap(find.byType(DropdownButtonFormField<String?>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Star Health · POL-1'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
+
+    final claim = await (db.select(db.claims)
+          ..where((c) => c.id.equals('c1')))
+        .getSingle();
+    expect(claim.policyId, 'p1');
+    expect(find.text('base'), findsOneWidget);
     await _unmount(tester);
   });
 }

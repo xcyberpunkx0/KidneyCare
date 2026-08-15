@@ -149,12 +149,13 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
             if (policies.isEmpty)
               Text(l10n.claimNoPolicyYet,
                   style: typo.caption.copyWith(color: colors.muted))
-            else if (policies.length == 1)
-              Text(
-                '${l10n.claimPolicyLabel}: ${_policyLabel(policies.first)}',
-                style: typo.body,
-              )
             else
+              // Always the dropdown — even with a single policy — so the
+              // control and `state.policyId` can never disagree about
+              // which policy (if any) is actually linked. A read-only
+              // label here previously showed the sole policy as selected
+              // even when the claim's stored policyId was null (e.g. a
+              // claim created before any policy existed).
               DropdownButtonFormField<String?>(
                 // DropdownButtonFormField only applies `initialValue` once
                 // per FormField instance; keying it on the resolved value
