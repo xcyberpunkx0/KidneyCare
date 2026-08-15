@@ -24,7 +24,7 @@ New tables in `lib/core/storage/tables.dart`, accessed via a new `ClaimDao`
 ### InsurancePolicies
 | column | type | notes |
 |---|---|---|
-| id | int pk autoincrement | |
+| id | text pk (UUID, matching all existing tables) | |
 | insurerName | text | |
 | policyNumber | text | |
 | tpaName | text nullable | |
@@ -37,8 +37,8 @@ exactly one.
 ### Claims
 | column | type | notes |
 |---|---|---|
-| id | int pk autoincrement | |
-| policyId | int nullable, FK → InsurancePolicies | |
+| id | text pk (UUID) | |
+| policyId | text nullable, FK → InsurancePolicies | |
 | title | text | e.g. "July dialysis + medicines" |
 | status | text enum `ClaimStatus` | |
 | createdAt | datetime | |
@@ -55,7 +55,8 @@ documentId). A document's **unclaimed** state is *derived by query* (a bill
 with no junction row), never stored.
 
 ### ClaimChecklistItems
-`id`, `claimId` FK, `label` text, `isDone` bool. New claims are pre-seeded
+`id` text pk (UUID), `claimId` FK, `label` text, `isDone` bool, `sortOrder`
+int. New claims are pre-seeded
 from a default template (claim form, original bills, prescription copy, lab
 reports, policy/ID copy); items are editable per claim.
 
