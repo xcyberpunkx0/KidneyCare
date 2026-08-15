@@ -147,4 +147,36 @@ void main() {
     expect(claim.claimedAmountPaise, isNull);
     expect(claim.approvedAmountPaise, isNull);
   });
+
+  test('reopenAsDraft writes a timeline event', () async {
+    await addBill('b1');
+    final id = (await repo.createClaim(
+      title: 'Bundle',
+      policyId: null,
+      documentIds: ['b1'],
+      checklistLabels: [],
+    ))
+        .valueOrNull!;
+    await repo.markSubmitted(
+      claimId: id,
+      submittedOn: DateTime(2026, 8, 15),
+      claimedAmountPaise: 500000,
+      insurerRef: '',
+    );
+    await repo.recordOutcome(
+      claimId: id,
+      outcome: ClaimStatus.rejected,
+      settledOn: DateTime(2026, 9, 1),
+    );
+
+    await repo.reopenAsDraft(id);
+
+    final claim = (await db.claimDao.getClaimById(id))!;
+    expect(claim.status, ClaimStatus.draft);
+
+    final events = await db.timelineDao.getPage(limit: 10, offset: 0);
+    final reopenedEvents =
+        events.where((e) => e.title == 'Claim reopened').toList();
+    expect(reopenedEvents, hasLength(1));
+  });
 }

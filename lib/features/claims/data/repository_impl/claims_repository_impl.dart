@@ -189,19 +189,26 @@ class ClaimsRepositoryImpl implements ClaimsRepository {
         throw const ValidationFailure(
             message: 'Only a rejected claim can be reopened.');
       }
-      await _db.claimDao.upsertClaim(ClaimsCompanion(
-        id: Value(claim.id),
-        policyId: Value(claim.policyId),
-        title: Value(claim.title),
-        status: const Value(ClaimStatus.draft),
-        createdAt: Value(claim.createdAt),
-        submittedOn: const Value(null),
-        settledOn: const Value(null),
-        claimedAmountPaise: const Value(null),
-        approvedAmountPaise: const Value(null),
-        insurerRef: const Value(''),
-        note: Value(claim.note),
-      ));
+      await _db.transaction(() async {
+        await _db.claimDao.upsertClaim(ClaimsCompanion(
+          id: Value(claim.id),
+          policyId: Value(claim.policyId),
+          title: Value(claim.title),
+          status: const Value(ClaimStatus.draft),
+          createdAt: Value(claim.createdAt),
+          submittedOn: const Value(null),
+          settledOn: const Value(null),
+          claimedAmountPaise: const Value(null),
+          approvedAmountPaise: const Value(null),
+          insurerRef: const Value(''),
+          note: Value(claim.note),
+        ));
+        await _timeline(
+          title: 'Claim reopened',
+          subtitle: claim.title,
+          occurredAt: DateTime.now(),
+        );
+      });
     });
   }
 
