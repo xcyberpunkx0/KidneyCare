@@ -7,6 +7,7 @@ import '../../features/capture/presentation/pages/capture_flow_page.dart';
 import '../../features/claims/presentation/pages/claim_detail_page.dart';
 import '../../features/claims/presentation/pages/claim_edit_page.dart';
 import '../../features/claims/presentation/pages/claims_page.dart';
+import '../../features/claims/presentation/pages/policy_edit_page.dart';
 import '../../features/dialysis/presentation/pages/dialysis_page.dart';
 import '../../features/dialysis/presentation/pages/log_session_page.dart';
 import '../../features/documents/presentation/pages/document_viewer_page.dart';
@@ -165,6 +166,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'emergencyCard',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const EmergencyCardPage(),
+      ),
+      GoRoute(
+        path: '/policy',
+        name: 'policyEdit',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const PolicyEditPage(),
       ),
       GoRoute(
         path: '/medication-entry',
