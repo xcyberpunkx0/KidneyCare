@@ -1897,6 +1897,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove key'**
   String get geminiKeyRemove;
+
+  /// No description provided for @eventClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance claim'**
+  String get eventClaim;
+
+  /// No description provided for @claimsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Claims'**
+  String get claimsTitle;
+
+  /// No description provided for @claimsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Claims'**
+  String get claimsAction;
+
+  /// No description provided for @claimsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No claims yet. Bundle bills from the vault into a claim and track it to settlement.'**
+  String get claimsEmpty;
+
+  /// No description provided for @claimsYtdLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{claimed} claimed · {recovered} recovered this year'**
+  String claimsYtdLine(String claimed, String recovered);
+
+  /// No description provided for @unclaimedBillsChip.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unclaimed {count, plural, =1{bill} other{bills}}'**
+  String unclaimedBillsChip(int count);
+
+  /// No description provided for @claimSectionAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get claimSectionAttention;
+
+  /// No description provided for @claimSectionInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get claimSectionInProgress;
+
+  /// No description provided for @claimSectionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Settled & rejected'**
+  String get claimSectionHistory;
+
+  /// No description provided for @claimDocCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{document} other{documents}}'**
+  String claimDocCount(int count);
+
+  /// No description provided for @claimStatusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get claimStatusDraft;
+
+  /// No description provided for @claimStatusSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get claimStatusSubmitted;
+
+  /// No description provided for @claimStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get claimStatusApproved;
+
+  /// No description provided for @claimStatusPartiallySettled.
+  ///
+  /// In en, this message translates to:
+  /// **'Partially settled'**
+  String get claimStatusPartiallySettled;
+
+  /// No description provided for @claimStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get claimStatusRejected;
+
+  /// No description provided for @claimNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New claim'**
+  String get claimNew;
+
+  /// No description provided for @claimEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit claim'**
+  String get claimEdit;
+
+  /// No description provided for @claimTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim title'**
+  String get claimTitleLabel;
+
+  /// No description provided for @claimTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. August dialysis and medicines'**
+  String get claimTitleHint;
+
+  /// No description provided for @claimTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the claim a short title.'**
+  String get claimTitleRequired;
+
+  /// No description provided for @claimPolicyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy'**
+  String get claimPolicyLabel;
+
+  /// No description provided for @claimNoPolicyYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your policy in Settings to enable deadline reminders.'**
+  String get claimNoPolicyYet;
+
+  /// No description provided for @claimPickDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach documents'**
+  String get claimPickDocuments;
+
+  /// No description provided for @claimPickDocumentsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Unclaimed bills are pre-selected'**
+  String get claimPickDocumentsSub;
+
+  /// No description provided for @claimDocumentsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get claimDocumentsSection;
+
+  /// No description provided for @claimChecklistSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist'**
+  String get claimChecklistSection;
+
+  /// No description provided for @claimChecklistAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add checklist item…'**
+  String get claimChecklistAddHint;
+
+  /// No description provided for @claimAmountClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed'**
+  String get claimAmountClaimed;
+
+  /// No description provided for @claimAmountApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get claimAmountApproved;
+
+  /// No description provided for @claimAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount in ₹'**
+  String get claimAmountHint;
+
+  /// No description provided for @claimAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid amount in rupees.'**
+  String get claimAmountInvalid;
+
+  /// No description provided for @claimInsurerRefLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurer claim no.'**
+  String get claimInsurerRefLabel;
+
+  /// No description provided for @claimNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get claimNotesLabel;
+
+  /// No description provided for @claimMarkSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark submitted'**
+  String get claimMarkSubmitted;
+
+  /// No description provided for @claimRecordOutcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Record outcome'**
+  String get claimRecordOutcome;
+
+  /// No description provided for @claimReopen.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen as draft'**
+  String get claimReopen;
+
+  /// No description provided for @claimDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete claim'**
+  String get claimDelete;
+
+  /// No description provided for @claimDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this claim? Its documents stay in the vault.'**
+  String get claimDeleteConfirm;
+
+  /// No description provided for @claimSubmittedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted on'**
+  String get claimSubmittedOn;
+
+  /// No description provided for @claimSettledOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Settled on'**
+  String get claimSettledOn;
+
+  /// No description provided for @claimCreatedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Created on'**
+  String get claimCreatedOn;
+
+  /// No description provided for @claimNoDocsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach at least one document before submitting.'**
+  String get claimNoDocsError;
+
+  /// No description provided for @claimApprovedExceedsWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved amount is more than claimed — double-check the letter.'**
+  String get claimApprovedExceedsWarning;
+
+  /// No description provided for @claimOutcomeApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved in full'**
+  String get claimOutcomeApproved;
+
+  /// No description provided for @claimOutcomePartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Partially settled'**
+  String get claimOutcomePartial;
+
+  /// No description provided for @claimOutcomeRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get claimOutcomeRejected;
+
+  /// No description provided for @claimDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{day} other{days}} left to claim'**
+  String claimDaysLeft(int count);
+
+  /// No description provided for @claimOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Past claim window'**
+  String get claimOverdue;
+
+  /// No description provided for @claimAwaitingLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted {count} days ago — worth a follow-up call'**
+  String claimAwaitingLong(int count);
+
+  /// No description provided for @claimGlanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CLAIMS · {count}'**
+  String claimGlanceTitle(int count);
+
+  /// No description provided for @policyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance policy'**
+  String get policyTitle;
+
+  /// No description provided for @policySettingsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurer, policy number, claim window'**
+  String get policySettingsSub;
+
+  /// No description provided for @policyInsurerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurer'**
+  String get policyInsurerLabel;
+
+  /// No description provided for @policyNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy number'**
+  String get policyNumberLabel;
+
+  /// No description provided for @policyTpaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TPA (optional)'**
+  String get policyTpaLabel;
+
+  /// No description provided for @policyWindowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim window (days)'**
+  String get policyWindowLabel;
+
+  /// No description provided for @policyWindowInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the number of days bills stay claimable.'**
+  String get policyWindowInvalid;
+
+  /// No description provided for @policyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurer and policy number are required.'**
+  String get policyRequired;
+
+  /// No description provided for @checklistClaimForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed claim form'**
+  String get checklistClaimForm;
+
+  /// No description provided for @checklistOriginalBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Original bills'**
+  String get checklistOriginalBills;
+
+  /// No description provided for @checklistPrescriptionCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription copy'**
+  String get checklistPrescriptionCopy;
+
+  /// No description provided for @checklistLabReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab reports'**
+  String get checklistLabReports;
+
+  /// No description provided for @checklistPolicyIdCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy & ID copy'**
+  String get checklistPolicyIdCopy;
 }
 
 class _AppLocalizationsDelegate

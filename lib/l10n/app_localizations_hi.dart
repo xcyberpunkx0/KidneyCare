@@ -998,4 +998,229 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get geminiKeyRemove => 'कुंजी हटाएँ';
+
+  @override
+  String get eventClaim => 'बीमा क्लेम';
+
+  @override
+  String get claimsTitle => 'क्लेम';
+
+  @override
+  String get claimsAction => 'क्लेम';
+
+  @override
+  String get claimsEmpty =>
+      'अभी कोई क्लेम नहीं। वॉल्ट के बिलों को एक क्लेम में जोड़ें और निपटान तक ट्रैक करें।';
+
+  @override
+  String claimsYtdLine(String claimed, String recovered) {
+    return 'इस साल $claimed क्लेम किया · $recovered वापस मिला';
+  }
+
+  @override
+  String unclaimedBillsChip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'बिल',
+      one: 'बिल',
+    );
+    return '$count बिना क्लेम $_temp0';
+  }
+
+  @override
+  String get claimSectionAttention => 'ध्यान चाहिए';
+
+  @override
+  String get claimSectionInProgress => 'प्रगति में';
+
+  @override
+  String get claimSectionHistory => 'निपटाए और अस्वीकृत';
+
+  @override
+  String claimDocCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'दस्तावेज़',
+      one: 'दस्तावेज़',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get claimStatusDraft => 'ड्राफ़्ट';
+
+  @override
+  String get claimStatusSubmitted => 'जमा किया गया';
+
+  @override
+  String get claimStatusApproved => 'स्वीकृत';
+
+  @override
+  String get claimStatusPartiallySettled => 'आंशिक रूप से निपटाया';
+
+  @override
+  String get claimStatusRejected => 'अस्वीकृत';
+
+  @override
+  String get claimNew => 'नया क्लेम';
+
+  @override
+  String get claimEdit => 'क्लेम बदलें';
+
+  @override
+  String get claimTitleLabel => 'क्लेम का शीर्षक';
+
+  @override
+  String get claimTitleHint => 'जैसे अगस्त डायलिसिस और दवाइयाँ';
+
+  @override
+  String get claimTitleRequired => 'क्लेम को एक छोटा शीर्षक दें।';
+
+  @override
+  String get claimPolicyLabel => 'पॉलिसी';
+
+  @override
+  String get claimNoPolicyYet =>
+      'समय-सीमा रिमाइंडर के लिए सेटिंग्स में अपनी पॉलिसी जोड़ें।';
+
+  @override
+  String get claimPickDocuments => 'दस्तावेज़ जोड़ें';
+
+  @override
+  String get claimPickDocumentsSub => 'बिना क्लेम वाले बिल पहले से चुने हैं';
+
+  @override
+  String get claimDocumentsSection => 'दस्तावेज़';
+
+  @override
+  String get claimChecklistSection => 'चेकलिस्ट';
+
+  @override
+  String get claimChecklistAddHint => 'चेकलिस्ट आइटम जोड़ें…';
+
+  @override
+  String get claimAmountClaimed => 'क्लेम किया';
+
+  @override
+  String get claimAmountApproved => 'स्वीकृत';
+
+  @override
+  String get claimAmountHint => 'राशि ₹ में';
+
+  @override
+  String get claimAmountInvalid => 'रुपये में सही राशि लिखें।';
+
+  @override
+  String get claimInsurerRefLabel => 'बीमा क्लेम नंबर';
+
+  @override
+  String get claimNotesLabel => 'नोट';
+
+  @override
+  String get claimMarkSubmitted => 'जमा किया चिह्नित करें';
+
+  @override
+  String get claimRecordOutcome => 'नतीजा दर्ज करें';
+
+  @override
+  String get claimReopen => 'फिर से ड्राफ़्ट करें';
+
+  @override
+  String get claimDelete => 'क्लेम हटाएँ';
+
+  @override
+  String get claimDeleteConfirm =>
+      'यह क्लेम हटाएँ? दस्तावेज़ वॉल्ट में बने रहेंगे।';
+
+  @override
+  String get claimSubmittedOn => 'जमा करने की तारीख़';
+
+  @override
+  String get claimSettledOn => 'निपटान की तारीख़';
+
+  @override
+  String get claimCreatedOn => 'बनाने की तारीख़';
+
+  @override
+  String get claimNoDocsError =>
+      'जमा करने से पहले कम से कम एक दस्तावेज़ जोड़ें।';
+
+  @override
+  String get claimApprovedExceedsWarning =>
+      'स्वीकृत राशि क्लेम से ज़्यादा है — पत्र फिर से जाँचें।';
+
+  @override
+  String get claimOutcomeApproved => 'पूरा स्वीकृत';
+
+  @override
+  String get claimOutcomePartial => 'आंशिक रूप से निपटाया';
+
+  @override
+  String get claimOutcomeRejected => 'अस्वीकृत';
+
+  @override
+  String claimDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'दिन',
+      one: 'दिन',
+    );
+    return 'क्लेम के लिए $count $_temp0 बाक़ी';
+  }
+
+  @override
+  String get claimOverdue => 'क्लेम की समय-सीमा निकल गई';
+
+  @override
+  String claimAwaitingLong(int count) {
+    return '$count दिन पहले जमा किया — फ़ॉलो-अप कॉल करें';
+  }
+
+  @override
+  String claimGlanceTitle(int count) {
+    return 'क्लेम · $count';
+  }
+
+  @override
+  String get policyTitle => 'बीमा पॉलिसी';
+
+  @override
+  String get policySettingsSub => 'बीमा कंपनी, पॉलिसी नंबर, क्लेम अवधि';
+
+  @override
+  String get policyInsurerLabel => 'बीमा कंपनी';
+
+  @override
+  String get policyNumberLabel => 'पॉलिसी नंबर';
+
+  @override
+  String get policyTpaLabel => 'TPA (वैकल्पिक)';
+
+  @override
+  String get policyWindowLabel => 'क्लेम अवधि (दिन)';
+
+  @override
+  String get policyWindowInvalid =>
+      'बिल कितने दिन क्लेम हो सकते हैं, वह संख्या लिखें।';
+
+  @override
+  String get policyRequired => 'बीमा कंपनी और पॉलिसी नंबर ज़रूरी हैं।';
+
+  @override
+  String get checklistClaimForm => 'हस्ताक्षरित क्लेम फ़ॉर्म';
+
+  @override
+  String get checklistOriginalBills => 'मूल बिल';
+
+  @override
+  String get checklistPrescriptionCopy => 'पर्चे की कॉपी';
+
+  @override
+  String get checklistLabReports => 'लैब रिपोर्ट';
+
+  @override
+  String get checklistPolicyIdCopy => 'पॉलिसी और पहचान-पत्र की कॉपी';
 }

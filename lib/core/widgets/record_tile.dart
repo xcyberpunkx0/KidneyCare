@@ -128,6 +128,8 @@ class RecordTile extends StatelessWidget {
         (Icons.receipt_long_outlined, colors.purpleBg, colors.purple),
       TimelineEventType.symptom =>
         (Icons.monitor_heart_outlined, colors.amberBg, colors.amber),
+      TimelineEventType.claim =>
+        (Icons.receipt_long_outlined, colors.greenBg, colors.green),
     };
   }
 }
