@@ -28,20 +28,24 @@ class ClaimsGlanceCard extends ConsumerWidget {
     final policies =
         ref.watch(policiesProvider).value ?? const <InsurancePolicy>[];
 
+    // Same rule as reminder scheduling: an unclaimed bill isn't tied to
+    // a policy yet, so judge urgency by the shortest claim window.
+    final windowDays = policies.isEmpty
+        ? 0
+        : policies
+            .map((p) => p.claimWindowDays)
+            .reduce((a, b) => a < b ? a : b);
     final expiring = policies.isEmpty
         ? const <Document>[]
         : bills
             .where((b) =>
-                daysUntilDeadline(b.documentDate,
-                    policies.first.claimWindowDays, now) <=
-                7)
+                daysUntilDeadline(b.documentDate, windowDays, now) <= 7)
             .toList();
     final stale = staleSubmitted(claims, now);
 
     final lines = <String>[
       for (final bill in expiring.take(2))
-        switch (daysUntilDeadline(
-            bill.documentDate, policies.first.claimWindowDays, now)) {
+        switch (daysUntilDeadline(bill.documentDate, windowDays, now)) {
           < 0 => '${bill.title} — ${l10n.claimOverdue}',
           final days => '${bill.title} — ${l10n.claimDaysLeft(days)}',
         },
