@@ -119,6 +119,11 @@ class ClaimDao extends DatabaseAccessor<AppDatabase> with _$ClaimDaoMixin {
   Future<void> upsertPolicy(InsurancePoliciesCompanion entry) =>
       into(insurancePolicies).insertOnConflictUpdate(entry);
 
-  Future<void> deletePolicy(String id) =>
-      (delete(insurancePolicies)..where((t) => t.id.equals(id))).go();
+  Future<void> deletePolicy(String id) {
+    return transaction(() async {
+      await (update(claims)..where((c) => c.policyId.equals(id)))
+          .write(const ClaimsCompanion(policyId: Value(null)));
+      await (delete(insurancePolicies)..where((t) => t.id.equals(id))).go();
+    });
+  }
 }

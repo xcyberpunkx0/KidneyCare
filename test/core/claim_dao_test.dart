@@ -92,4 +92,27 @@ void main() {
     final items = await db.claimDao.watchChecklist('c1').first;
     expect(items.map((i) => i.label), ['Form', 'Bills', 'Reports']);
   });
+
+  test('deletePolicy clears policyId on referencing claims, keeps the claim',
+      () async {
+    await db.claimDao.upsertPolicy(InsurancePoliciesCompanion(
+      id: const Value('p1'),
+      insurerName: const Value('Acme Health'),
+      policyNumber: const Value('POL123'),
+    ));
+    await db.claimDao.upsertClaim(ClaimsCompanion(
+      id: const Value('c1'),
+      policyId: const Value('p1'),
+      title: const Value('Claim c1'),
+      status: const Value(ClaimStatus.draft),
+      createdAt: Value(DateTime(2026, 8, 1)),
+    ));
+
+    await db.claimDao.deletePolicy('p1');
+
+    expect(await db.claimDao.watchPolicies().first, isEmpty);
+    final claim = await db.claimDao.getClaimById('c1');
+    expect(claim, isNot(isNull));
+    expect(claim!.policyId, isNull);
+  });
 }
