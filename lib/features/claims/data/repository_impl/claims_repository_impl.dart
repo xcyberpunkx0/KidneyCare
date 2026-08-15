@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -231,12 +233,15 @@ class ClaimsRepositoryImpl implements ClaimsRepository {
   @override
   Future<Result<void>> addChecklistItem(String claimId, String label) {
     return Result.guard(() async {
-      final items = await _db.claimDao.watchChecklist(claimId).first;
+      final items = await _db.claimDao.getChecklist(claimId);
+      final sortOrder = items.isEmpty
+          ? 0
+          : items.map((i) => i.sortOrder).reduce(max) + 1;
       await _db.claimDao.upsertChecklistItem(ClaimChecklistItemsCompanion(
         id: Value(_uuid.v4()),
         claimId: Value(claimId),
         label: Value(label),
-        sortOrder: Value(items.length),
+        sortOrder: Value(sortOrder),
       ));
     });
   }

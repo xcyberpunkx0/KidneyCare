@@ -75,6 +75,16 @@ class ClaimDao extends DatabaseAccessor<AppDatabase> with _$ClaimDaoMixin {
     return query.watch();
   }
 
+  /// One-shot read of the checklist, same ordering as [watchChecklist].
+  /// Used inside transactions where a stream query would never emit
+  /// (it wouldn't fire until the enclosing transaction commits).
+  Future<List<ClaimChecklistItem>> getChecklist(String claimId) {
+    final query = select(claimChecklistItems)
+      ..where((t) => t.claimId.equals(claimId))
+      ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]);
+    return query.get();
+  }
+
   /// Bills that belong to no claim, oldest first — the ones whose
   /// submission window is running out soonest.
   Stream<List<Document>> watchUnclaimedBills() {

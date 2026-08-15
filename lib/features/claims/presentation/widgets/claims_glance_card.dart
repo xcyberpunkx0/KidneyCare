@@ -32,9 +32,7 @@ class ClaimsGlanceCard extends ConsumerWidget {
     // a policy yet, so judge urgency by the shortest claim window.
     final windowDays = policies.isEmpty
         ? 0
-        : policies
-            .map((p) => p.claimWindowDays)
-            .reduce((a, b) => a < b ? a : b);
+        : minClaimWindowDays(policies.map((p) => p.claimWindowDays));
     final expiring = policies.isEmpty
         ? const <Document>[]
         : bills
@@ -69,7 +67,7 @@ class ClaimsGlanceCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.claimGlanceTitle(lines.length),
+              l10n.claimGlanceTitle(expiring.length + stale.length),
               style:
                   typo.overline.copyWith(fontSize: 11, color: colors.amber),
             ),

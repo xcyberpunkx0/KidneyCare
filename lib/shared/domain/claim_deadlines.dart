@@ -62,3 +62,11 @@ List<BillReminder> planBillReminders({
   }
   return plan;
 }
+
+/// Shortest of a set of policy claim windows. An unclaimed bill isn't tied
+/// to a policy yet, so callers judge urgency by the tightest window: a
+/// reminder or deadline may fire early, never late. Callers pass raw ints
+/// (e.g. `policies.map((p) => p.claimWindowDays)`) so this file stays free
+/// of storage-layer imports.
+int minClaimWindowDays(Iterable<int> windows) =>
+    windows.reduce((a, b) => a < b ? a : b);

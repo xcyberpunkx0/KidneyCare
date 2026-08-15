@@ -33,6 +33,17 @@ Claim _claim({
   );
 }
 
+InsurancePolicy _policy(String id, {required int claimWindowDays}) {
+  return InsurancePolicy(
+    id: id,
+    insurerName: 'Insurer $id',
+    policyNumber: id,
+    tpaName: '',
+    claimWindowDays: claimWindowDays,
+    note: '',
+  );
+}
+
 Document _bill(String id, {DateTime? documentDate}) {
   return Document(
     id: id,
@@ -149,6 +160,29 @@ void main() {
 
     expect(find.textContaining('unclaimed'), findsOneWidget);
     expect(find.text('bill-1'), findsOneWidget);
+  });
+
+  testWidgets(
+      'unclaimed strip uses the shortest policy window, not the first one',
+      (tester) async {
+    final now = DateTime.now();
+    // With the 30-day policy alone the bill would still have 14 days left;
+    // the 15-day policy (listed second) puts it 1 day past its deadline.
+    // The strip must agree with Home/notifications and use the minimum.
+    final billDate = now.subtract(const Duration(days: 16));
+    await tester.pumpWidget(_host(
+      claims: const [],
+      unclaimed: [_bill('bill-1', documentDate: billDate)],
+      policies: [
+        _policy('p-long', claimWindowDays: 30),
+        _policy('p-short', claimWindowDays: 15),
+      ],
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('bill-1'), findsOneWidget);
+    expect(find.textContaining('Past claim window'), findsOneWidget);
+    expect(find.textContaining('left to claim'), findsNothing);
   });
 
   testWidgets('tapping the FAB navigates to claimEdit', (tester) async {

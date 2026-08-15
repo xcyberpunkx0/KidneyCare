@@ -15,6 +15,16 @@ void main() {
     });
   });
 
+  group('minClaimWindowDays', () {
+    test('returns the shortest window among several policies', () {
+      expect(minClaimWindowDays([30, 15, 45]), 15);
+    });
+
+    test('returns the sole window when there is one policy', () {
+      expect(minClaimWindowDays([20]), 20);
+    });
+  });
+
   group('planBillReminders', () {
     test('schedules 9 AM five days before the deadline, ids from 1000', () {
       final plan = planBillReminders(

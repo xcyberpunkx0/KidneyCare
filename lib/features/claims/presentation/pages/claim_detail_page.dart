@@ -34,9 +34,18 @@ class ClaimDetailPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _markSubmitted(
-      BuildContext context, WidgetRef ref, Claim claim) async {
-    final entered = await showDialog<({int paise, String ref})>(
+  Future<void> _markSubmitted(BuildContext context, WidgetRef ref,
+      Claim claim, List<Document> documents) async {
+    // The repo also guards this, but a snackbar with the localized
+    // message beats surfacing the repo's English failure text.
+    if (documents.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.claimNoDocsError)),
+      );
+      return;
+    }
+    final entered =
+        await showDialog<({int paise, String ref, DateTime submittedOn})>(
       context: context,
       builder: (_) => const _SubmitDialog(),
     );
@@ -45,7 +54,7 @@ class ClaimDetailPage extends ConsumerWidget {
       context,
       ref.read(claimsRepositoryProvider).markSubmitted(
             claimId: claim.id,
-            submittedOn: DateTime.now(),
+            submittedOn: entered.submittedOn,
             claimedAmountPaise: entered.paise,
             insurerRef: entered.ref,
           ),
@@ -54,7 +63,8 @@ class ClaimDetailPage extends ConsumerWidget {
 
   Future<void> _recordOutcome(
       BuildContext context, WidgetRef ref, Claim claim) async {
-    final entered = await showDialog<({ClaimStatus outcome, int? paise})>(
+    final entered = await showDialog<
+        ({ClaimStatus outcome, int? paise, DateTime settledOn})>(
       context: context,
       builder: (_) =>
           _OutcomeDialog(claimedPaise: claim.claimedAmountPaise),
@@ -65,7 +75,7 @@ class ClaimDetailPage extends ConsumerWidget {
       ref.read(claimsRepositoryProvider).recordOutcome(
             claimId: claim.id,
             outcome: entered.outcome,
-            settledOn: DateTime.now(),
+            settledOn: entered.settledOn,
             approvedAmountPaise: entered.paise,
           ),
     );
@@ -213,7 +223,8 @@ class ClaimDetailPage extends ConsumerWidget {
             const SizedBox(height: 20),
             switch (claim.status) {
               ClaimStatus.draft => FilledButton(
-                  onPressed: () => _markSubmitted(context, ref, claim),
+                  onPressed: () =>
+                      _markSubmitted(context, ref, claim, documents),
                   child: Text(l10n.claimMarkSubmitted),
                 ),
               ClaimStatus.submitted => FilledButton(
@@ -281,8 +292,9 @@ class _StatusChip extends StatelessWidget {
   }
 }
 
-/// Submission date is "now" by design; the dialog collects amount and the
-/// insurer's claim number.
+/// Submission date defaults to today but is editable — bills are often
+/// entered a few days after they were actually posted to the insurer.
+/// The dialog also collects amount and the insurer's claim number.
 class _SubmitDialog extends StatefulWidget {
   const _SubmitDialog();
 
@@ -293,6 +305,7 @@ class _SubmitDialog extends StatefulWidget {
 class _SubmitDialogState extends State<_SubmitDialog> {
   final _amount = TextEditingController();
   final _ref = TextEditingController();
+  DateTime _submittedOn = DateTime.now();
   String? _error;
 
   @override
@@ -302,13 +315,25 @@ class _SubmitDialogState extends State<_SubmitDialog> {
     super.dispose();
   }
 
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _submittedOn,
+      firstDate: DateTime(2020, 1, 1),
+      lastDate: DateTime.now(),
+      helpText: context.l10n.claimSubmittedOn,
+    );
+    if (picked != null) setState(() => _submittedOn = picked);
+  }
+
   void _confirm() {
     final paise = parsePaise(_amount.text);
     if (paise == null) {
       setState(() => _error = context.l10n.claimAmountInvalid);
       return;
     }
-    Navigator.pop(context, (paise: paise, ref: _ref.text.trim()));
+    Navigator.pop(context,
+        (paise: paise, ref: _ref.text.trim(), submittedOn: _submittedOn));
   }
 
   @override
@@ -320,6 +345,12 @@ class _SubmitDialogState extends State<_SubmitDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          _DateField(
+            label: l10n.claimSubmittedOn,
+            date: _submittedOn,
+            onTap: _pickDate,
+          ),
+          const SizedBox(height: 10),
           TextField(
             controller: _amount,
             autofocus: true,
@@ -363,6 +394,7 @@ class _OutcomeDialog extends StatefulWidget {
 class _OutcomeDialogState extends State<_OutcomeDialog> {
   final _amount = TextEditingController();
   ClaimStatus _outcome = ClaimStatus.approved;
+  DateTime _settledOn = DateTime.now();
   String? _error;
   String? _warning;
 
@@ -370,6 +402,17 @@ class _OutcomeDialogState extends State<_OutcomeDialog> {
   void dispose() {
     _amount.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _settledOn,
+      firstDate: DateTime(2020, 1, 1),
+      lastDate: DateTime.now(),
+      helpText: context.l10n.claimSettledOn,
+    );
+    if (picked != null) setState(() => _settledOn = picked);
   }
 
   void _confirm() {
@@ -388,7 +431,8 @@ class _OutcomeDialogState extends State<_OutcomeDialog> {
         return;
       }
     }
-    Navigator.pop(context, (outcome: _outcome, paise: paise));
+    Navigator.pop(
+        context, (outcome: _outcome, paise: paise, settledOn: _settledOn));
   }
 
   @override
@@ -402,6 +446,12 @@ class _OutcomeDialogState extends State<_OutcomeDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _DateField(
+            label: l10n.claimSettledOn,
+            date: _settledOn,
+            onTap: _pickDate,
+          ),
+          const SizedBox(height: 10),
           RadioGroup<ClaimStatus>(
             groupValue: _outcome,
             onChanged: (value) =>
@@ -447,6 +497,63 @@ class _OutcomeDialogState extends State<_OutcomeDialog> {
           child: Text(l10n.cancel),
         ),
         FilledButton(onPressed: _confirm, child: Text(l10n.save)),
+      ],
+    );
+  }
+}
+
+/// Label + tappable date pill, used by the submit and outcome dialogs so
+/// the recorded date isn't silently forced to "now".
+class _DateField extends StatelessWidget {
+  const _DateField({
+    required this.label,
+    required this.date,
+    required this.onTap,
+  });
+
+  final String label;
+  final DateTime date;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: typo.body),
+        Semantics(
+          button: true,
+          label: '$label ${date.monthDayYear}',
+          child: Material(
+            color: colors.fieldBg,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: colors.fieldBorder, width: 1.5),
+            ),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      date.monthDayYear,
+                      style: typo.number(13.5,
+                          weight: FontWeight.w600, color: colors.ink),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(Icons.event_outlined, size: 14, color: colors.muted),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

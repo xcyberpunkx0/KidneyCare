@@ -5,7 +5,7 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 
-/// Gemini-style suggestion chips under the hero card: the two things a
+/// Gemini-style suggestion chips under the hero card: the things a
 /// caregiver does most often between captures.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});

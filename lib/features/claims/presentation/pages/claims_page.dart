@@ -124,8 +124,9 @@ class _UnclaimedStrip extends ConsumerWidget {
     final l10n = context.l10n;
     final policies =
         ref.watch(policiesProvider).value ?? const <InsurancePolicy>[];
-    final windowDays =
-        policies.isEmpty ? null : policies.first.claimWindowDays;
+    final windowDays = policies.isEmpty
+        ? null
+        : minClaimWindowDays(policies.map((p) => p.claimWindowDays));
     final now = DateTime.now();
 
     return Container(

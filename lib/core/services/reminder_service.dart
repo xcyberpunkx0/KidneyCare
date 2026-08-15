@@ -226,9 +226,8 @@ final reminderSyncProvider = Provider<void>((ref) {
           ],
           // An unclaimed bill isn't tied to a policy yet, so use the
           // shortest claim window: a reminder may fire early, never late.
-          windowDays: policies
-              .map((p) => p.claimWindowDays)
-              .reduce((a, b) => a < b ? a : b),
+          windowDays:
+              minClaimWindowDays(policies.map((p) => p.claimWindowDays)),
           now: DateTime.now(),
         );
   Future.microtask(() => ref.read(reminderServiceProvider).sync(
