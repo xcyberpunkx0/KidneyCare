@@ -4522,6 +4522,1685 @@ class DialysisSessionsCompanion extends UpdateCompanion<DialysisSession> {
   }
 }
 
+class $InsurancePoliciesTable extends InsurancePolicies
+    with TableInfo<$InsurancePoliciesTable, InsurancePolicy> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InsurancePoliciesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _insurerNameMeta = const VerificationMeta(
+    'insurerName',
+  );
+  @override
+  late final GeneratedColumn<String> insurerName = GeneratedColumn<String>(
+    'insurer_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _policyNumberMeta = const VerificationMeta(
+    'policyNumber',
+  );
+  @override
+  late final GeneratedColumn<String> policyNumber = GeneratedColumn<String>(
+    'policy_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _tpaNameMeta = const VerificationMeta(
+    'tpaName',
+  );
+  @override
+  late final GeneratedColumn<String> tpaName = GeneratedColumn<String>(
+    'tpa_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _claimWindowDaysMeta = const VerificationMeta(
+    'claimWindowDays',
+  );
+  @override
+  late final GeneratedColumn<int> claimWindowDays = GeneratedColumn<int>(
+    'claim_window_days',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(30),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    insurerName,
+    policyNumber,
+    tpaName,
+    claimWindowDays,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'insurance_policies';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InsurancePolicy> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('insurer_name')) {
+      context.handle(
+        _insurerNameMeta,
+        insurerName.isAcceptableOrUnknown(
+          data['insurer_name']!,
+          _insurerNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_insurerNameMeta);
+    }
+    if (data.containsKey('policy_number')) {
+      context.handle(
+        _policyNumberMeta,
+        policyNumber.isAcceptableOrUnknown(
+          data['policy_number']!,
+          _policyNumberMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_policyNumberMeta);
+    }
+    if (data.containsKey('tpa_name')) {
+      context.handle(
+        _tpaNameMeta,
+        tpaName.isAcceptableOrUnknown(data['tpa_name']!, _tpaNameMeta),
+      );
+    }
+    if (data.containsKey('claim_window_days')) {
+      context.handle(
+        _claimWindowDaysMeta,
+        claimWindowDays.isAcceptableOrUnknown(
+          data['claim_window_days']!,
+          _claimWindowDaysMeta,
+        ),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InsurancePolicy map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InsurancePolicy(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      insurerName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}insurer_name'],
+      )!,
+      policyNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}policy_number'],
+      )!,
+      tpaName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tpa_name'],
+      )!,
+      claimWindowDays: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}claim_window_days'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+    );
+  }
+
+  @override
+  $InsurancePoliciesTable createAlias(String alias) {
+    return $InsurancePoliciesTable(attachedDatabase, alias);
+  }
+}
+
+class InsurancePolicy extends DataClass implements Insertable<InsurancePolicy> {
+  final String id;
+  final String insurerName;
+  final String policyNumber;
+  final String tpaName;
+
+  /// Days from a bill's date until the insurer stops accepting it.
+  final int claimWindowDays;
+  final String note;
+  const InsurancePolicy({
+    required this.id,
+    required this.insurerName,
+    required this.policyNumber,
+    required this.tpaName,
+    required this.claimWindowDays,
+    required this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['insurer_name'] = Variable<String>(insurerName);
+    map['policy_number'] = Variable<String>(policyNumber);
+    map['tpa_name'] = Variable<String>(tpaName);
+    map['claim_window_days'] = Variable<int>(claimWindowDays);
+    map['note'] = Variable<String>(note);
+    return map;
+  }
+
+  InsurancePoliciesCompanion toCompanion(bool nullToAbsent) {
+    return InsurancePoliciesCompanion(
+      id: Value(id),
+      insurerName: Value(insurerName),
+      policyNumber: Value(policyNumber),
+      tpaName: Value(tpaName),
+      claimWindowDays: Value(claimWindowDays),
+      note: Value(note),
+    );
+  }
+
+  factory InsurancePolicy.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InsurancePolicy(
+      id: serializer.fromJson<String>(json['id']),
+      insurerName: serializer.fromJson<String>(json['insurerName']),
+      policyNumber: serializer.fromJson<String>(json['policyNumber']),
+      tpaName: serializer.fromJson<String>(json['tpaName']),
+      claimWindowDays: serializer.fromJson<int>(json['claimWindowDays']),
+      note: serializer.fromJson<String>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'insurerName': serializer.toJson<String>(insurerName),
+      'policyNumber': serializer.toJson<String>(policyNumber),
+      'tpaName': serializer.toJson<String>(tpaName),
+      'claimWindowDays': serializer.toJson<int>(claimWindowDays),
+      'note': serializer.toJson<String>(note),
+    };
+  }
+
+  InsurancePolicy copyWith({
+    String? id,
+    String? insurerName,
+    String? policyNumber,
+    String? tpaName,
+    int? claimWindowDays,
+    String? note,
+  }) => InsurancePolicy(
+    id: id ?? this.id,
+    insurerName: insurerName ?? this.insurerName,
+    policyNumber: policyNumber ?? this.policyNumber,
+    tpaName: tpaName ?? this.tpaName,
+    claimWindowDays: claimWindowDays ?? this.claimWindowDays,
+    note: note ?? this.note,
+  );
+  InsurancePolicy copyWithCompanion(InsurancePoliciesCompanion data) {
+    return InsurancePolicy(
+      id: data.id.present ? data.id.value : this.id,
+      insurerName: data.insurerName.present
+          ? data.insurerName.value
+          : this.insurerName,
+      policyNumber: data.policyNumber.present
+          ? data.policyNumber.value
+          : this.policyNumber,
+      tpaName: data.tpaName.present ? data.tpaName.value : this.tpaName,
+      claimWindowDays: data.claimWindowDays.present
+          ? data.claimWindowDays.value
+          : this.claimWindowDays,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InsurancePolicy(')
+          ..write('id: $id, ')
+          ..write('insurerName: $insurerName, ')
+          ..write('policyNumber: $policyNumber, ')
+          ..write('tpaName: $tpaName, ')
+          ..write('claimWindowDays: $claimWindowDays, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    insurerName,
+    policyNumber,
+    tpaName,
+    claimWindowDays,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InsurancePolicy &&
+          other.id == this.id &&
+          other.insurerName == this.insurerName &&
+          other.policyNumber == this.policyNumber &&
+          other.tpaName == this.tpaName &&
+          other.claimWindowDays == this.claimWindowDays &&
+          other.note == this.note);
+}
+
+class InsurancePoliciesCompanion extends UpdateCompanion<InsurancePolicy> {
+  final Value<String> id;
+  final Value<String> insurerName;
+  final Value<String> policyNumber;
+  final Value<String> tpaName;
+  final Value<int> claimWindowDays;
+  final Value<String> note;
+  final Value<int> rowid;
+  const InsurancePoliciesCompanion({
+    this.id = const Value.absent(),
+    this.insurerName = const Value.absent(),
+    this.policyNumber = const Value.absent(),
+    this.tpaName = const Value.absent(),
+    this.claimWindowDays = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InsurancePoliciesCompanion.insert({
+    required String id,
+    required String insurerName,
+    required String policyNumber,
+    this.tpaName = const Value.absent(),
+    this.claimWindowDays = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       insurerName = Value(insurerName),
+       policyNumber = Value(policyNumber);
+  static Insertable<InsurancePolicy> custom({
+    Expression<String>? id,
+    Expression<String>? insurerName,
+    Expression<String>? policyNumber,
+    Expression<String>? tpaName,
+    Expression<int>? claimWindowDays,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (insurerName != null) 'insurer_name': insurerName,
+      if (policyNumber != null) 'policy_number': policyNumber,
+      if (tpaName != null) 'tpa_name': tpaName,
+      if (claimWindowDays != null) 'claim_window_days': claimWindowDays,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InsurancePoliciesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? insurerName,
+    Value<String>? policyNumber,
+    Value<String>? tpaName,
+    Value<int>? claimWindowDays,
+    Value<String>? note,
+    Value<int>? rowid,
+  }) {
+    return InsurancePoliciesCompanion(
+      id: id ?? this.id,
+      insurerName: insurerName ?? this.insurerName,
+      policyNumber: policyNumber ?? this.policyNumber,
+      tpaName: tpaName ?? this.tpaName,
+      claimWindowDays: claimWindowDays ?? this.claimWindowDays,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (insurerName.present) {
+      map['insurer_name'] = Variable<String>(insurerName.value);
+    }
+    if (policyNumber.present) {
+      map['policy_number'] = Variable<String>(policyNumber.value);
+    }
+    if (tpaName.present) {
+      map['tpa_name'] = Variable<String>(tpaName.value);
+    }
+    if (claimWindowDays.present) {
+      map['claim_window_days'] = Variable<int>(claimWindowDays.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InsurancePoliciesCompanion(')
+          ..write('id: $id, ')
+          ..write('insurerName: $insurerName, ')
+          ..write('policyNumber: $policyNumber, ')
+          ..write('tpaName: $tpaName, ')
+          ..write('claimWindowDays: $claimWindowDays, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ClaimsTable extends Claims with TableInfo<$ClaimsTable, Claim> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ClaimsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _policyIdMeta = const VerificationMeta(
+    'policyId',
+  );
+  @override
+  late final GeneratedColumn<String> policyId = GeneratedColumn<String>(
+    'policy_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<ClaimStatus, String> status =
+      GeneratedColumn<String>(
+        'status',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<ClaimStatus>($ClaimsTable.$converterstatus);
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _submittedOnMeta = const VerificationMeta(
+    'submittedOn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> submittedOn = GeneratedColumn<DateTime>(
+    'submitted_on',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _settledOnMeta = const VerificationMeta(
+    'settledOn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> settledOn = GeneratedColumn<DateTime>(
+    'settled_on',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _claimedAmountPaiseMeta =
+      const VerificationMeta('claimedAmountPaise');
+  @override
+  late final GeneratedColumn<int> claimedAmountPaise = GeneratedColumn<int>(
+    'claimed_amount_paise',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _approvedAmountPaiseMeta =
+      const VerificationMeta('approvedAmountPaise');
+  @override
+  late final GeneratedColumn<int> approvedAmountPaise = GeneratedColumn<int>(
+    'approved_amount_paise',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _insurerRefMeta = const VerificationMeta(
+    'insurerRef',
+  );
+  @override
+  late final GeneratedColumn<String> insurerRef = GeneratedColumn<String>(
+    'insurer_ref',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    policyId,
+    title,
+    status,
+    createdAt,
+    submittedOn,
+    settledOn,
+    claimedAmountPaise,
+    approvedAmountPaise,
+    insurerRef,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'claims';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Claim> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('policy_id')) {
+      context.handle(
+        _policyIdMeta,
+        policyId.isAcceptableOrUnknown(data['policy_id']!, _policyIdMeta),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('submitted_on')) {
+      context.handle(
+        _submittedOnMeta,
+        submittedOn.isAcceptableOrUnknown(
+          data['submitted_on']!,
+          _submittedOnMeta,
+        ),
+      );
+    }
+    if (data.containsKey('settled_on')) {
+      context.handle(
+        _settledOnMeta,
+        settledOn.isAcceptableOrUnknown(data['settled_on']!, _settledOnMeta),
+      );
+    }
+    if (data.containsKey('claimed_amount_paise')) {
+      context.handle(
+        _claimedAmountPaiseMeta,
+        claimedAmountPaise.isAcceptableOrUnknown(
+          data['claimed_amount_paise']!,
+          _claimedAmountPaiseMeta,
+        ),
+      );
+    }
+    if (data.containsKey('approved_amount_paise')) {
+      context.handle(
+        _approvedAmountPaiseMeta,
+        approvedAmountPaise.isAcceptableOrUnknown(
+          data['approved_amount_paise']!,
+          _approvedAmountPaiseMeta,
+        ),
+      );
+    }
+    if (data.containsKey('insurer_ref')) {
+      context.handle(
+        _insurerRefMeta,
+        insurerRef.isAcceptableOrUnknown(data['insurer_ref']!, _insurerRefMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Claim map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Claim(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      policyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}policy_id'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      status: $ClaimsTable.$converterstatus.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}status'],
+        )!,
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      submittedOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}submitted_on'],
+      ),
+      settledOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}settled_on'],
+      ),
+      claimedAmountPaise: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}claimed_amount_paise'],
+      ),
+      approvedAmountPaise: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}approved_amount_paise'],
+      ),
+      insurerRef: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}insurer_ref'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      )!,
+    );
+  }
+
+  @override
+  $ClaimsTable createAlias(String alias) {
+    return $ClaimsTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ClaimStatus, String, String> $converterstatus =
+      const EnumNameConverter<ClaimStatus>(ClaimStatus.values);
+}
+
+class Claim extends DataClass implements Insertable<Claim> {
+  final String id;
+  final String? policyId;
+  final String title;
+  final ClaimStatus status;
+  final DateTime createdAt;
+  final DateTime? submittedOn;
+  final DateTime? settledOn;
+  final int? claimedAmountPaise;
+  final int? approvedAmountPaise;
+
+  /// Claim number assigned by the insurer/TPA after submission.
+  final String insurerRef;
+  final String note;
+  const Claim({
+    required this.id,
+    this.policyId,
+    required this.title,
+    required this.status,
+    required this.createdAt,
+    this.submittedOn,
+    this.settledOn,
+    this.claimedAmountPaise,
+    this.approvedAmountPaise,
+    required this.insurerRef,
+    required this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    if (!nullToAbsent || policyId != null) {
+      map['policy_id'] = Variable<String>(policyId);
+    }
+    map['title'] = Variable<String>(title);
+    {
+      map['status'] = Variable<String>(
+        $ClaimsTable.$converterstatus.toSql(status),
+      );
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || submittedOn != null) {
+      map['submitted_on'] = Variable<DateTime>(submittedOn);
+    }
+    if (!nullToAbsent || settledOn != null) {
+      map['settled_on'] = Variable<DateTime>(settledOn);
+    }
+    if (!nullToAbsent || claimedAmountPaise != null) {
+      map['claimed_amount_paise'] = Variable<int>(claimedAmountPaise);
+    }
+    if (!nullToAbsent || approvedAmountPaise != null) {
+      map['approved_amount_paise'] = Variable<int>(approvedAmountPaise);
+    }
+    map['insurer_ref'] = Variable<String>(insurerRef);
+    map['note'] = Variable<String>(note);
+    return map;
+  }
+
+  ClaimsCompanion toCompanion(bool nullToAbsent) {
+    return ClaimsCompanion(
+      id: Value(id),
+      policyId: policyId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(policyId),
+      title: Value(title),
+      status: Value(status),
+      createdAt: Value(createdAt),
+      submittedOn: submittedOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(submittedOn),
+      settledOn: settledOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settledOn),
+      claimedAmountPaise: claimedAmountPaise == null && nullToAbsent
+          ? const Value.absent()
+          : Value(claimedAmountPaise),
+      approvedAmountPaise: approvedAmountPaise == null && nullToAbsent
+          ? const Value.absent()
+          : Value(approvedAmountPaise),
+      insurerRef: Value(insurerRef),
+      note: Value(note),
+    );
+  }
+
+  factory Claim.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Claim(
+      id: serializer.fromJson<String>(json['id']),
+      policyId: serializer.fromJson<String?>(json['policyId']),
+      title: serializer.fromJson<String>(json['title']),
+      status: $ClaimsTable.$converterstatus.fromJson(
+        serializer.fromJson<String>(json['status']),
+      ),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      submittedOn: serializer.fromJson<DateTime?>(json['submittedOn']),
+      settledOn: serializer.fromJson<DateTime?>(json['settledOn']),
+      claimedAmountPaise: serializer.fromJson<int?>(json['claimedAmountPaise']),
+      approvedAmountPaise: serializer.fromJson<int?>(
+        json['approvedAmountPaise'],
+      ),
+      insurerRef: serializer.fromJson<String>(json['insurerRef']),
+      note: serializer.fromJson<String>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'policyId': serializer.toJson<String?>(policyId),
+      'title': serializer.toJson<String>(title),
+      'status': serializer.toJson<String>(
+        $ClaimsTable.$converterstatus.toJson(status),
+      ),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'submittedOn': serializer.toJson<DateTime?>(submittedOn),
+      'settledOn': serializer.toJson<DateTime?>(settledOn),
+      'claimedAmountPaise': serializer.toJson<int?>(claimedAmountPaise),
+      'approvedAmountPaise': serializer.toJson<int?>(approvedAmountPaise),
+      'insurerRef': serializer.toJson<String>(insurerRef),
+      'note': serializer.toJson<String>(note),
+    };
+  }
+
+  Claim copyWith({
+    String? id,
+    Value<String?> policyId = const Value.absent(),
+    String? title,
+    ClaimStatus? status,
+    DateTime? createdAt,
+    Value<DateTime?> submittedOn = const Value.absent(),
+    Value<DateTime?> settledOn = const Value.absent(),
+    Value<int?> claimedAmountPaise = const Value.absent(),
+    Value<int?> approvedAmountPaise = const Value.absent(),
+    String? insurerRef,
+    String? note,
+  }) => Claim(
+    id: id ?? this.id,
+    policyId: policyId.present ? policyId.value : this.policyId,
+    title: title ?? this.title,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+    submittedOn: submittedOn.present ? submittedOn.value : this.submittedOn,
+    settledOn: settledOn.present ? settledOn.value : this.settledOn,
+    claimedAmountPaise: claimedAmountPaise.present
+        ? claimedAmountPaise.value
+        : this.claimedAmountPaise,
+    approvedAmountPaise: approvedAmountPaise.present
+        ? approvedAmountPaise.value
+        : this.approvedAmountPaise,
+    insurerRef: insurerRef ?? this.insurerRef,
+    note: note ?? this.note,
+  );
+  Claim copyWithCompanion(ClaimsCompanion data) {
+    return Claim(
+      id: data.id.present ? data.id.value : this.id,
+      policyId: data.policyId.present ? data.policyId.value : this.policyId,
+      title: data.title.present ? data.title.value : this.title,
+      status: data.status.present ? data.status.value : this.status,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      submittedOn: data.submittedOn.present
+          ? data.submittedOn.value
+          : this.submittedOn,
+      settledOn: data.settledOn.present ? data.settledOn.value : this.settledOn,
+      claimedAmountPaise: data.claimedAmountPaise.present
+          ? data.claimedAmountPaise.value
+          : this.claimedAmountPaise,
+      approvedAmountPaise: data.approvedAmountPaise.present
+          ? data.approvedAmountPaise.value
+          : this.approvedAmountPaise,
+      insurerRef: data.insurerRef.present
+          ? data.insurerRef.value
+          : this.insurerRef,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Claim(')
+          ..write('id: $id, ')
+          ..write('policyId: $policyId, ')
+          ..write('title: $title, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('submittedOn: $submittedOn, ')
+          ..write('settledOn: $settledOn, ')
+          ..write('claimedAmountPaise: $claimedAmountPaise, ')
+          ..write('approvedAmountPaise: $approvedAmountPaise, ')
+          ..write('insurerRef: $insurerRef, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    policyId,
+    title,
+    status,
+    createdAt,
+    submittedOn,
+    settledOn,
+    claimedAmountPaise,
+    approvedAmountPaise,
+    insurerRef,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Claim &&
+          other.id == this.id &&
+          other.policyId == this.policyId &&
+          other.title == this.title &&
+          other.status == this.status &&
+          other.createdAt == this.createdAt &&
+          other.submittedOn == this.submittedOn &&
+          other.settledOn == this.settledOn &&
+          other.claimedAmountPaise == this.claimedAmountPaise &&
+          other.approvedAmountPaise == this.approvedAmountPaise &&
+          other.insurerRef == this.insurerRef &&
+          other.note == this.note);
+}
+
+class ClaimsCompanion extends UpdateCompanion<Claim> {
+  final Value<String> id;
+  final Value<String?> policyId;
+  final Value<String> title;
+  final Value<ClaimStatus> status;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> submittedOn;
+  final Value<DateTime?> settledOn;
+  final Value<int?> claimedAmountPaise;
+  final Value<int?> approvedAmountPaise;
+  final Value<String> insurerRef;
+  final Value<String> note;
+  final Value<int> rowid;
+  const ClaimsCompanion({
+    this.id = const Value.absent(),
+    this.policyId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.status = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.submittedOn = const Value.absent(),
+    this.settledOn = const Value.absent(),
+    this.claimedAmountPaise = const Value.absent(),
+    this.approvedAmountPaise = const Value.absent(),
+    this.insurerRef = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ClaimsCompanion.insert({
+    required String id,
+    this.policyId = const Value.absent(),
+    required String title,
+    required ClaimStatus status,
+    required DateTime createdAt,
+    this.submittedOn = const Value.absent(),
+    this.settledOn = const Value.absent(),
+    this.claimedAmountPaise = const Value.absent(),
+    this.approvedAmountPaise = const Value.absent(),
+    this.insurerRef = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       title = Value(title),
+       status = Value(status),
+       createdAt = Value(createdAt);
+  static Insertable<Claim> custom({
+    Expression<String>? id,
+    Expression<String>? policyId,
+    Expression<String>? title,
+    Expression<String>? status,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? submittedOn,
+    Expression<DateTime>? settledOn,
+    Expression<int>? claimedAmountPaise,
+    Expression<int>? approvedAmountPaise,
+    Expression<String>? insurerRef,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (policyId != null) 'policy_id': policyId,
+      if (title != null) 'title': title,
+      if (status != null) 'status': status,
+      if (createdAt != null) 'created_at': createdAt,
+      if (submittedOn != null) 'submitted_on': submittedOn,
+      if (settledOn != null) 'settled_on': settledOn,
+      if (claimedAmountPaise != null)
+        'claimed_amount_paise': claimedAmountPaise,
+      if (approvedAmountPaise != null)
+        'approved_amount_paise': approvedAmountPaise,
+      if (insurerRef != null) 'insurer_ref': insurerRef,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ClaimsCompanion copyWith({
+    Value<String>? id,
+    Value<String?>? policyId,
+    Value<String>? title,
+    Value<ClaimStatus>? status,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? submittedOn,
+    Value<DateTime?>? settledOn,
+    Value<int?>? claimedAmountPaise,
+    Value<int?>? approvedAmountPaise,
+    Value<String>? insurerRef,
+    Value<String>? note,
+    Value<int>? rowid,
+  }) {
+    return ClaimsCompanion(
+      id: id ?? this.id,
+      policyId: policyId ?? this.policyId,
+      title: title ?? this.title,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      submittedOn: submittedOn ?? this.submittedOn,
+      settledOn: settledOn ?? this.settledOn,
+      claimedAmountPaise: claimedAmountPaise ?? this.claimedAmountPaise,
+      approvedAmountPaise: approvedAmountPaise ?? this.approvedAmountPaise,
+      insurerRef: insurerRef ?? this.insurerRef,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (policyId.present) {
+      map['policy_id'] = Variable<String>(policyId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(
+        $ClaimsTable.$converterstatus.toSql(status.value),
+      );
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (submittedOn.present) {
+      map['submitted_on'] = Variable<DateTime>(submittedOn.value);
+    }
+    if (settledOn.present) {
+      map['settled_on'] = Variable<DateTime>(settledOn.value);
+    }
+    if (claimedAmountPaise.present) {
+      map['claimed_amount_paise'] = Variable<int>(claimedAmountPaise.value);
+    }
+    if (approvedAmountPaise.present) {
+      map['approved_amount_paise'] = Variable<int>(approvedAmountPaise.value);
+    }
+    if (insurerRef.present) {
+      map['insurer_ref'] = Variable<String>(insurerRef.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClaimsCompanion(')
+          ..write('id: $id, ')
+          ..write('policyId: $policyId, ')
+          ..write('title: $title, ')
+          ..write('status: $status, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('submittedOn: $submittedOn, ')
+          ..write('settledOn: $settledOn, ')
+          ..write('claimedAmountPaise: $claimedAmountPaise, ')
+          ..write('approvedAmountPaise: $approvedAmountPaise, ')
+          ..write('insurerRef: $insurerRef, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ClaimDocumentsTable extends ClaimDocuments
+    with TableInfo<$ClaimDocumentsTable, ClaimDocument> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ClaimDocumentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _claimIdMeta = const VerificationMeta(
+    'claimId',
+  );
+  @override
+  late final GeneratedColumn<String> claimId = GeneratedColumn<String>(
+    'claim_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _documentIdMeta = const VerificationMeta(
+    'documentId',
+  );
+  @override
+  late final GeneratedColumn<String> documentId = GeneratedColumn<String>(
+    'document_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [claimId, documentId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'claim_documents';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ClaimDocument> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('claim_id')) {
+      context.handle(
+        _claimIdMeta,
+        claimId.isAcceptableOrUnknown(data['claim_id']!, _claimIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_claimIdMeta);
+    }
+    if (data.containsKey('document_id')) {
+      context.handle(
+        _documentIdMeta,
+        documentId.isAcceptableOrUnknown(data['document_id']!, _documentIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_documentIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {claimId, documentId};
+  @override
+  ClaimDocument map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ClaimDocument(
+      claimId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}claim_id'],
+      )!,
+      documentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}document_id'],
+      )!,
+    );
+  }
+
+  @override
+  $ClaimDocumentsTable createAlias(String alias) {
+    return $ClaimDocumentsTable(attachedDatabase, alias);
+  }
+}
+
+class ClaimDocument extends DataClass implements Insertable<ClaimDocument> {
+  final String claimId;
+  final String documentId;
+  const ClaimDocument({required this.claimId, required this.documentId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['claim_id'] = Variable<String>(claimId);
+    map['document_id'] = Variable<String>(documentId);
+    return map;
+  }
+
+  ClaimDocumentsCompanion toCompanion(bool nullToAbsent) {
+    return ClaimDocumentsCompanion(
+      claimId: Value(claimId),
+      documentId: Value(documentId),
+    );
+  }
+
+  factory ClaimDocument.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ClaimDocument(
+      claimId: serializer.fromJson<String>(json['claimId']),
+      documentId: serializer.fromJson<String>(json['documentId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'claimId': serializer.toJson<String>(claimId),
+      'documentId': serializer.toJson<String>(documentId),
+    };
+  }
+
+  ClaimDocument copyWith({String? claimId, String? documentId}) =>
+      ClaimDocument(
+        claimId: claimId ?? this.claimId,
+        documentId: documentId ?? this.documentId,
+      );
+  ClaimDocument copyWithCompanion(ClaimDocumentsCompanion data) {
+    return ClaimDocument(
+      claimId: data.claimId.present ? data.claimId.value : this.claimId,
+      documentId: data.documentId.present
+          ? data.documentId.value
+          : this.documentId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClaimDocument(')
+          ..write('claimId: $claimId, ')
+          ..write('documentId: $documentId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(claimId, documentId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ClaimDocument &&
+          other.claimId == this.claimId &&
+          other.documentId == this.documentId);
+}
+
+class ClaimDocumentsCompanion extends UpdateCompanion<ClaimDocument> {
+  final Value<String> claimId;
+  final Value<String> documentId;
+  final Value<int> rowid;
+  const ClaimDocumentsCompanion({
+    this.claimId = const Value.absent(),
+    this.documentId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ClaimDocumentsCompanion.insert({
+    required String claimId,
+    required String documentId,
+    this.rowid = const Value.absent(),
+  }) : claimId = Value(claimId),
+       documentId = Value(documentId);
+  static Insertable<ClaimDocument> custom({
+    Expression<String>? claimId,
+    Expression<String>? documentId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (claimId != null) 'claim_id': claimId,
+      if (documentId != null) 'document_id': documentId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ClaimDocumentsCompanion copyWith({
+    Value<String>? claimId,
+    Value<String>? documentId,
+    Value<int>? rowid,
+  }) {
+    return ClaimDocumentsCompanion(
+      claimId: claimId ?? this.claimId,
+      documentId: documentId ?? this.documentId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (claimId.present) {
+      map['claim_id'] = Variable<String>(claimId.value);
+    }
+    if (documentId.present) {
+      map['document_id'] = Variable<String>(documentId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClaimDocumentsCompanion(')
+          ..write('claimId: $claimId, ')
+          ..write('documentId: $documentId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ClaimChecklistItemsTable extends ClaimChecklistItems
+    with TableInfo<$ClaimChecklistItemsTable, ClaimChecklistItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ClaimChecklistItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _claimIdMeta = const VerificationMeta(
+    'claimId',
+  );
+  @override
+  late final GeneratedColumn<String> claimId = GeneratedColumn<String>(
+    'claim_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isDoneMeta = const VerificationMeta('isDone');
+  @override
+  late final GeneratedColumn<bool> isDone = GeneratedColumn<bool>(
+    'is_done',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_done" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, claimId, label, isDone, sortOrder];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'claim_checklist_items';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ClaimChecklistItem> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('claim_id')) {
+      context.handle(
+        _claimIdMeta,
+        claimId.isAcceptableOrUnknown(data['claim_id']!, _claimIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_claimIdMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('is_done')) {
+      context.handle(
+        _isDoneMeta,
+        isDone.isAcceptableOrUnknown(data['is_done']!, _isDoneMeta),
+      );
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ClaimChecklistItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ClaimChecklistItem(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      claimId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}claim_id'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      isDone: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_done'],
+      )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+    );
+  }
+
+  @override
+  $ClaimChecklistItemsTable createAlias(String alias) {
+    return $ClaimChecklistItemsTable(attachedDatabase, alias);
+  }
+}
+
+class ClaimChecklistItem extends DataClass
+    implements Insertable<ClaimChecklistItem> {
+  final String id;
+  final String claimId;
+  final String label;
+  final bool isDone;
+  final int sortOrder;
+  const ClaimChecklistItem({
+    required this.id,
+    required this.claimId,
+    required this.label,
+    required this.isDone,
+    required this.sortOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['claim_id'] = Variable<String>(claimId);
+    map['label'] = Variable<String>(label);
+    map['is_done'] = Variable<bool>(isDone);
+    map['sort_order'] = Variable<int>(sortOrder);
+    return map;
+  }
+
+  ClaimChecklistItemsCompanion toCompanion(bool nullToAbsent) {
+    return ClaimChecklistItemsCompanion(
+      id: Value(id),
+      claimId: Value(claimId),
+      label: Value(label),
+      isDone: Value(isDone),
+      sortOrder: Value(sortOrder),
+    );
+  }
+
+  factory ClaimChecklistItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ClaimChecklistItem(
+      id: serializer.fromJson<String>(json['id']),
+      claimId: serializer.fromJson<String>(json['claimId']),
+      label: serializer.fromJson<String>(json['label']),
+      isDone: serializer.fromJson<bool>(json['isDone']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'claimId': serializer.toJson<String>(claimId),
+      'label': serializer.toJson<String>(label),
+      'isDone': serializer.toJson<bool>(isDone),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+    };
+  }
+
+  ClaimChecklistItem copyWith({
+    String? id,
+    String? claimId,
+    String? label,
+    bool? isDone,
+    int? sortOrder,
+  }) => ClaimChecklistItem(
+    id: id ?? this.id,
+    claimId: claimId ?? this.claimId,
+    label: label ?? this.label,
+    isDone: isDone ?? this.isDone,
+    sortOrder: sortOrder ?? this.sortOrder,
+  );
+  ClaimChecklistItem copyWithCompanion(ClaimChecklistItemsCompanion data) {
+    return ClaimChecklistItem(
+      id: data.id.present ? data.id.value : this.id,
+      claimId: data.claimId.present ? data.claimId.value : this.claimId,
+      label: data.label.present ? data.label.value : this.label,
+      isDone: data.isDone.present ? data.isDone.value : this.isDone,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClaimChecklistItem(')
+          ..write('id: $id, ')
+          ..write('claimId: $claimId, ')
+          ..write('label: $label, ')
+          ..write('isDone: $isDone, ')
+          ..write('sortOrder: $sortOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, claimId, label, isDone, sortOrder);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ClaimChecklistItem &&
+          other.id == this.id &&
+          other.claimId == this.claimId &&
+          other.label == this.label &&
+          other.isDone == this.isDone &&
+          other.sortOrder == this.sortOrder);
+}
+
+class ClaimChecklistItemsCompanion extends UpdateCompanion<ClaimChecklistItem> {
+  final Value<String> id;
+  final Value<String> claimId;
+  final Value<String> label;
+  final Value<bool> isDone;
+  final Value<int> sortOrder;
+  final Value<int> rowid;
+  const ClaimChecklistItemsCompanion({
+    this.id = const Value.absent(),
+    this.claimId = const Value.absent(),
+    this.label = const Value.absent(),
+    this.isDone = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ClaimChecklistItemsCompanion.insert({
+    required String id,
+    required String claimId,
+    required String label,
+    this.isDone = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       claimId = Value(claimId),
+       label = Value(label);
+  static Insertable<ClaimChecklistItem> custom({
+    Expression<String>? id,
+    Expression<String>? claimId,
+    Expression<String>? label,
+    Expression<bool>? isDone,
+    Expression<int>? sortOrder,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (claimId != null) 'claim_id': claimId,
+      if (label != null) 'label': label,
+      if (isDone != null) 'is_done': isDone,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ClaimChecklistItemsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? claimId,
+    Value<String>? label,
+    Value<bool>? isDone,
+    Value<int>? sortOrder,
+    Value<int>? rowid,
+  }) {
+    return ClaimChecklistItemsCompanion(
+      id: id ?? this.id,
+      claimId: claimId ?? this.claimId,
+      label: label ?? this.label,
+      isDone: isDone ?? this.isDone,
+      sortOrder: sortOrder ?? this.sortOrder,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (claimId.present) {
+      map['claim_id'] = Variable<String>(claimId.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (isDone.present) {
+      map['is_done'] = Variable<bool>(isDone.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ClaimChecklistItemsCompanion(')
+          ..write('id: $id, ')
+          ..write('claimId: $claimId, ')
+          ..write('label: $label, ')
+          ..write('isDone: $isDone, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4535,6 +6214,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $DialysisSessionsTable dialysisSessions = $DialysisSessionsTable(
     this,
   );
+  late final $InsurancePoliciesTable insurancePolicies =
+      $InsurancePoliciesTable(this);
+  late final $ClaimsTable claims = $ClaimsTable(this);
+  late final $ClaimDocumentsTable claimDocuments = $ClaimDocumentsTable(this);
+  late final $ClaimChecklistItemsTable claimChecklistItems =
+      $ClaimChecklistItemsTable(this);
   late final PatientDao patientDao = PatientDao(this as AppDatabase);
   late final DocumentDao documentDao = DocumentDao(this as AppDatabase);
   late final MedicationDao medicationDao = MedicationDao(this as AppDatabase);
@@ -4543,6 +6228,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final DoseDao doseDao = DoseDao(this as AppDatabase);
   late final ChatDao chatDao = ChatDao(this as AppDatabase);
   late final DialysisDao dialysisDao = DialysisDao(this as AppDatabase);
+  late final ClaimDao claimDao = ClaimDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4556,6 +6242,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     doses,
     chatMessages,
     dialysisSessions,
+    insurancePolicies,
+    claims,
+    claimDocuments,
+    claimChecklistItems,
   ];
 }
 
@@ -6802,6 +8492,920 @@ typedef $$DialysisSessionsTableProcessedTableManager =
       DialysisSession,
       PrefetchHooks Function()
     >;
+typedef $$InsurancePoliciesTableCreateCompanionBuilder =
+    InsurancePoliciesCompanion Function({
+      required String id,
+      required String insurerName,
+      required String policyNumber,
+      Value<String> tpaName,
+      Value<int> claimWindowDays,
+      Value<String> note,
+      Value<int> rowid,
+    });
+typedef $$InsurancePoliciesTableUpdateCompanionBuilder =
+    InsurancePoliciesCompanion Function({
+      Value<String> id,
+      Value<String> insurerName,
+      Value<String> policyNumber,
+      Value<String> tpaName,
+      Value<int> claimWindowDays,
+      Value<String> note,
+      Value<int> rowid,
+    });
+
+class $$InsurancePoliciesTableFilterComposer
+    extends Composer<_$AppDatabase, $InsurancePoliciesTable> {
+  $$InsurancePoliciesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get insurerName => $composableBuilder(
+    column: $table.insurerName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get policyNumber => $composableBuilder(
+    column: $table.policyNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tpaName => $composableBuilder(
+    column: $table.tpaName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get claimWindowDays => $composableBuilder(
+    column: $table.claimWindowDays,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$InsurancePoliciesTableOrderingComposer
+    extends Composer<_$AppDatabase, $InsurancePoliciesTable> {
+  $$InsurancePoliciesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get insurerName => $composableBuilder(
+    column: $table.insurerName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get policyNumber => $composableBuilder(
+    column: $table.policyNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tpaName => $composableBuilder(
+    column: $table.tpaName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get claimWindowDays => $composableBuilder(
+    column: $table.claimWindowDays,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$InsurancePoliciesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $InsurancePoliciesTable> {
+  $$InsurancePoliciesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get insurerName => $composableBuilder(
+    column: $table.insurerName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get policyNumber => $composableBuilder(
+    column: $table.policyNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get tpaName =>
+      $composableBuilder(column: $table.tpaName, builder: (column) => column);
+
+  GeneratedColumn<int> get claimWindowDays => $composableBuilder(
+    column: $table.claimWindowDays,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$InsurancePoliciesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $InsurancePoliciesTable,
+          InsurancePolicy,
+          $$InsurancePoliciesTableFilterComposer,
+          $$InsurancePoliciesTableOrderingComposer,
+          $$InsurancePoliciesTableAnnotationComposer,
+          $$InsurancePoliciesTableCreateCompanionBuilder,
+          $$InsurancePoliciesTableUpdateCompanionBuilder,
+          (
+            InsurancePolicy,
+            BaseReferences<
+              _$AppDatabase,
+              $InsurancePoliciesTable,
+              InsurancePolicy
+            >,
+          ),
+          InsurancePolicy,
+          PrefetchHooks Function()
+        > {
+  $$InsurancePoliciesTableTableManager(
+    _$AppDatabase db,
+    $InsurancePoliciesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InsurancePoliciesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InsurancePoliciesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InsurancePoliciesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> insurerName = const Value.absent(),
+                Value<String> policyNumber = const Value.absent(),
+                Value<String> tpaName = const Value.absent(),
+                Value<int> claimWindowDays = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InsurancePoliciesCompanion(
+                id: id,
+                insurerName: insurerName,
+                policyNumber: policyNumber,
+                tpaName: tpaName,
+                claimWindowDays: claimWindowDays,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String insurerName,
+                required String policyNumber,
+                Value<String> tpaName = const Value.absent(),
+                Value<int> claimWindowDays = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InsurancePoliciesCompanion.insert(
+                id: id,
+                insurerName: insurerName,
+                policyNumber: policyNumber,
+                tpaName: tpaName,
+                claimWindowDays: claimWindowDays,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$InsurancePoliciesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $InsurancePoliciesTable,
+      InsurancePolicy,
+      $$InsurancePoliciesTableFilterComposer,
+      $$InsurancePoliciesTableOrderingComposer,
+      $$InsurancePoliciesTableAnnotationComposer,
+      $$InsurancePoliciesTableCreateCompanionBuilder,
+      $$InsurancePoliciesTableUpdateCompanionBuilder,
+      (
+        InsurancePolicy,
+        BaseReferences<_$AppDatabase, $InsurancePoliciesTable, InsurancePolicy>,
+      ),
+      InsurancePolicy,
+      PrefetchHooks Function()
+    >;
+typedef $$ClaimsTableCreateCompanionBuilder =
+    ClaimsCompanion Function({
+      required String id,
+      Value<String?> policyId,
+      required String title,
+      required ClaimStatus status,
+      required DateTime createdAt,
+      Value<DateTime?> submittedOn,
+      Value<DateTime?> settledOn,
+      Value<int?> claimedAmountPaise,
+      Value<int?> approvedAmountPaise,
+      Value<String> insurerRef,
+      Value<String> note,
+      Value<int> rowid,
+    });
+typedef $$ClaimsTableUpdateCompanionBuilder =
+    ClaimsCompanion Function({
+      Value<String> id,
+      Value<String?> policyId,
+      Value<String> title,
+      Value<ClaimStatus> status,
+      Value<DateTime> createdAt,
+      Value<DateTime?> submittedOn,
+      Value<DateTime?> settledOn,
+      Value<int?> claimedAmountPaise,
+      Value<int?> approvedAmountPaise,
+      Value<String> insurerRef,
+      Value<String> note,
+      Value<int> rowid,
+    });
+
+class $$ClaimsTableFilterComposer
+    extends Composer<_$AppDatabase, $ClaimsTable> {
+  $$ClaimsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get policyId => $composableBuilder(
+    column: $table.policyId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<ClaimStatus, ClaimStatus, String> get status =>
+      $composableBuilder(
+        column: $table.status,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get submittedOn => $composableBuilder(
+    column: $table.submittedOn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get settledOn => $composableBuilder(
+    column: $table.settledOn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get claimedAmountPaise => $composableBuilder(
+    column: $table.claimedAmountPaise,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get approvedAmountPaise => $composableBuilder(
+    column: $table.approvedAmountPaise,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get insurerRef => $composableBuilder(
+    column: $table.insurerRef,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ClaimsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ClaimsTable> {
+  $$ClaimsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get policyId => $composableBuilder(
+    column: $table.policyId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get submittedOn => $composableBuilder(
+    column: $table.submittedOn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get settledOn => $composableBuilder(
+    column: $table.settledOn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get claimedAmountPaise => $composableBuilder(
+    column: $table.claimedAmountPaise,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get approvedAmountPaise => $composableBuilder(
+    column: $table.approvedAmountPaise,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get insurerRef => $composableBuilder(
+    column: $table.insurerRef,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ClaimsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ClaimsTable> {
+  $$ClaimsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get policyId =>
+      $composableBuilder(column: $table.policyId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ClaimStatus, String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get submittedOn => $composableBuilder(
+    column: $table.submittedOn,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get settledOn =>
+      $composableBuilder(column: $table.settledOn, builder: (column) => column);
+
+  GeneratedColumn<int> get claimedAmountPaise => $composableBuilder(
+    column: $table.claimedAmountPaise,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get approvedAmountPaise => $composableBuilder(
+    column: $table.approvedAmountPaise,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get insurerRef => $composableBuilder(
+    column: $table.insurerRef,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$ClaimsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ClaimsTable,
+          Claim,
+          $$ClaimsTableFilterComposer,
+          $$ClaimsTableOrderingComposer,
+          $$ClaimsTableAnnotationComposer,
+          $$ClaimsTableCreateCompanionBuilder,
+          $$ClaimsTableUpdateCompanionBuilder,
+          (Claim, BaseReferences<_$AppDatabase, $ClaimsTable, Claim>),
+          Claim,
+          PrefetchHooks Function()
+        > {
+  $$ClaimsTableTableManager(_$AppDatabase db, $ClaimsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ClaimsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClaimsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ClaimsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String?> policyId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<ClaimStatus> status = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> submittedOn = const Value.absent(),
+                Value<DateTime?> settledOn = const Value.absent(),
+                Value<int?> claimedAmountPaise = const Value.absent(),
+                Value<int?> approvedAmountPaise = const Value.absent(),
+                Value<String> insurerRef = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimsCompanion(
+                id: id,
+                policyId: policyId,
+                title: title,
+                status: status,
+                createdAt: createdAt,
+                submittedOn: submittedOn,
+                settledOn: settledOn,
+                claimedAmountPaise: claimedAmountPaise,
+                approvedAmountPaise: approvedAmountPaise,
+                insurerRef: insurerRef,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<String?> policyId = const Value.absent(),
+                required String title,
+                required ClaimStatus status,
+                required DateTime createdAt,
+                Value<DateTime?> submittedOn = const Value.absent(),
+                Value<DateTime?> settledOn = const Value.absent(),
+                Value<int?> claimedAmountPaise = const Value.absent(),
+                Value<int?> approvedAmountPaise = const Value.absent(),
+                Value<String> insurerRef = const Value.absent(),
+                Value<String> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimsCompanion.insert(
+                id: id,
+                policyId: policyId,
+                title: title,
+                status: status,
+                createdAt: createdAt,
+                submittedOn: submittedOn,
+                settledOn: settledOn,
+                claimedAmountPaise: claimedAmountPaise,
+                approvedAmountPaise: approvedAmountPaise,
+                insurerRef: insurerRef,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ClaimsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ClaimsTable,
+      Claim,
+      $$ClaimsTableFilterComposer,
+      $$ClaimsTableOrderingComposer,
+      $$ClaimsTableAnnotationComposer,
+      $$ClaimsTableCreateCompanionBuilder,
+      $$ClaimsTableUpdateCompanionBuilder,
+      (Claim, BaseReferences<_$AppDatabase, $ClaimsTable, Claim>),
+      Claim,
+      PrefetchHooks Function()
+    >;
+typedef $$ClaimDocumentsTableCreateCompanionBuilder =
+    ClaimDocumentsCompanion Function({
+      required String claimId,
+      required String documentId,
+      Value<int> rowid,
+    });
+typedef $$ClaimDocumentsTableUpdateCompanionBuilder =
+    ClaimDocumentsCompanion Function({
+      Value<String> claimId,
+      Value<String> documentId,
+      Value<int> rowid,
+    });
+
+class $$ClaimDocumentsTableFilterComposer
+    extends Composer<_$AppDatabase, $ClaimDocumentsTable> {
+  $$ClaimDocumentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get claimId => $composableBuilder(
+    column: $table.claimId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ClaimDocumentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ClaimDocumentsTable> {
+  $$ClaimDocumentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get claimId => $composableBuilder(
+    column: $table.claimId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ClaimDocumentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ClaimDocumentsTable> {
+  $$ClaimDocumentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get claimId =>
+      $composableBuilder(column: $table.claimId, builder: (column) => column);
+
+  GeneratedColumn<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => column,
+  );
+}
+
+class $$ClaimDocumentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ClaimDocumentsTable,
+          ClaimDocument,
+          $$ClaimDocumentsTableFilterComposer,
+          $$ClaimDocumentsTableOrderingComposer,
+          $$ClaimDocumentsTableAnnotationComposer,
+          $$ClaimDocumentsTableCreateCompanionBuilder,
+          $$ClaimDocumentsTableUpdateCompanionBuilder,
+          (
+            ClaimDocument,
+            BaseReferences<_$AppDatabase, $ClaimDocumentsTable, ClaimDocument>,
+          ),
+          ClaimDocument,
+          PrefetchHooks Function()
+        > {
+  $$ClaimDocumentsTableTableManager(
+    _$AppDatabase db,
+    $ClaimDocumentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ClaimDocumentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClaimDocumentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ClaimDocumentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> claimId = const Value.absent(),
+                Value<String> documentId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimDocumentsCompanion(
+                claimId: claimId,
+                documentId: documentId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String claimId,
+                required String documentId,
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimDocumentsCompanion.insert(
+                claimId: claimId,
+                documentId: documentId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ClaimDocumentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ClaimDocumentsTable,
+      ClaimDocument,
+      $$ClaimDocumentsTableFilterComposer,
+      $$ClaimDocumentsTableOrderingComposer,
+      $$ClaimDocumentsTableAnnotationComposer,
+      $$ClaimDocumentsTableCreateCompanionBuilder,
+      $$ClaimDocumentsTableUpdateCompanionBuilder,
+      (
+        ClaimDocument,
+        BaseReferences<_$AppDatabase, $ClaimDocumentsTable, ClaimDocument>,
+      ),
+      ClaimDocument,
+      PrefetchHooks Function()
+    >;
+typedef $$ClaimChecklistItemsTableCreateCompanionBuilder =
+    ClaimChecklistItemsCompanion Function({
+      required String id,
+      required String claimId,
+      required String label,
+      Value<bool> isDone,
+      Value<int> sortOrder,
+      Value<int> rowid,
+    });
+typedef $$ClaimChecklistItemsTableUpdateCompanionBuilder =
+    ClaimChecklistItemsCompanion Function({
+      Value<String> id,
+      Value<String> claimId,
+      Value<String> label,
+      Value<bool> isDone,
+      Value<int> sortOrder,
+      Value<int> rowid,
+    });
+
+class $$ClaimChecklistItemsTableFilterComposer
+    extends Composer<_$AppDatabase, $ClaimChecklistItemsTable> {
+  $$ClaimChecklistItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get claimId => $composableBuilder(
+    column: $table.claimId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDone => $composableBuilder(
+    column: $table.isDone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ClaimChecklistItemsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ClaimChecklistItemsTable> {
+  $$ClaimChecklistItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get claimId => $composableBuilder(
+    column: $table.claimId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDone => $composableBuilder(
+    column: $table.isDone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ClaimChecklistItemsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ClaimChecklistItemsTable> {
+  $$ClaimChecklistItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get claimId =>
+      $composableBuilder(column: $table.claimId, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDone =>
+      $composableBuilder(column: $table.isDone, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+}
+
+class $$ClaimChecklistItemsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ClaimChecklistItemsTable,
+          ClaimChecklistItem,
+          $$ClaimChecklistItemsTableFilterComposer,
+          $$ClaimChecklistItemsTableOrderingComposer,
+          $$ClaimChecklistItemsTableAnnotationComposer,
+          $$ClaimChecklistItemsTableCreateCompanionBuilder,
+          $$ClaimChecklistItemsTableUpdateCompanionBuilder,
+          (
+            ClaimChecklistItem,
+            BaseReferences<
+              _$AppDatabase,
+              $ClaimChecklistItemsTable,
+              ClaimChecklistItem
+            >,
+          ),
+          ClaimChecklistItem,
+          PrefetchHooks Function()
+        > {
+  $$ClaimChecklistItemsTableTableManager(
+    _$AppDatabase db,
+    $ClaimChecklistItemsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ClaimChecklistItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ClaimChecklistItemsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ClaimChecklistItemsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> claimId = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<bool> isDone = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimChecklistItemsCompanion(
+                id: id,
+                claimId: claimId,
+                label: label,
+                isDone: isDone,
+                sortOrder: sortOrder,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String claimId,
+                required String label,
+                Value<bool> isDone = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ClaimChecklistItemsCompanion.insert(
+                id: id,
+                claimId: claimId,
+                label: label,
+                isDone: isDone,
+                sortOrder: sortOrder,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ClaimChecklistItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ClaimChecklistItemsTable,
+      ClaimChecklistItem,
+      $$ClaimChecklistItemsTableFilterComposer,
+      $$ClaimChecklistItemsTableOrderingComposer,
+      $$ClaimChecklistItemsTableAnnotationComposer,
+      $$ClaimChecklistItemsTableCreateCompanionBuilder,
+      $$ClaimChecklistItemsTableUpdateCompanionBuilder,
+      (
+        ClaimChecklistItem,
+        BaseReferences<
+          _$AppDatabase,
+          $ClaimChecklistItemsTable,
+          ClaimChecklistItem
+        >,
+      ),
+      ClaimChecklistItem,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6822,4 +9426,12 @@ class $AppDatabaseManager {
       $$ChatMessagesTableTableManager(_db, _db.chatMessages);
   $$DialysisSessionsTableTableManager get dialysisSessions =>
       $$DialysisSessionsTableTableManager(_db, _db.dialysisSessions);
+  $$InsurancePoliciesTableTableManager get insurancePolicies =>
+      $$InsurancePoliciesTableTableManager(_db, _db.insurancePolicies);
+  $$ClaimsTableTableManager get claims =>
+      $$ClaimsTableTableManager(_db, _db.claims);
+  $$ClaimDocumentsTableTableManager get claimDocuments =>
+      $$ClaimDocumentsTableTableManager(_db, _db.claimDocuments);
+  $$ClaimChecklistItemsTableTableManager get claimChecklistItems =>
+      $$ClaimChecklistItemsTableTableManager(_db, _db.claimChecklistItems);
 }
