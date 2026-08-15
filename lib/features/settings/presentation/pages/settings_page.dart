@@ -87,6 +87,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             const SizedBox(height: 9),
             SettingsTile(
+              icon: Icons.health_and_safety_outlined,
+              title: l10n.policyTitle,
+              subtitle: l10n.policySettingsSub,
+              onTap: () => context.pushNamed('policyEdit'),
+            ),
+            const SizedBox(height: 9),
+            SettingsTile(
               icon: Icons.notifications_outlined,
               title: l10n.reminders,
               subtitle: l10n.remindersSub,

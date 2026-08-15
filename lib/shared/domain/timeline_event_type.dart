@@ -9,7 +9,8 @@ enum TimelineEventType {
   doctorVisit('Doctor visit'),
   bill('Hospital bill'),
   discharge('Discharge summary'),
-  symptom('Symptom');
+  symptom('Symptom'),
+  claim('Insurance claim');
 
   const TimelineEventType(this.label);
 

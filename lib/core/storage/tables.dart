@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../shared/domain/claim_status.dart';
 import '../../shared/domain/document_type.dart';
 import '../../shared/domain/med_schedule.dart';
 import '../../shared/domain/timeline_event_type.dart';
@@ -137,6 +138,67 @@ class DialysisSessions extends Table {
   RealColumn get postWeightKg => real().nullable()();
   RealColumn get durationHours => real().nullable()();
   TextColumn get note => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// A health-insurance policy claims are filed against. Usually one row;
+/// modeled as a list because top-up policies exist.
+class InsurancePolicies extends Table {
+  TextColumn get id => text()();
+  TextColumn get insurerName => text()();
+  TextColumn get policyNumber => text()();
+  TextColumn get tpaName => text().withDefault(const Constant(''))();
+
+  /// Days from a bill's date until the insurer stops accepting it.
+  IntColumn get claimWindowDays =>
+      integer().withDefault(const Constant(30))();
+  TextColumn get note => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// One reimbursement claim: a bundle of vault documents moving through
+/// draft → submitted → outcome. Money is integer paise, never floats.
+class Claims extends Table {
+  TextColumn get id => text()();
+  TextColumn get policyId => text().nullable()();
+  TextColumn get title => text()();
+  TextColumn get status => textEnum<ClaimStatus>()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get submittedOn => dateTime().nullable()();
+  DateTimeColumn get settledOn => dateTime().nullable()();
+  IntColumn get claimedAmountPaise => integer().nullable()();
+  IntColumn get approvedAmountPaise => integer().nullable()();
+
+  /// Claim number assigned by the insurer/TPA after submission.
+  TextColumn get insurerRef => text().withDefault(const Constant(''))();
+  TextColumn get note => text().withDefault(const Constant(''))();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+/// Documents attached to a claim. A document with no row here is
+/// "unclaimed" — that state is always derived, never stored.
+class ClaimDocuments extends Table {
+  TextColumn get claimId => text()();
+  TextColumn get documentId => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {claimId, documentId};
+}
+
+/// Per-claim submission checklist. Labels are copied in at creation time
+/// (localized then), so past claims keep the wording they were made with.
+class ClaimChecklistItems extends Table {
+  TextColumn get id => text()();
+  TextColumn get claimId => text()();
+  TextColumn get label => text()();
+  BoolColumn get isDone => boolean().withDefault(const Constant(false))();
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
 
   @override
   Set<Column<Object>> get primaryKey => {id};

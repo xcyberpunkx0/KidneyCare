@@ -1003,4 +1003,235 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get geminiKeyRemove => 'Remove key';
+
+  @override
+  String get eventClaim => 'Insurance claim';
+
+  @override
+  String get claimsTitle => 'Claims';
+
+  @override
+  String get claimsAction => 'Claims';
+
+  @override
+  String get claimsEmptyTitle => 'No claims yet';
+
+  @override
+  String get claimsEmpty =>
+      'No claims yet. Bundle bills from the vault into a claim and track it to settlement.';
+
+  @override
+  String claimsYtdLine(String claimed, String recovered) {
+    return '$claimed claimed · $recovered recovered this year';
+  }
+
+  @override
+  String unclaimedBillsChip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'bills',
+      one: 'bill',
+    );
+    return '$count unclaimed $_temp0';
+  }
+
+  @override
+  String get claimSectionAttention => 'Needs attention';
+
+  @override
+  String get claimSectionInProgress => 'In progress';
+
+  @override
+  String get claimSectionHistory => 'Settled & rejected';
+
+  @override
+  String claimDocCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'documents',
+      one: 'document',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get claimStatusDraft => 'Draft';
+
+  @override
+  String get claimStatusSubmitted => 'Submitted';
+
+  @override
+  String get claimStatusApproved => 'Approved';
+
+  @override
+  String get claimStatusPartiallySettled => 'Partially settled';
+
+  @override
+  String get claimStatusRejected => 'Rejected';
+
+  @override
+  String get claimNew => 'New claim';
+
+  @override
+  String get claimEdit => 'Edit claim';
+
+  @override
+  String get claimTitleLabel => 'Claim title';
+
+  @override
+  String get claimTitleHint => 'e.g. August dialysis and medicines';
+
+  @override
+  String get claimTitleRequired => 'Give the claim a short title.';
+
+  @override
+  String get claimPolicyLabel => 'Policy';
+
+  @override
+  String get claimPolicyNone => 'No policy';
+
+  @override
+  String get claimNoPolicyYet =>
+      'Add your policy in Settings to enable deadline reminders.';
+
+  @override
+  String get claimPickDocuments => 'Attach documents';
+
+  @override
+  String get claimPickDocumentsSub => 'Unclaimed bills are pre-selected';
+
+  @override
+  String get claimDocumentsSection => 'Documents';
+
+  @override
+  String get claimChecklistSection => 'Checklist';
+
+  @override
+  String get claimChecklistAddHint => 'Add checklist item…';
+
+  @override
+  String get claimAmountClaimed => 'Claimed';
+
+  @override
+  String get claimAmountApproved => 'Approved';
+
+  @override
+  String get claimAmountHint => 'Amount in ₹';
+
+  @override
+  String get claimAmountInvalid => 'Enter a valid amount in rupees.';
+
+  @override
+  String get claimInsurerRefLabel => 'Insurer claim no.';
+
+  @override
+  String get claimNotesLabel => 'Notes';
+
+  @override
+  String get claimMarkSubmitted => 'Mark submitted';
+
+  @override
+  String get claimRecordOutcome => 'Record outcome';
+
+  @override
+  String get claimReopen => 'Reopen as draft';
+
+  @override
+  String get claimDelete => 'Delete claim';
+
+  @override
+  String get claimDeleteConfirm =>
+      'Delete this claim? Its documents stay in the vault.';
+
+  @override
+  String get claimSubmittedOn => 'Submitted on';
+
+  @override
+  String get claimSettledOn => 'Settled on';
+
+  @override
+  String get claimCreatedOn => 'Created on';
+
+  @override
+  String get claimNoDocsError =>
+      'Attach at least one document before submitting.';
+
+  @override
+  String get claimApprovedExceedsWarning =>
+      'Approved amount is more than claimed — double-check the letter.';
+
+  @override
+  String get claimOutcomeApproved => 'Approved in full';
+
+  @override
+  String get claimOutcomePartial => 'Partially settled';
+
+  @override
+  String get claimOutcomeRejected => 'Rejected';
+
+  @override
+  String claimDaysLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'days',
+      one: 'day',
+    );
+    return '$count $_temp0 left to claim';
+  }
+
+  @override
+  String get claimOverdue => 'Past claim window';
+
+  @override
+  String claimAwaitingLong(int count) {
+    return 'Submitted $count days ago — worth a follow-up call';
+  }
+
+  @override
+  String claimGlanceTitle(int count) {
+    return 'CLAIMS · $count';
+  }
+
+  @override
+  String get policyTitle => 'Insurance policy';
+
+  @override
+  String get policySettingsSub => 'Insurer, policy number, claim window';
+
+  @override
+  String get policyInsurerLabel => 'Insurer';
+
+  @override
+  String get policyNumberLabel => 'Policy number';
+
+  @override
+  String get policyTpaLabel => 'TPA (optional)';
+
+  @override
+  String get policyWindowLabel => 'Claim window (days)';
+
+  @override
+  String get policyWindowInvalid =>
+      'Enter the number of days bills stay claimable.';
+
+  @override
+  String get policyRequired => 'Insurer and policy number are required.';
+
+  @override
+  String get checklistClaimForm => 'Signed claim form';
+
+  @override
+  String get checklistOriginalBills => 'Original bills';
+
+  @override
+  String get checklistPrescriptionCopy => 'Prescription copy';
+
+  @override
+  String get checklistLabReports => 'Lab reports';
+
+  @override
+  String get checklistPolicyIdCopy => 'Policy & ID copy';
 }

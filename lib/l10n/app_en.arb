@@ -556,5 +556,91 @@
   "geminiKeySubOff": "Paste your own key to turn on AI features",
   "geminiKeyHint": "Paste your key here",
   "geminiKeyHelp": "Free at aistudio.google.com. Stored only on this device, in secure storage.",
-  "geminiKeyRemove": "Remove key"
+  "geminiKeyRemove": "Remove key",
+  "eventClaim": "Insurance claim",
+  "claimsTitle": "Claims",
+  "claimsAction": "Claims",
+  "claimsEmptyTitle": "No claims yet",
+  "claimsEmpty": "No claims yet. Bundle bills from the vault into a claim and track it to settlement.",
+  "claimsYtdLine": "{claimed} claimed · {recovered} recovered this year",
+  "@claimsYtdLine": {
+    "placeholders": {
+      "claimed": {"type": "String"},
+      "recovered": {"type": "String"}
+    }
+  },
+  "unclaimedBillsChip": "{count} unclaimed {count, plural, =1{bill} other{bills}}",
+  "@unclaimedBillsChip": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimSectionAttention": "Needs attention",
+  "claimSectionInProgress": "In progress",
+  "claimSectionHistory": "Settled & rejected",
+  "claimDocCount": "{count} {count, plural, =1{document} other{documents}}",
+  "@claimDocCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimStatusDraft": "Draft",
+  "claimStatusSubmitted": "Submitted",
+  "claimStatusApproved": "Approved",
+  "claimStatusPartiallySettled": "Partially settled",
+  "claimStatusRejected": "Rejected",
+  "claimNew": "New claim",
+  "claimEdit": "Edit claim",
+  "claimTitleLabel": "Claim title",
+  "claimTitleHint": "e.g. August dialysis and medicines",
+  "claimTitleRequired": "Give the claim a short title.",
+  "claimPolicyLabel": "Policy",
+  "claimPolicyNone": "No policy",
+  "claimNoPolicyYet": "Add your policy in Settings to enable deadline reminders.",
+  "claimPickDocuments": "Attach documents",
+  "claimPickDocumentsSub": "Unclaimed bills are pre-selected",
+  "claimDocumentsSection": "Documents",
+  "claimChecklistSection": "Checklist",
+  "claimChecklistAddHint": "Add checklist item…",
+  "claimAmountClaimed": "Claimed",
+  "claimAmountApproved": "Approved",
+  "claimAmountHint": "Amount in ₹",
+  "claimAmountInvalid": "Enter a valid amount in rupees.",
+  "claimInsurerRefLabel": "Insurer claim no.",
+  "claimNotesLabel": "Notes",
+  "claimMarkSubmitted": "Mark submitted",
+  "claimRecordOutcome": "Record outcome",
+  "claimReopen": "Reopen as draft",
+  "claimDelete": "Delete claim",
+  "claimDeleteConfirm": "Delete this claim? Its documents stay in the vault.",
+  "claimSubmittedOn": "Submitted on",
+  "claimSettledOn": "Settled on",
+  "claimCreatedOn": "Created on",
+  "claimNoDocsError": "Attach at least one document before submitting.",
+  "claimApprovedExceedsWarning": "Approved amount is more than claimed — double-check the letter.",
+  "claimOutcomeApproved": "Approved in full",
+  "claimOutcomePartial": "Partially settled",
+  "claimOutcomeRejected": "Rejected",
+  "claimDaysLeft": "{count} {count, plural, =1{day} other{days}} left to claim",
+  "@claimDaysLeft": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimOverdue": "Past claim window",
+  "claimAwaitingLong": "Submitted {count} days ago — worth a follow-up call",
+  "@claimAwaitingLong": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimGlanceTitle": "CLAIMS · {count}",
+  "@claimGlanceTitle": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "policyTitle": "Insurance policy",
+  "policySettingsSub": "Insurer, policy number, claim window",
+  "policyInsurerLabel": "Insurer",
+  "policyNumberLabel": "Policy number",
+  "policyTpaLabel": "TPA (optional)",
+  "policyWindowLabel": "Claim window (days)",
+  "policyWindowInvalid": "Enter the number of days bills stay claimable.",
+  "policyRequired": "Insurer and policy number are required.",
+  "checklistClaimForm": "Signed claim form",
+  "checklistOriginalBills": "Original bills",
+  "checklistPrescriptionCopy": "Prescription copy",
+  "checklistLabReports": "Lab reports",
+  "checklistPolicyIdCopy": "Policy & ID copy"
 }

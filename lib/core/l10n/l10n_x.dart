@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../shared/domain/claim_status.dart';
 import '../../shared/domain/document_type.dart';
 import '../../shared/domain/med_schedule.dart';
 import '../../shared/domain/timeline_event_type.dart';
@@ -39,6 +40,7 @@ extension TimelineEventTypeL10n on TimelineEventType {
         TimelineEventType.bill => l10n.eventBill,
         TimelineEventType.discharge => l10n.eventDischarge,
         TimelineEventType.symptom => l10n.eventSymptom,
+        TimelineEventType.claim => l10n.eventClaim,
       };
 }
 
@@ -57,6 +59,16 @@ extension MedTimingCueL10n on MedTimingCue {
         MedTimingCue.beforeFood => l10n.cueBeforeFood,
         MedTimingCue.withFood => l10n.cueWithFood,
         MedTimingCue.dialysisDayOnly => l10n.cueDialysisDayOnly,
+      };
+}
+
+extension ClaimStatusL10n on ClaimStatus {
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+        ClaimStatus.draft => l10n.claimStatusDraft,
+        ClaimStatus.submitted => l10n.claimStatusSubmitted,
+        ClaimStatus.approved => l10n.claimStatusApproved,
+        ClaimStatus.partiallySettled => l10n.claimStatusPartiallySettled,
+        ClaimStatus.rejected => l10n.claimStatusRejected,
       };
 }
 

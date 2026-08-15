@@ -11,6 +11,7 @@ abstract final class AppRoutes {
   static const search = '/search';
   static const capture = '/capture';
   static const onboarding = '/onboarding';
+  static const claims = '/claims';
 
   static const homeName = 'home';
   static const labsName = 'labs';
@@ -20,4 +21,5 @@ abstract final class AppRoutes {
   static const timelineName = 'timeline';
   static const searchName = 'search';
   static const captureName = 'capture';
+  static const claimsName = 'claims';
 }

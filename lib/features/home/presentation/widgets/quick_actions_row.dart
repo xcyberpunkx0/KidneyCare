@@ -5,7 +5,7 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 
-/// Gemini-style suggestion chips under the hero card: the two things a
+/// Gemini-style suggestion chips under the hero card: the things a
 /// caregiver does most often between captures.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
@@ -31,6 +31,14 @@ class QuickActionsRow extends StatelessWidget {
               icon: Icons.monitor_heart_outlined,
               label: l10n.logSymptomAction,
               onTap: () => context.pushNamed('symptomLog'),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _ActionChip(
+              icon: Icons.receipt_long_outlined,
+              label: l10n.claimsAction,
+              onTap: () => context.pushNamed('claims'),
             ),
           ),
         ],

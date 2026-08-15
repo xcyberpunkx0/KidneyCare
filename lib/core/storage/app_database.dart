@@ -7,11 +7,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
 import 'package:sqlite3/open.dart';
 
+import '../../shared/domain/claim_status.dart';
 import '../../shared/domain/document_type.dart';
 import '../../shared/domain/med_schedule.dart';
 import '../../shared/domain/timeline_event_type.dart';
 import '../services/vault_key_store.dart';
 import 'daos/chat_dao.dart';
+import 'daos/claim_dao.dart';
 import 'daos/dialysis_dao.dart';
 import 'daos/document_dao.dart';
 import 'daos/dose_dao.dart';
@@ -34,6 +36,10 @@ part 'app_database.g.dart';
     Doses,
     ChatMessages,
     DialysisSessions,
+    InsurancePolicies,
+    Claims,
+    ClaimDocuments,
+    ClaimChecklistItems,
   ],
   daos: [
     PatientDao,
@@ -44,6 +50,7 @@ part 'app_database.g.dart';
     DoseDao,
     ChatDao,
     DialysisDao,
+    ClaimDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -52,7 +59,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -73,6 +80,12 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 5) {
           await m.addColumn(patients, patients.comorbidities);
+        }
+        if (from < 6) {
+          await m.createTable(insurancePolicies);
+          await m.createTable(claims);
+          await m.createTable(claimDocuments);
+          await m.createTable(claimChecklistItems);
         }
       },
     );
