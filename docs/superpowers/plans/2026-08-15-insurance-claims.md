@@ -2346,7 +2346,9 @@ git add lib/features/claims/presentation/pages/policy_edit_page.dart lib/core/ro
 git commit -m "feat: add insurance policy editor in settings"
 ```
 
----### Task 10: Claim create/edit page with document picker
+---
+
+### Task 10: Claim create/edit page with document picker
 
 **Files:**
 - Replace placeholder: `lib/features/claims/presentation/pages/claim_edit_page.dart`
