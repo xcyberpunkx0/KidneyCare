@@ -1057,7 +1057,7 @@ In `record_tile.dart`, extend `_iconFor`'s switch with:
 ```dart
       TimelineEventType.claim =>
         (Icons.receipt_long_outlined, colors.greenBg, colors.green),
-    ```
+```
 
 - [ ] **Step 6: Verify the compiler is satisfied**
 
