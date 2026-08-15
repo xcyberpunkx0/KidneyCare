@@ -65,10 +65,10 @@ void main() {
     await addDocument('b1', DocumentType.bill, DateTime(2026, 8, 10));
     await addClaim('c1');
     await db.claimDao.attachDocument('c1', 'b1');
-    await db.claimDao.upsertChecklistItem(ClaimChecklistItemsCompanion(
-      id: const Value('i1'),
-      claimId: const Value('c1'),
-      label: const Value('Claim form'),
+    await db.claimDao.upsertChecklistItem(const ClaimChecklistItemsCompanion(
+      id: Value('i1'),
+      claimId: Value('c1'),
+      label: Value('Claim form'),
     ));
 
     await db.claimDao.deleteClaimCascade('c1');
@@ -95,10 +95,10 @@ void main() {
 
   test('deletePolicy clears policyId on referencing claims, keeps the claim',
       () async {
-    await db.claimDao.upsertPolicy(InsurancePoliciesCompanion(
-      id: const Value('p1'),
-      insurerName: const Value('Acme Health'),
-      policyNumber: const Value('POL123'),
+    await db.claimDao.upsertPolicy(const InsurancePoliciesCompanion(
+      id: Value('p1'),
+      insurerName: Value('Acme Health'),
+      policyNumber: Value('POL123'),
     ));
     await db.claimDao.upsertClaim(ClaimsCompanion(
       id: const Value('c1'),
