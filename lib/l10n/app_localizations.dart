@@ -2030,6 +2030,12 @@ abstract class AppLocalizations {
   /// **'Policy'**
   String get claimPolicyLabel;
 
+  /// No description provided for @claimPolicyNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No policy'**
+  String get claimPolicyNone;
+
   /// No description provided for @claimNoPolicyYet.
   ///
   /// In en, this message translates to:

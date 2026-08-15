@@ -322,6 +322,7 @@
   "claimTitleHint": "जैसे अगस्त डायलिसिस और दवाइयाँ",
   "claimTitleRequired": "क्लेम को एक छोटा शीर्षक दें।",
   "claimPolicyLabel": "पॉलिसी",
+  "claimPolicyNone": "कोई पॉलिसी नहीं",
   "claimNoPolicyYet": "समय-सीमा रिमाइंडर के लिए सेटिंग्स में अपनी पॉलिसी जोड़ें।",
   "claimPickDocuments": "दस्तावेज़ जोड़ें",
   "claimPickDocumentsSub": "बिना क्लेम वाले बिल पहले से चुने हैं",

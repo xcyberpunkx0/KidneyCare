@@ -591,6 +591,7 @@
   "claimTitleHint": "e.g. August dialysis and medicines",
   "claimTitleRequired": "Give the claim a short title.",
   "claimPolicyLabel": "Policy",
+  "claimPolicyNone": "No policy",
   "claimNoPolicyYet": "Add your policy in Settings to enable deadline reminders.",
   "claimPickDocuments": "Attach documents",
   "claimPickDocumentsSub": "Unclaimed bills are pre-selected",

@@ -1090,6 +1090,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get claimPolicyLabel => 'Policy';
 
   @override
+  String get claimPolicyNone => 'No policy';
+
+  @override
   String get claimNoPolicyYet =>
       'Add your policy in Settings to enable deadline reminders.';
 

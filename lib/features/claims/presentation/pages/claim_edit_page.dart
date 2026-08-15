@@ -35,27 +35,43 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
 
   /// New claim: pre-select every unclaimed bill. Edit: load the draft's
   /// current title and attachments once streams deliver.
+  ///
+  /// The actual `preselect` call is deferred to a microtask: Riverpod
+  /// forbids mutating a provider's state from within another widget's
+  /// `build`, and calling it synchronously here can collide with an
+  /// in-flight async transition on `unclaimedBillsProvider` /
+  /// `policiesProvider` / `claimProvider` (e.g. their first stream emission
+  /// resolving during the same frame).
   void _initialize() {
     if (_initialized) return;
-    final controller = ref.read(claimEditControllerProvider.notifier);
     if (widget.claimId == null) {
       final unclaimed = ref.read(unclaimedBillsProvider).value;
       final policies = ref.read(policiesProvider).value;
       if (unclaimed == null || policies == null) return;
-      controller.preselect(
-        unclaimed.map((d) => d.id).toSet(),
-        '',
-        policies.isEmpty ? null : policies.first.id,
-      );
       _initialized = true;
+      final ids = unclaimed.map((d) => d.id).toSet();
+      // Auto-select only when there's exactly one policy; with none or
+      // several, leave the choice to the caregiver.
+      final policyId = policies.length == 1 ? policies.first.id : null;
+      Future.microtask(() {
+        if (!mounted) return;
+        ref
+            .read(claimEditControllerProvider.notifier)
+            .preselect(ids, '', policyId);
+      });
     } else {
       final claim = ref.read(claimProvider(widget.claimId!)).value;
       final docs = ref.read(claimDocumentsProvider(widget.claimId!)).value;
       if (claim == null || docs == null) return;
-      _title.text = claim.title;
-      controller.preselect(
-          docs.map((d) => d.id).toSet(), claim.title, claim.policyId);
       _initialized = true;
+      _title.text = claim.title;
+      final ids = docs.map((d) => d.id).toSet();
+      Future.microtask(() {
+        if (!mounted) return;
+        ref
+            .read(claimEditControllerProvider.notifier)
+            .preselect(ids, claim.title, claim.policyId);
+      });
     }
   }
 
@@ -132,7 +148,44 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
             const SizedBox(height: 14),
             if (policies.isEmpty)
               Text(l10n.claimNoPolicyYet,
-                  style: typo.caption.copyWith(color: colors.muted)),
+                  style: typo.caption.copyWith(color: colors.muted))
+            else if (policies.length == 1)
+              Text(
+                '${l10n.claimPolicyLabel}: ${_policyLabel(policies.first)}',
+                style: typo.body,
+              )
+            else
+              DropdownButtonFormField<String?>(
+                // DropdownButtonFormField only applies `initialValue` once
+                // per FormField instance; keying it on the resolved value
+                // forces a fresh instance (and a fresh initial value) when
+                // the selection changes from outside the dropdown itself
+                // (e.g. the edit-draft preselect).
+                key: ValueKey(
+                  policies.any((p) => p.id == state.policyId)
+                      ? state.policyId
+                      : null,
+                ),
+                initialValue: policies.any((p) => p.id == state.policyId)
+                    ? state.policyId
+                    : null,
+                style: typo.body,
+                decoration: InputDecoration(labelText: l10n.claimPolicyLabel),
+                items: [
+                  DropdownMenuItem<String?>(
+                    value: null,
+                    child: Text(l10n.claimPolicyNone),
+                  ),
+                  for (final policy in policies)
+                    DropdownMenuItem<String?>(
+                      value: policy.id,
+                      child: Text(_policyLabel(policy)),
+                    ),
+                ],
+                onChanged: (value) => ref
+                    .read(claimEditControllerProvider.notifier)
+                    .setPolicy(value),
+              ),
             const SizedBox(height: 14),
             Text(l10n.claimPickDocuments, style: typo.cardTitle),
             Text(l10n.claimPickDocumentsSub,
@@ -172,3 +225,7 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
     );
   }
 }
+
+/// "Star Health · POL-1" — how a policy is displayed for selection.
+String _policyLabel(InsurancePolicy policy) =>
+    '${policy.insurerName} · ${policy.policyNumber}';

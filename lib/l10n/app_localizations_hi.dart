@@ -1085,6 +1085,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get claimPolicyLabel => 'पॉलिसी';
 
   @override
+  String get claimPolicyNone => 'कोई पॉलिसी नहीं';
+
+  @override
   String get claimNoPolicyYet =>
       'समय-सीमा रिमाइंडर के लिए सेटिंग्स में अपनी पॉलिसी जोड़ें।';
 
