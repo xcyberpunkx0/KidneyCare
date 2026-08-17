@@ -551,7 +551,7 @@ abstract class AppLocalizations {
   /// No description provided for @invalidNumber.
   ///
   /// In en, this message translates to:
-  /// **'One of the values is not a valid number.'**
+  /// **'Enter a valid number'**
   String get invalidNumber;
 
   /// No description provided for @medicines.
@@ -2323,6 +2323,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Policy & ID copy'**
   String get checklistPolicyIdCopy;
+
+  /// No description provided for @labHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{metric} readings'**
+  String labHistoryTitle(String metric);
+
+  /// No description provided for @viewReadingHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'View {metric} history'**
+  String viewReadingHistory(String metric);
+
+  /// No description provided for @editReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reading'**
+  String get editReading;
+
+  /// No description provided for @editReadingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reading of {date}'**
+  String editReadingOn(String date);
+
+  /// No description provided for @deleteReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete reading'**
+  String get deleteReading;
+
+  /// No description provided for @deleteReadingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this reading? This cannot be undone.'**
+  String get deleteReadingConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -13,4 +13,13 @@ abstract interface class LabsRepository {
     required DateTime takenAt,
     required Map<LabMetric, double> values,
   });
+
+  /// Every stored reading of [metric], newest first — the correction view.
+  Stream<List<LabReading>> watchReadings(LabMetric metric);
+
+  /// Rewrites a mistyped value; the reading keeps its original date.
+  Future<Result<void>> updateReading(String id, double value);
+
+  /// Removes a reading entirely.
+  Future<Result<void>> deleteReading(String id);
 }

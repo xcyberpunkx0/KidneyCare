@@ -54,4 +54,12 @@ class LabDao extends DatabaseAccessor<AppDatabase> with _$LabDaoMixin {
   Future<void> insertAll(List<LabResultsCompanion> entries) async {
     await batch((b) => b.insertAllOnConflictUpdate(labResults, entries));
   }
+
+  Future<void> updateValue(String id, double value) {
+    return (update(labResults)..where((t) => t.id.equals(id)))
+        .write(LabResultsCompanion(value: Value(value)));
+  }
+
+  Future<void> deleteById(String id) =>
+      (delete(labResults)..where((t) => t.id.equals(id))).go();
 }

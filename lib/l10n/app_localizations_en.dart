@@ -280,7 +280,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get labValuesSaved => 'Lab values saved to the timeline';
 
   @override
-  String get invalidNumber => 'One of the values is not a valid number.';
+  String get invalidNumber => 'Enter a valid number';
 
   @override
   String get medicines => 'Medicines';
@@ -1256,4 +1256,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checklistPolicyIdCopy => 'Policy & ID copy';
+
+  @override
+  String labHistoryTitle(String metric) {
+    return '$metric readings';
+  }
+
+  @override
+  String viewReadingHistory(String metric) {
+    return 'View $metric history';
+  }
+
+  @override
+  String get editReading => 'Edit reading';
+
+  @override
+  String editReadingOn(String date) {
+    return 'Edit reading of $date';
+  }
+
+  @override
+  String get deleteReading => 'Delete reading';
+
+  @override
+  String get deleteReadingConfirm =>
+      'Delete this reading? This cannot be undone.';
 }

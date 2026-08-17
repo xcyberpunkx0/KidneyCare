@@ -13,6 +13,7 @@ import '../../data/repository_impl/labs_repository_impl.dart';
 import '../controllers/labs_controllers.dart';
 import '../widgets/all_values_card.dart';
 import '../widgets/lab_chart_card.dart';
+import '../widgets/lab_history_sheet.dart';
 import '../widgets/metric_chip_row.dart';
 
 /// Labs & Trends — metric chips, trend chart with normal-range band, and
@@ -136,7 +137,10 @@ class _LabsPageState extends ConsumerState<LabsPage> {
                       .select(metric),
                 ),
                 const SizedBox(height: 12),
-                LabChartCard(series: current),
+                LabChartCard(
+                  series: current,
+                  onHistoryTap: () => showLabHistorySheet(context, current),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(22, 14, 22, 6),
                   child: Text(
@@ -153,6 +157,8 @@ class _LabsPageState extends ConsumerState<LabsPage> {
                           .select(series.metric);
                     }
                   },
+                  onRowLongPress: (series) =>
+                      showLabHistorySheet(context, series),
                 ),
               ],
             );

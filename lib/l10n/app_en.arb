@@ -662,5 +662,21 @@
   "checklistOriginalBills": "Original bills",
   "checklistPrescriptionCopy": "Prescription copy",
   "checklistLabReports": "Lab reports",
-  "checklistPolicyIdCopy": "Policy & ID copy"
+  "checklistPolicyIdCopy": "Policy & ID copy",
+  "labHistoryTitle": "{metric} readings",
+  "@labHistoryTitle": {
+    "placeholders": {"metric": {"type": "String"}}
+  },
+  "viewReadingHistory": "View {metric} history",
+  "@viewReadingHistory": {
+    "placeholders": {"metric": {"type": "String"}}
+  },
+  "editReading": "Edit reading",
+  "editReadingOn": "Edit reading of {date}",
+  "@editReadingOn": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "deleteReading": "Delete reading",
+  "deleteReadingConfirm": "Delete this reading? This cannot be undone.",
+  "invalidNumber": "Enter a valid number"
 }

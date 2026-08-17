@@ -279,7 +279,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get labValuesSaved => 'आँकड़े टाइमलाइन में सहेज दिए गए';
 
   @override
-  String get invalidNumber => 'कोई एक आँकड़ा सही संख्या नहीं है।';
+  String get invalidNumber => 'सही संख्या लिखें';
 
   @override
   String get medicines => 'दवाइयाँ';
@@ -1251,4 +1251,29 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get checklistPolicyIdCopy => 'पॉलिसी और पहचान-पत्र की कॉपी';
+
+  @override
+  String labHistoryTitle(String metric) {
+    return '$metric की रीडिंग';
+  }
+
+  @override
+  String viewReadingHistory(String metric) {
+    return '$metric का इतिहास देखें';
+  }
+
+  @override
+  String get editReading => 'रीडिंग बदलें';
+
+  @override
+  String editReadingOn(String date) {
+    return '$date की रीडिंग बदलें';
+  }
+
+  @override
+  String get deleteReading => 'रीडिंग हटाएँ';
+
+  @override
+  String get deleteReadingConfirm =>
+      'यह रीडिंग हटाएँ? इसे वापस नहीं लाया जा सकता।';
 }
