@@ -192,6 +192,14 @@
   },
   "enterLabValues": "Enter lab values",
   "enterLabValuesCopy": "Type in the values from the report — leave anything blank that was not tested.",
+  "changeUnit": "Change unit, currently {unit}",
+  "@changeUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
   "reportDate": "REPORT DATE",
   "changeReportDate": "Change report date, currently {date}",
   "@changeReportDate": {
@@ -448,6 +456,16 @@
   "noSessionsMessage": "After each dialysis, log the session here — weights, fluid removed, and how it went.",
   "logASession": "Log a session",
   "logSessionCopy": "Today's dialysis, in the record. Fill what you know — everything except duration is optional.",
+  "sessionDate": "SESSION DATE",
+  "sessionDateDialogTitle": "Session date",
+  "changeSessionDate": "Change session date, currently {date}",
+  "@changeSessionDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "duration": "DURATION",
   "preWeightKgLabel": "PRE WEIGHT (KG)",
   "postWeightKgLabel": "POST WEIGHT (KG)",
@@ -511,8 +529,10 @@
   "groupByClock": "By the clock",
   "groupWeekly": "Weekly",
   "cueMorning": "Morning",
+  "cueNoon": "Noon",
   "cueNight": "Night",
   "cueBeforeFood": "Before food",
+  "cueAfterFood": "After food",
   "cueWithFood": "With food",
   "cueDialysisDayOnly": "Dialysis day only",
   "dayMon": "Mon",

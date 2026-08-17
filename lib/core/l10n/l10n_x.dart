@@ -55,8 +55,10 @@ extension MedScheduleGroupL10n on MedScheduleGroup {
 extension MedTimingCueL10n on MedTimingCue {
   String localizedLabel(AppLocalizations l10n) => switch (this) {
         MedTimingCue.morning => l10n.cueMorning,
+        MedTimingCue.noon => l10n.cueNoon,
         MedTimingCue.night => l10n.cueNight,
         MedTimingCue.beforeFood => l10n.cueBeforeFood,
+        MedTimingCue.afterFood => l10n.cueAfterFood,
         MedTimingCue.withFood => l10n.cueWithFood,
         MedTimingCue.dialysisDayOnly => l10n.cueDialysisDayOnly,
       };

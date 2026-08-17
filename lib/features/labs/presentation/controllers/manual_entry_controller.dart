@@ -19,15 +19,23 @@ class ManualEntryController extends Notifier<ManualEntryState> {
   ManualEntryState build() => const ManualEntryState();
 
   /// Parses raw field text into values; blank fields are skipped. Returns
-  /// null when a non-blank field is not a valid number.
-  static Map<LabMetric, double>? parseValues(Map<LabMetric, String> raw) {
+  /// null when a non-blank field is not a valid number. Metrics listed in
+  /// [inAltUnit] were typed in their report unit and are converted to the
+  /// canonical unit here.
+  static Map<LabMetric, double>? parseValues(
+    Map<LabMetric, String> raw, {
+    Set<LabMetric> inAltUnit = const {},
+  }) {
     final values = <LabMetric, double>{};
     for (final MapEntry(key: metric, value: text) in raw.entries) {
       final trimmed = text.trim();
       if (trimmed.isEmpty) continue;
       final value = double.tryParse(trimmed);
       if (value == null) return null;
-      values[metric] = value;
+      final factor = metric.altUnitFactor;
+      values[metric] = inAltUnit.contains(metric) && factor != null
+          ? value * factor
+          : value;
     }
     return values;
   }

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/app_choice_chip.dart';
 import '../../../../core/widgets/labeled_field_card.dart';
 import '../../domain/entities/session_log.dart';
@@ -27,6 +28,7 @@ class _LogSessionPageState extends ConsumerState<LogSessionPage> {
   final _diastolic = TextEditingController();
   final _note = TextEditingController();
   double _hours = 4;
+  DateTime _completedAt = DateTime.now();
 
   /// Quick-note suggestions; the selected chip's localized text is
   /// written into the note field as user data.
@@ -48,10 +50,21 @@ class _LogSessionPageState extends ConsumerState<LogSessionPage> {
     super.dispose();
   }
 
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _completedAt,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      helpText: context.l10n.sessionDateDialogTitle,
+    );
+    if (picked != null) setState(() => _completedAt = picked);
+  }
+
   Future<void> _save() async {
     final saved = await ref.read(logSessionProvider.notifier).save(
           SessionLog(
-            completedAt: DateTime.now(),
+            completedAt: _completedAt,
             durationHours: _hours,
             preWeightKg: double.tryParse(_preWeight.text.trim()),
             postWeightKg: double.tryParse(_postWeight.text.trim()),
@@ -103,7 +116,50 @@ class _LogSessionPageState extends ConsumerState<LogSessionPage> {
               l10n.logSessionCopy,
               style: typo.body.copyWith(color: colors.muted),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Text(l10n.sessionDate,
+                    style: typo.overline.copyWith(
+                        fontSize: 10.5, color: colors.muted)),
+                const SizedBox(width: 12),
+                Semantics(
+                  button: true,
+                  label: l10n.changeSessionDate(_completedAt.monthDayYear),
+                  child: Material(
+                    color: colors.fieldBg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(
+                          color: colors.fieldBorder, width: 1.5),
+                    ),
+                    child: InkWell(
+                      onTap: _pickDate,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 9),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _completedAt.monthDayYear,
+                              style: typo.number(13.5,
+                                  weight: FontWeight.w600,
+                                  color: colors.ink),
+                            ),
+                            const SizedBox(width: 6),
+                            Icon(Icons.event_outlined,
+                                size: 14, color: colors.muted),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             LabeledFieldCard(
               label: l10n.duration,
               child: Wrap(

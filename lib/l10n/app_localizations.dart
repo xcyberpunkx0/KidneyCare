@@ -494,6 +494,12 @@ abstract class AppLocalizations {
   /// **'Type in the values from the report — leave anything blank that was not tested.'**
   String get enterLabValuesCopy;
 
+  /// No description provided for @changeUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change unit, currently {unit}'**
+  String changeUnit(String unit);
+
   /// No description provided for @reportDate.
   ///
   /// In en, this message translates to:
@@ -1328,6 +1334,24 @@ abstract class AppLocalizations {
   /// **'Today\'s dialysis, in the record. Fill what you know — everything except duration is optional.'**
   String get logSessionCopy;
 
+  /// No description provided for @sessionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'SESSION DATE'**
+  String get sessionDate;
+
+  /// No description provided for @sessionDateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session date'**
+  String get sessionDateDialogTitle;
+
+  /// No description provided for @changeSessionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Change session date, currently {date}'**
+  String changeSessionDate(String date);
+
   /// No description provided for @duration.
   ///
   /// In en, this message translates to:
@@ -1706,6 +1730,12 @@ abstract class AppLocalizations {
   /// **'Morning'**
   String get cueMorning;
 
+  /// No description provided for @cueNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Noon'**
+  String get cueNoon;
+
   /// No description provided for @cueNight.
   ///
   /// In en, this message translates to:
@@ -1717,6 +1747,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Before food'**
   String get cueBeforeFood;
+
+  /// No description provided for @cueAfterFood.
+  ///
+  /// In en, this message translates to:
+  /// **'After food'**
+  String get cueAfterFood;
 
   /// No description provided for @cueWithFood.
   ///

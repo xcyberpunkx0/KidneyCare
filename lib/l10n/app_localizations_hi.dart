@@ -246,6 +246,11 @@ class AppLocalizationsHi extends AppLocalizations {
       'रिपोर्ट से आँकड़े भरें — जो जाँच नहीं हुई उसे खाली छोड़ दें।';
 
   @override
+  String changeUnit(String unit) {
+    return 'यूनिट बदलें, अभी $unit';
+  }
+
+  @override
   String get reportDate => 'रिपोर्ट की तारीख़';
 
   @override
@@ -707,6 +712,17 @@ class AppLocalizationsHi extends AppLocalizations {
       'आज का डायलिसिस, रिकॉर्ड में। जो पता है भरें — अवधि के अलावा सब वैकल्पिक है।';
 
   @override
+  String get sessionDate => 'सेशन की तारीख़';
+
+  @override
+  String get sessionDateDialogTitle => 'सेशन की तारीख़';
+
+  @override
+  String changeSessionDate(String date) {
+    return 'सेशन की तारीख़ बदलें, अभी $date';
+  }
+
+  @override
   String get duration => 'अवधि';
 
   @override
@@ -898,10 +914,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cueMorning => 'सुबह';
 
   @override
+  String get cueNoon => 'दोपहर';
+
+  @override
   String get cueNight => 'रात';
 
   @override
   String get cueBeforeFood => 'खाने से पहले';
+
+  @override
+  String get cueAfterFood => 'खाने के बाद';
 
   @override
   String get cueWithFood => 'खाने के साथ';

@@ -51,7 +51,12 @@ class DialysisRepositoryImpl implements DialysisRepository {
             center: patient.dialysisCenter,
             dryWeightKg: patient.dryWeightKg,
           );
-          final next = profile.nextSession(log.completedAt);
+          // A backdated log must not drag the standing "next session"
+          // into the past — roll forward from now in that case.
+          final now = DateTime.now();
+          final anchor =
+              log.completedAt.isAfter(now) ? log.completedAt : now;
+          final next = profile.nextSession(anchor);
           if (next != null) {
             await _db.dialysisDao.upsert(DialysisSessionsCompanion(
               id: const Value('hd-next'),

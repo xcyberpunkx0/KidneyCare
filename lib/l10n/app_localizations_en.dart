@@ -247,6 +247,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Type in the values from the report — leave anything blank that was not tested.';
 
   @override
+  String changeUnit(String unit) {
+    return 'Change unit, currently $unit';
+  }
+
+  @override
   String get reportDate => 'REPORT DATE';
 
   @override
@@ -712,6 +717,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Today\'s dialysis, in the record. Fill what you know — everything except duration is optional.';
 
   @override
+  String get sessionDate => 'SESSION DATE';
+
+  @override
+  String get sessionDateDialogTitle => 'Session date';
+
+  @override
+  String changeSessionDate(String date) {
+    return 'Change session date, currently $date';
+  }
+
+  @override
   String get duration => 'DURATION';
 
   @override
@@ -904,10 +920,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cueMorning => 'Morning';
 
   @override
+  String get cueNoon => 'Noon';
+
+  @override
   String get cueNight => 'Night';
 
   @override
   String get cueBeforeFood => 'Before food';
+
+  @override
+  String get cueAfterFood => 'After food';
 
   @override
   String get cueWithFood => 'With food';
