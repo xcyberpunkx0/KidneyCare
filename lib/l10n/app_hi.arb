@@ -370,5 +370,12 @@
   "checklistOriginalBills": "मूल बिल",
   "checklistPrescriptionCopy": "पर्चे की कॉपी",
   "checklistLabReports": "लैब रिपोर्ट",
-  "checklistPolicyIdCopy": "पॉलिसी और पहचान-पत्र की कॉपी"
+  "checklistPolicyIdCopy": "पॉलिसी और पहचान-पत्र की कॉपी",
+  "labHistoryTitle": "{metric} की रीडिंग",
+  "viewReadingHistory": "{metric} का इतिहास देखें",
+  "editReading": "रीडिंग बदलें",
+  "editReadingOn": "{date} की रीडिंग बदलें",
+  "deleteReading": "रीडिंग हटाएँ",
+  "deleteReadingConfirm": "यह रीडिंग हटाएँ? इसे वापस नहीं लाया जा सकता।",
+  "invalidNumber": "सही संख्या लिखें"
 }

@@ -1,5 +1,18 @@
 import '../../../../shared/domain/lab_metric.dart';
 
+/// One stored observation, addressable for editing and deletion.
+class LabReading {
+  const LabReading({
+    required this.id,
+    required this.takenAt,
+    required this.value,
+  });
+
+  final String id;
+  final DateTime takenAt;
+  final double value;
+}
+
 /// One observation in a metric's history.
 class LabPoint {
   const LabPoint({required this.takenAt, required this.value});

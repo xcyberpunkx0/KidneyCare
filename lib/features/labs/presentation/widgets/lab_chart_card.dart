@@ -11,9 +11,12 @@ import '../../domain/entities/lab_series.dart';
 /// The trend chart card: big current value, range status, and a line chart
 /// with the normal range shaded behind it.
 class LabChartCard extends StatelessWidget {
-  const LabChartCard({super.key, required this.series});
+  const LabChartCard({super.key, required this.series, this.onHistoryTap});
 
   final LabSeries series;
+
+  /// Opens the reading history for corrections.
+  final VoidCallback? onHistoryTap;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,22 @@ class LabChartCard extends StatelessWidget {
                 label: statusLabel,
                 tone: abnormal ? StatusTone.amber : StatusTone.neutral,
               ),
+              if (onHistoryTap != null) ...[
+                const SizedBox(width: 4),
+                Semantics(
+                  button: true,
+                  label: l10n.viewReadingHistory(metric.label),
+                  child: InkWell(
+                    onTap: onHistoryTap,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child:
+                          Icon(Icons.history, size: 18, color: colors.muted),
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
           const SizedBox(height: 4),

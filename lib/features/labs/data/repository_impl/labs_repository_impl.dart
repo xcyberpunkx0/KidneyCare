@@ -54,6 +54,24 @@ class LabsRepositoryImpl implements LabsRepository {
     });
   }
 
+  @override
+  Stream<List<LabReading>> watchReadings(LabMetric metric) {
+    return _db.labDao.watchMetric(metric.code).map((rows) => [
+          for (final row in rows.reversed)
+            LabReading(id: row.id, takenAt: row.takenAt, value: row.value),
+        ]);
+  }
+
+  @override
+  Future<Result<void>> updateReading(String id, double value) {
+    return Result.guard(() => _db.labDao.updateValue(id, value));
+  }
+
+  @override
+  Future<Result<void>> deleteReading(String id) {
+    return Result.guard(() => _db.labDao.deleteById(id));
+  }
+
   List<LabSeries> _groupIntoSeries(List<LabResult> rows, Patient? patient) {
     final byMetric = <LabMetric, List<LabPoint>>{};
     for (final row in rows) {

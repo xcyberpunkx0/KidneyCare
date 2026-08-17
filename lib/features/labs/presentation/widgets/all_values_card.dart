@@ -7,10 +7,18 @@ import '../../domain/entities/lab_series.dart';
 /// "All values" card: the latest reading of every tracked metric, abnormal
 /// ones in amber with a direction arrow.
 class AllValuesCard extends StatelessWidget {
-  const AllValuesCard({super.key, required this.series, this.onRowTap});
+  const AllValuesCard({
+    super.key,
+    required this.series,
+    this.onRowTap,
+    this.onRowLongPress,
+  });
 
   final List<LabSeries> series;
   final void Function(LabSeries series)? onRowTap;
+
+  /// Long-press opens the reading history for corrections.
+  final void Function(LabSeries series)? onRowLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +41,9 @@ class AllValuesCard extends StatelessWidget {
               isLast: i == withData.length - 1,
               onTap:
                   onRowTap == null ? null : () => onRowTap!(withData[i]),
+              onLongPress: onRowLongPress == null
+                  ? null
+                  : () => onRowLongPress!(withData[i]),
             ),
         ],
       ),
@@ -45,11 +56,13 @@ class _ValueRow extends StatelessWidget {
     required this.series,
     required this.isLast,
     this.onTap,
+    this.onLongPress,
   });
 
   final LabSeries series;
   final bool isLast;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +73,7 @@ class _ValueRow extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
