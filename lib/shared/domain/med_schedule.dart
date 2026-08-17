@@ -12,8 +12,10 @@ enum MedScheduleGroup {
 /// Timing cue icons shown on medication cards.
 enum MedTimingCue {
   morning('Morning'),
+  noon('Noon'),
   night('Night'),
   beforeFood('Before food'),
+  afterFood('After food'),
   withFood('With food'),
   dialysisDayOnly('Dialysis day only');
 

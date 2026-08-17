@@ -117,9 +117,13 @@ class CaptureRepositoryImpl implements CaptureRepository {
       if (instruction.contains('before food') ||
           instruction.contains('empty stomach'))
         MedTimingCue.beforeFood.name
+      else if (instruction.contains('after food') ||
+          instruction.contains('after meal'))
+        MedTimingCue.afterFood.name
       else if (instruction.contains('food') || instruction.contains('meal'))
         MedTimingCue.withFood.name,
       if (instruction.contains('morning')) MedTimingCue.morning.name,
+      if (instruction.contains('noon')) MedTimingCue.noon.name,
       if (instruction.contains('night') || instruction.contains('bedtime'))
         MedTimingCue.night.name,
       if (instruction.contains('dialysis'))

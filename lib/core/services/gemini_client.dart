@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../network/api_config.dart';
@@ -63,12 +64,7 @@ class GeminiClient {
         },
       );
     } on DioException catch (error, stackTrace) {
-      throw switch (error.type) {
-        DioExceptionType.connectionError ||
-        DioExceptionType.connectionTimeout =>
-          NetworkFailure(cause: error, stackTrace: stackTrace),
-        _ => ExtractionFailure(cause: error, stackTrace: stackTrace),
-      };
+      throw mapDioException(error, stackTrace);
     }
 
     final text = _firstCandidateText(response.data);
@@ -80,6 +76,40 @@ class GeminiClient {
     } on FormatException catch (error, stackTrace) {
       throw ParsingFailure(cause: error, stackTrace: stackTrace);
     }
+  }
+
+  /// Maps a transport-level error onto the failure vocabulary, keeping the
+  /// message specific enough for the caregiver to know what to do next.
+  @visibleForTesting
+  static AppFailure mapDioException(DioException error,
+      [StackTrace? stackTrace]) {
+    return switch (error.type) {
+      DioExceptionType.connectionError ||
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout =>
+        NetworkFailure(cause: error, stackTrace: stackTrace),
+      DioExceptionType.badResponse => switch (
+            error.response?.statusCode) {
+          400 || 401 || 403 => ExtractionFailure(
+              message: 'The AI service did not accept the API key. '
+                  'Please re-check the Gemini key in Settings.',
+              cause: error,
+              stackTrace: stackTrace),
+          429 => ExtractionFailure(
+              message: 'The free AI quota is used up for the moment. '
+                  'Please wait a minute and try again.',
+              cause: error,
+              stackTrace: stackTrace),
+          != null && >= 500 => ExtractionFailure(
+              message: 'The AI service is having trouble right now. '
+                  'The photo is safe — please try again shortly.',
+              cause: error,
+              stackTrace: stackTrace),
+          _ => ExtractionFailure(cause: error, stackTrace: stackTrace),
+        },
+      _ => ExtractionFailure(cause: error, stackTrace: stackTrace),
+    };
   }
 
   String? _firstCandidateText(Map<String, dynamic>? body) {

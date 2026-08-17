@@ -154,6 +154,7 @@ class _LeadingChip extends StatelessWidget {
 
   String? _clockLabel(List<MedTimingCue> cues) {
     if (cues.contains(MedTimingCue.morning)) return '7 AM';
+    if (cues.contains(MedTimingCue.noon)) return '12 PM';
     if (cues.contains(MedTimingCue.night)) return '9 PM';
     return null;
   }
@@ -161,6 +162,9 @@ class _LeadingChip extends StatelessWidget {
   IconData _cueIcon(List<MedTimingCue> cues) {
     if (cues.contains(MedTimingCue.beforeFood)) {
       return Icons.no_meals_outlined;
+    }
+    if (cues.contains(MedTimingCue.afterFood)) {
+      return Icons.restaurant_outlined;
     }
     if (cues.contains(MedTimingCue.withFood)) {
       return Icons.medication_outlined;
@@ -170,6 +174,9 @@ class _LeadingChip extends StatelessWidget {
     }
     if (cues.contains(MedTimingCue.morning)) {
       return Icons.wb_sunny_outlined;
+    }
+    if (cues.contains(MedTimingCue.noon)) {
+      return Icons.light_mode_outlined;
     }
     return Icons.medication_outlined;
   }

@@ -11,8 +11,10 @@ enum LabMetric {
   albumin('alb', 'Albumin', 'g/dL', 3.5, 5.0, 1),
   phosphorus('phos', 'Phosphorus', 'mg/dL', 3.0, 5.5, 1),
   calcium('ca', 'Calcium', 'mg/dL', 8.4, 10.2, 1),
-  whiteBloodCells('wbc', 'WBC', '10³/µL', 4.0, 11.0, 1),
-  platelets('plt', 'Platelets', '10³/µL', 150, 450, 0),
+  whiteBloodCells('wbc', 'WBC', '10³/µL', 4.0, 11.0, 1,
+      altUnit: 'cells/cumm', altUnitFactor: 0.001, altDecimals: 0),
+  platelets('plt', 'Platelets', '10³/µL', 150, 450, 0,
+      altUnit: 'lakh/cumm', altUnitFactor: 100, altDecimals: 2),
   weight('wt', 'Weight', 'kg', 56.5, 58.5, 1),
   bloodPressureSystolic('bps', 'BP systolic', 'mmHg', 110, 140, 0),
   bloodPressureDiastolic('bpd', 'BP diastolic', 'mmHg', 70, 90, 0);
@@ -23,8 +25,11 @@ enum LabMetric {
     this.unit,
     this.normalMin,
     this.normalMax,
-    this.decimals,
-  );
+    this.decimals, {
+    this.altUnit,
+    this.altUnitFactor,
+    this.altDecimals = 0,
+  });
 
   final String code;
   final String label;
@@ -32,6 +37,13 @@ enum LabMetric {
   final double normalMin;
   final double normalMax;
   final int decimals;
+
+  /// Alternate unit Indian lab reports commonly print for this metric,
+  /// e.g. cells/cumm for WBC. Values are always *stored* in [unit];
+  /// [altUnitFactor] converts an alt-unit reading into [unit].
+  final String? altUnit;
+  final double? altUnitFactor;
+  final int altDecimals;
 
   static LabMetric? fromCode(String code) {
     for (final metric in values) {
@@ -45,4 +57,12 @@ enum LabMetric {
   bool isBelow(double value) => value < normalMin;
 
   String format(double value) => value.toStringAsFixed(decimals);
+
+  /// Formats a canonical-unit value as it reads in [altUnit].
+  String formatAsAlt(double value) =>
+      (value / altUnitFactor!).toStringAsFixed(altDecimals);
+
+  /// "4000 - 11000" — the normal band expressed in [altUnit].
+  String formatAltRange() =>
+      '${formatAsAlt(normalMin)} - ${formatAsAlt(normalMax)}';
 }

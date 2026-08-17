@@ -61,6 +61,10 @@ class _ManualLabEntryPageState extends ConsumerState<ManualLabEntryPage> {
   };
   DateTime _takenAt = DateTime.now();
 
+  /// Metrics currently being typed in their report unit (e.g. cells/cumm)
+  /// instead of the canonical unit.
+  final Set<LabMetric> _altUnits = {};
+
   @override
   void dispose() {
     for (final controller in _controllers.values) {
@@ -81,11 +85,14 @@ class _ManualLabEntryPageState extends ConsumerState<ManualLabEntryPage> {
   }
 
   Future<void> _save() async {
-    final values = ManualEntryController.parseValues({
-      for (final MapEntry(key: metric, value: controller)
-          in _controllers.entries)
-        metric: controller.text,
-    });
+    final values = ManualEntryController.parseValues(
+      {
+        for (final MapEntry(key: metric, value: controller)
+            in _controllers.entries)
+          metric: controller.text,
+      },
+      inAltUnit: _altUnits,
+    );
     if (values == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(context.l10n.invalidNumber),
@@ -187,6 +194,12 @@ class _ManualLabEntryPageState extends ConsumerState<ManualLabEntryPage> {
                 title: group.localizedTitle(l10n),
                 metrics: group.metrics,
                 controllers: _controllers,
+                altUnits: _altUnits,
+                onToggleUnit: (metric) => setState(() {
+                  _altUnits.contains(metric)
+                      ? _altUnits.remove(metric)
+                      : _altUnits.add(metric);
+                }),
               ),
             ],
             const SizedBox(height: 18),
@@ -220,11 +233,15 @@ class _MetricGroupCard extends StatelessWidget {
     required this.title,
     required this.metrics,
     required this.controllers,
+    required this.altUnits,
+    required this.onToggleUnit,
   });
 
   final String title;
   final List<LabMetric> metrics;
   final Map<LabMetric, TextEditingController> controllers;
+  final Set<LabMetric> altUnits;
+  final ValueChanged<LabMetric> onToggleUnit;
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +266,10 @@ class _MetricGroupCard extends StatelessWidget {
           for (var i = 0; i < metrics.length; i++) ...[
             const SizedBox(height: 8),
             _MetricRow(
-                metric: metrics[i], controller: controllers[metrics[i]]!),
+                metric: metrics[i],
+                controller: controllers[metrics[i]]!,
+                inAltUnit: altUnits.contains(metrics[i]),
+                onToggleUnit: onToggleUnit),
           ],
         ],
       ),
@@ -258,15 +278,29 @@ class _MetricGroupCard extends StatelessWidget {
 }
 
 class _MetricRow extends StatelessWidget {
-  const _MetricRow({required this.metric, required this.controller});
+  const _MetricRow({
+    required this.metric,
+    required this.controller,
+    required this.inAltUnit,
+    required this.onToggleUnit,
+  });
 
   final LabMetric metric;
   final TextEditingController controller;
+  final bool inAltUnit;
+  final ValueChanged<LabMetric> onToggleUnit;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final typo = context.typo;
+    final unit = inAltUnit ? metric.altUnit! : metric.unit;
+    final rangeMin = inAltUnit
+        ? metric.formatAsAlt(metric.normalMin)
+        : metric.format(metric.normalMin);
+    final rangeMax = inAltUnit
+        ? metric.formatAsAlt(metric.normalMax)
+        : metric.format(metric.normalMax);
 
     return Row(
       children: [
@@ -278,11 +312,7 @@ class _MetricRow extends StatelessWidget {
                   style: typo.cardTitle
                       .copyWith(fontWeight: FontWeight.w500)),
               Text(
-                context.l10n.normalRangeHint(
-                  metric.format(metric.normalMin),
-                  metric.format(metric.normalMax),
-                  metric.unit,
-                ),
+                context.l10n.normalRangeHint(rangeMin, rangeMax, unit),
                 style: typo.caption
                     .copyWith(fontSize: 10.5, color: colors.muted),
               ),
@@ -303,7 +333,38 @@ class _MetricRow extends StatelessWidget {
               isDense: true,
               filled: true,
               fillColor: colors.fieldBg,
-              suffixText: metric.unit,
+              suffixIcon: metric.altUnit == null
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Semantics(
+                        button: true,
+                        label: context.l10n.changeUnit(unit),
+                        child: InkWell(
+                          onTap: () => onToggleUnit(metric),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 6),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(unit,
+                                    style: typo.caption.copyWith(
+                                        fontSize: 10.5,
+                                        color: colors.accent,
+                                        fontWeight: FontWeight.w600)),
+                                const SizedBox(width: 2),
+                                Icon(Icons.swap_horiz,
+                                    size: 13, color: colors.accent),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+              suffixIconConstraints: const BoxConstraints(),
+              suffixText: metric.altUnit == null ? metric.unit : null,
               suffixStyle: typo.caption
                   .copyWith(fontSize: 10.5, color: colors.muted),
               contentPadding: const EdgeInsets.symmetric(
