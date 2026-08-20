@@ -19,6 +19,11 @@ final _documentByIdProvider =
   return ref.watch(documentsRepositoryProvider).getById(id);
 });
 
+final _documentPagesProvider =
+    FutureProvider.family<List<DocumentPage>, String>((ref, id) {
+  return ref.watch(documentsRepositoryProvider).pagesFor(id);
+});
+
 /// Full-screen document view: original scan (or placeholder), metadata and
 /// extracted text.
 class DocumentViewerPage extends ConsumerWidget {
@@ -41,8 +46,15 @@ class DocumentViewerPage extends ConsumerWidget {
       body: document.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => const _MissingDocument(),
-        data: (doc) =>
-            doc == null ? const _MissingDocument() : _Body(document: doc),
+        data: (doc) => doc == null
+            ? const _MissingDocument()
+            : _Body(
+                document: doc,
+                pages: ref
+                        .watch(_documentPagesProvider(documentId))
+                        .value ??
+                    const [],
+              ),
       ),
     );
   }
@@ -64,9 +76,10 @@ class _MissingDocument extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.document});
+  const _Body({required this.document, required this.pages});
 
   final Document document;
+  final List<DocumentPage> pages;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +89,10 @@ class _Body extends StatelessWidget {
     final tags = (jsonDecode(document.tagsJson) as List<dynamic>)
         .whereType<String>()
         .toList();
+    final pagePaths = [
+      for (final page in pages)
+        if (File(page.originalPath).existsSync()) page.originalPath,
+    ];
     final hasImage = document.originalPath.isNotEmpty &&
         File(document.originalPath).existsSync();
 
@@ -94,7 +111,9 @@ class _Body extends StatelessWidget {
           style: typo.bodySmall.copyWith(color: colors.muted),
         ),
         const SizedBox(height: 14),
-        if (hasImage)
+        if (pagePaths.length > 1)
+          _PageGallery(paths: pagePaths)
+        else if (hasImage)
           ClipRRect(
             borderRadius: BorderRadius.circular(18),
             child: InteractiveViewer(
@@ -136,6 +155,62 @@ class _Body extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Swipeable pages of an imported multi-page document, with an "n/N" pill.
+class _PageGallery extends StatefulWidget {
+  const _PageGallery({required this.paths});
+
+  final List<String> paths;
+
+  @override
+  State<_PageGallery> createState() => _PageGalleryState();
+}
+
+class _PageGalleryState extends State<_PageGallery> {
+  var _current = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final typo = context.typo;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: SizedBox(
+        height: 420,
+        child: Stack(
+          children: [
+            PageView.builder(
+              itemCount: widget.paths.length,
+              onPageChanged: (index) => setState(() => _current = index),
+              itemBuilder: (context, index) => InteractiveViewer(
+                maxScale: 5,
+                child: Center(
+                  child: Image.file(File(widget.paths[index])),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 10,
+              bottom: 10,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(99),
+                ),
+                child: Text(
+                  '${_current + 1}/${widget.paths.length}',
+                  style: typo.caption.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

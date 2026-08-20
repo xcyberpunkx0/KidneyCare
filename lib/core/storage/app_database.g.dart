@@ -1491,6 +1491,330 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
   }
 }
 
+class $DocumentPagesTable extends DocumentPages
+    with TableInfo<$DocumentPagesTable, DocumentPage> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DocumentPagesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _documentIdMeta = const VerificationMeta(
+    'documentId',
+  );
+  @override
+  late final GeneratedColumn<String> documentId = GeneratedColumn<String>(
+    'document_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _pageIndexMeta = const VerificationMeta(
+    'pageIndex',
+  );
+  @override
+  late final GeneratedColumn<int> pageIndex = GeneratedColumn<int>(
+    'page_index',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _originalPathMeta = const VerificationMeta(
+    'originalPath',
+  );
+  @override
+  late final GeneratedColumn<String> originalPath = GeneratedColumn<String>(
+    'original_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    documentId,
+    pageIndex,
+    originalPath,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'document_pages';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DocumentPage> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('document_id')) {
+      context.handle(
+        _documentIdMeta,
+        documentId.isAcceptableOrUnknown(data['document_id']!, _documentIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_documentIdMeta);
+    }
+    if (data.containsKey('page_index')) {
+      context.handle(
+        _pageIndexMeta,
+        pageIndex.isAcceptableOrUnknown(data['page_index']!, _pageIndexMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pageIndexMeta);
+    }
+    if (data.containsKey('original_path')) {
+      context.handle(
+        _originalPathMeta,
+        originalPath.isAcceptableOrUnknown(
+          data['original_path']!,
+          _originalPathMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_originalPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DocumentPage map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DocumentPage(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      documentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}document_id'],
+      )!,
+      pageIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}page_index'],
+      )!,
+      originalPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_path'],
+      )!,
+    );
+  }
+
+  @override
+  $DocumentPagesTable createAlias(String alias) {
+    return $DocumentPagesTable(attachedDatabase, alias);
+  }
+}
+
+class DocumentPage extends DataClass implements Insertable<DocumentPage> {
+  final String id;
+  final String documentId;
+
+  /// 0-based position within the document, in pick/page order.
+  final int pageIndex;
+  final String originalPath;
+  const DocumentPage({
+    required this.id,
+    required this.documentId,
+    required this.pageIndex,
+    required this.originalPath,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['document_id'] = Variable<String>(documentId);
+    map['page_index'] = Variable<int>(pageIndex);
+    map['original_path'] = Variable<String>(originalPath);
+    return map;
+  }
+
+  DocumentPagesCompanion toCompanion(bool nullToAbsent) {
+    return DocumentPagesCompanion(
+      id: Value(id),
+      documentId: Value(documentId),
+      pageIndex: Value(pageIndex),
+      originalPath: Value(originalPath),
+    );
+  }
+
+  factory DocumentPage.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DocumentPage(
+      id: serializer.fromJson<String>(json['id']),
+      documentId: serializer.fromJson<String>(json['documentId']),
+      pageIndex: serializer.fromJson<int>(json['pageIndex']),
+      originalPath: serializer.fromJson<String>(json['originalPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'documentId': serializer.toJson<String>(documentId),
+      'pageIndex': serializer.toJson<int>(pageIndex),
+      'originalPath': serializer.toJson<String>(originalPath),
+    };
+  }
+
+  DocumentPage copyWith({
+    String? id,
+    String? documentId,
+    int? pageIndex,
+    String? originalPath,
+  }) => DocumentPage(
+    id: id ?? this.id,
+    documentId: documentId ?? this.documentId,
+    pageIndex: pageIndex ?? this.pageIndex,
+    originalPath: originalPath ?? this.originalPath,
+  );
+  DocumentPage copyWithCompanion(DocumentPagesCompanion data) {
+    return DocumentPage(
+      id: data.id.present ? data.id.value : this.id,
+      documentId: data.documentId.present
+          ? data.documentId.value
+          : this.documentId,
+      pageIndex: data.pageIndex.present ? data.pageIndex.value : this.pageIndex,
+      originalPath: data.originalPath.present
+          ? data.originalPath.value
+          : this.originalPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DocumentPage(')
+          ..write('id: $id, ')
+          ..write('documentId: $documentId, ')
+          ..write('pageIndex: $pageIndex, ')
+          ..write('originalPath: $originalPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, documentId, pageIndex, originalPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DocumentPage &&
+          other.id == this.id &&
+          other.documentId == this.documentId &&
+          other.pageIndex == this.pageIndex &&
+          other.originalPath == this.originalPath);
+}
+
+class DocumentPagesCompanion extends UpdateCompanion<DocumentPage> {
+  final Value<String> id;
+  final Value<String> documentId;
+  final Value<int> pageIndex;
+  final Value<String> originalPath;
+  final Value<int> rowid;
+  const DocumentPagesCompanion({
+    this.id = const Value.absent(),
+    this.documentId = const Value.absent(),
+    this.pageIndex = const Value.absent(),
+    this.originalPath = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DocumentPagesCompanion.insert({
+    required String id,
+    required String documentId,
+    required int pageIndex,
+    required String originalPath,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       documentId = Value(documentId),
+       pageIndex = Value(pageIndex),
+       originalPath = Value(originalPath);
+  static Insertable<DocumentPage> custom({
+    Expression<String>? id,
+    Expression<String>? documentId,
+    Expression<int>? pageIndex,
+    Expression<String>? originalPath,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (documentId != null) 'document_id': documentId,
+      if (pageIndex != null) 'page_index': pageIndex,
+      if (originalPath != null) 'original_path': originalPath,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DocumentPagesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? documentId,
+    Value<int>? pageIndex,
+    Value<String>? originalPath,
+    Value<int>? rowid,
+  }) {
+    return DocumentPagesCompanion(
+      id: id ?? this.id,
+      documentId: documentId ?? this.documentId,
+      pageIndex: pageIndex ?? this.pageIndex,
+      originalPath: originalPath ?? this.originalPath,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (documentId.present) {
+      map['document_id'] = Variable<String>(documentId.value);
+    }
+    if (pageIndex.present) {
+      map['page_index'] = Variable<int>(pageIndex.value);
+    }
+    if (originalPath.present) {
+      map['original_path'] = Variable<String>(originalPath.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DocumentPagesCompanion(')
+          ..write('id: $id, ')
+          ..write('documentId: $documentId, ')
+          ..write('pageIndex: $pageIndex, ')
+          ..write('originalPath: $originalPath, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $MedicationsTable extends Medications
     with TableInfo<$MedicationsTable, Medication> {
   @override
@@ -6320,6 +6644,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $PatientsTable patients = $PatientsTable(this);
   late final $DocumentsTable documents = $DocumentsTable(this);
+  late final $DocumentPagesTable documentPages = $DocumentPagesTable(this);
   late final $MedicationsTable medications = $MedicationsTable(this);
   late final $LabResultsTable labResults = $LabResultsTable(this);
   late final $TimelineEventsTable timelineEvents = $TimelineEventsTable(this);
@@ -6350,6 +6675,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     patients,
     documents,
+    documentPages,
     medications,
     labResults,
     timelineEvents,
@@ -7059,6 +7385,191 @@ typedef $$DocumentsTableProcessedTableManager =
       $$DocumentsTableUpdateCompanionBuilder,
       (Document, BaseReferences<_$AppDatabase, $DocumentsTable, Document>),
       Document,
+      PrefetchHooks Function()
+    >;
+typedef $$DocumentPagesTableCreateCompanionBuilder =
+    DocumentPagesCompanion Function({
+      required String id,
+      required String documentId,
+      required int pageIndex,
+      required String originalPath,
+      Value<int> rowid,
+    });
+typedef $$DocumentPagesTableUpdateCompanionBuilder =
+    DocumentPagesCompanion Function({
+      Value<String> id,
+      Value<String> documentId,
+      Value<int> pageIndex,
+      Value<String> originalPath,
+      Value<int> rowid,
+    });
+
+class $$DocumentPagesTableFilterComposer
+    extends Composer<_$AppDatabase, $DocumentPagesTable> {
+  $$DocumentPagesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get pageIndex => $composableBuilder(
+    column: $table.pageIndex,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalPath => $composableBuilder(
+    column: $table.originalPath,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DocumentPagesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DocumentPagesTable> {
+  $$DocumentPagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get pageIndex => $composableBuilder(
+    column: $table.pageIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalPath => $composableBuilder(
+    column: $table.originalPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DocumentPagesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DocumentPagesTable> {
+  $$DocumentPagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get documentId => $composableBuilder(
+    column: $table.documentId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get pageIndex =>
+      $composableBuilder(column: $table.pageIndex, builder: (column) => column);
+
+  GeneratedColumn<String> get originalPath => $composableBuilder(
+    column: $table.originalPath,
+    builder: (column) => column,
+  );
+}
+
+class $$DocumentPagesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DocumentPagesTable,
+          DocumentPage,
+          $$DocumentPagesTableFilterComposer,
+          $$DocumentPagesTableOrderingComposer,
+          $$DocumentPagesTableAnnotationComposer,
+          $$DocumentPagesTableCreateCompanionBuilder,
+          $$DocumentPagesTableUpdateCompanionBuilder,
+          (
+            DocumentPage,
+            BaseReferences<_$AppDatabase, $DocumentPagesTable, DocumentPage>,
+          ),
+          DocumentPage,
+          PrefetchHooks Function()
+        > {
+  $$DocumentPagesTableTableManager(_$AppDatabase db, $DocumentPagesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DocumentPagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DocumentPagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DocumentPagesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> documentId = const Value.absent(),
+                Value<int> pageIndex = const Value.absent(),
+                Value<String> originalPath = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DocumentPagesCompanion(
+                id: id,
+                documentId: documentId,
+                pageIndex: pageIndex,
+                originalPath: originalPath,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String documentId,
+                required int pageIndex,
+                required String originalPath,
+                Value<int> rowid = const Value.absent(),
+              }) => DocumentPagesCompanion.insert(
+                id: id,
+                documentId: documentId,
+                pageIndex: pageIndex,
+                originalPath: originalPath,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DocumentPagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DocumentPagesTable,
+      DocumentPage,
+      $$DocumentPagesTableFilterComposer,
+      $$DocumentPagesTableOrderingComposer,
+      $$DocumentPagesTableAnnotationComposer,
+      $$DocumentPagesTableCreateCompanionBuilder,
+      $$DocumentPagesTableUpdateCompanionBuilder,
+      (
+        DocumentPage,
+        BaseReferences<_$AppDatabase, $DocumentPagesTable, DocumentPage>,
+      ),
+      DocumentPage,
       PrefetchHooks Function()
     >;
 typedef $$MedicationsTableCreateCompanionBuilder =
@@ -9570,6 +10081,8 @@ class $AppDatabaseManager {
       $$PatientsTableTableManager(_db, _db.patients);
   $$DocumentsTableTableManager get documents =>
       $$DocumentsTableTableManager(_db, _db.documents);
+  $$DocumentPagesTableTableManager get documentPages =>
+      $$DocumentPagesTableTableManager(_db, _db.documentPages);
   $$MedicationsTableTableManager get medications =>
       $$MedicationsTableTableManager(_db, _db.medications);
   $$LabResultsTableTableManager get labResults =>

@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/services/gemini_client.dart';
+import '../../../../core/services/scan_page.dart';
 import '../../../../core/utils/app_failure.dart';
 import '../models/extraction_dto.dart';
 
@@ -51,12 +51,17 @@ Rules:
 - "medicines" only for prescriptions/discharge summaries.
 - "lab_values" only when numeric lab results are printed. Use only the
   listed metric_code values; skip metrics not in the list.
-- Dates in ISO format. Never invent data that is not on the paper.''';
+- Dates in ISO format. Never invent data that is not on the paper.
+- When several images are provided, they are the pages of ONE document,
+  in order. Combine them into a single JSON object.''';
 
-  Future<ExtractionDto> extract(Uint8List jpegBytes) async {
+  Future<ExtractionDto> extract(List<ScanPage> pages) async {
     final json = await _client.generateJson(
       prompt: 'Extract this medical document.',
-      imageBase64: base64Encode(jpegBytes),
+      images: [
+        for (final page in pages)
+          (mimeType: page.mimeType, base64: base64Encode(page.bytes)),
+      ],
       systemInstruction: _systemInstruction,
     );
     try {

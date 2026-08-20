@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/router/app_shell.dart';
+import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_choice_chip.dart';
@@ -74,8 +75,6 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(22, 0, 22, 10),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
                 children: [
                   Expanded(
                     child: Text(
@@ -86,6 +85,14 @@ class _DocumentsPageState extends ConsumerState<DocumentsPage> {
                   Text(
                     l10n.nScans(total),
                     style: typo.bodySmall.copyWith(color: colors.muted),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    onPressed: () => context.pushNamed(AppRoutes.importName),
+                    tooltip: l10n.importDocuments,
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(Icons.file_upload_outlined,
+                        size: 22, color: colors.ink),
                   ),
                 ],
               ),

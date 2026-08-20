@@ -20,13 +20,20 @@ void main() {
     final connection = await verifier.startAt(5);
     final db = AppDatabase.forTesting(connection);
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 7);
+    await verifier.migrateAndValidate(db, 8);
   });
 
   test('v6 vault upgrades cleanly to the current schema', () async {
     final connection = await verifier.startAt(6);
     final db = AppDatabase.forTesting(connection);
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 7);
+    await verifier.migrateAndValidate(db, 8);
+  });
+
+  test('v7 vault upgrades cleanly to the current schema', () async {
+    final connection = await verifier.startAt(7);
+    final db = AppDatabase.forTesting(connection);
+    addTearDown(db.close);
+    await verifier.migrateAndValidate(db, 8);
   });
 }

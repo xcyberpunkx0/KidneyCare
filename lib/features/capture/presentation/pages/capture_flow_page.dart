@@ -58,7 +58,8 @@ class CaptureFlowPage extends ConsumerWidget {
           CaptureStep.saving ||
           CaptureStep.saved =>
             ReviewStep(
-              state: state,
+              draft: state.draft!,
+              saving: state.step == CaptureStep.saving,
               onEdit: controller.editField,
               onChooseAlternative: controller.chooseAlternative,
               onSave: controller.save,

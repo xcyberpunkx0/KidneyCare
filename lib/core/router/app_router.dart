@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/ask/presentation/pages/ask_page.dart';
+import '../../features/capture/presentation/pages/batch_import_page.dart';
 import '../../features/capture/presentation/pages/capture_flow_page.dart';
 import '../../features/claims/presentation/pages/claim_detail_page.dart';
 import '../../features/claims/presentation/pages/claim_edit_page.dart';
@@ -185,6 +186,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoutes.captureName,
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const CaptureFlowPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.import,
+        name: AppRoutes.importName,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const BatchImportPage(),
       ),
       GoRoute(
         path: AppRoutes.search,

@@ -2527,6 +2527,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More options'**
   String get moreOptions;
+
+  /// No description provided for @importDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Import documents'**
+  String get importDocuments;
+
+  /// No description provided for @importPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Import photos'**
+  String get importPhotos;
+
+  /// No description provided for @importPdfFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Import PDF files'**
+  String get importPdfFiles;
+
+  /// No description provided for @importEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add scanned photos or PDF files.\nRecora will read each one for you.'**
+  String get importEmptyMessage;
+
+  /// No description provided for @nItemsToImport.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No documents} =1{1 document} other{{count} documents}}'**
+  String nItemsToImport(int count);
+
+  /// No description provided for @nSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String nSelected(int count);
+
+  /// No description provided for @nPages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 page} other{{count} pages}}'**
+  String nPages(int count);
+
+  /// No description provided for @combineIntoOneDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine into one'**
+  String get combineIntoOneDocument;
+
+  /// No description provided for @ungroupPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup'**
+  String get ungroupPages;
+
+  /// No description provided for @removeDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeDocument;
+
+  /// No description provided for @addMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more'**
+  String get addMore;
+
+  /// No description provided for @startImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Start import'**
+  String get startImport;
+
+  /// No description provided for @reviewingItemOfTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewing {index} of {total}'**
+  String reviewingItemOfTotal(int index, int total);
+
+  /// No description provided for @skipDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skipDocument;
+
+  /// No description provided for @saveAndNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & next'**
+  String get saveAndNext;
+
+  /// No description provided for @waitingForExtraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading this document…'**
+  String get waitingForExtraction;
+
+  /// No description provided for @extractionFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This document could not be read'**
+  String get extractionFailedTitle;
+
+  /// No description provided for @retryExtraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryExtraction;
+
+  /// No description provided for @importSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Import finished'**
+  String get importSummary;
+
+  /// No description provided for @nDocumentsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing saved} =1{1 document saved} other{{count} documents saved}}'**
+  String nDocumentsSaved(int count);
+
+  /// No description provided for @nDocumentsSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 skipped} other{{count} skipped}}'**
+  String nDocumentsSkipped(int count);
+
+  /// No description provided for @nDocumentsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 failed} other{{count} failed}}'**
+  String nDocumentsFailed(int count);
+
+  /// No description provided for @importDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get importDone;
 }
 
 class _AppLocalizationsDelegate

@@ -6,7 +6,7 @@ import '../tables.dart';
 
 part 'document_dao.g.dart';
 
-@DriftAccessor(tables: [Documents])
+@DriftAccessor(tables: [Documents, DocumentPages])
 class DocumentDao extends DatabaseAccessor<AppDatabase>
     with _$DocumentDaoMixin {
   DocumentDao(super.db);
@@ -63,7 +63,22 @@ class DocumentDao extends DatabaseAccessor<AppDatabase>
     return into(documents).insertOnConflictUpdate(entry);
   }
 
-  Future<void> deleteById(String id) {
-    return (delete(documents)..where((t) => t.id.equals(id))).go();
+  /// Page images of a multi-page document, in reading order. Empty for
+  /// documents captured as a single image — callers fall back to
+  /// Documents.originalPath.
+  Future<List<DocumentPage>> pagesFor(String documentId) {
+    final query = select(documentPages)
+      ..where((t) => t.documentId.equals(documentId))
+      ..orderBy([(t) => OrderingTerm.asc(t.pageIndex)]);
+    return query.get();
+  }
+
+  Future<void> insertPages(List<DocumentPagesCompanion> pages) {
+    return batch((b) => b.insertAll(documentPages, pages));
+  }
+
+  Future<void> deleteById(String id) async {
+    await (delete(documentPages)..where((t) => t.documentId.equals(id))).go();
+    await (delete(documents)..where((t) => t.id.equals(id))).go();
   }
 }

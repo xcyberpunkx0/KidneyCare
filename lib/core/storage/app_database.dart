@@ -30,6 +30,7 @@ part 'app_database.g.dart';
   tables: [
     Patients,
     Documents,
+    DocumentPages,
     Medications,
     LabResults,
     TimelineEvents,
@@ -59,7 +60,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration {
@@ -89,6 +90,9 @@ class AppDatabase extends _$AppDatabase {
         if (from < 7) {
           await m.addColumn(medications, medications.intervalDays);
           await m.addColumn(medications, medications.lastGivenOn);
+        }
+        if (from < 8) {
+          await m.createTable(documentPages);
         }
       },
     );
