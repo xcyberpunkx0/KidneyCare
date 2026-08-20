@@ -5,6 +5,7 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/app_snackbar.dart';
 import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/card_more_button.dart';
 import '../../../../core/widgets/status_chip.dart';
@@ -32,24 +33,16 @@ class IntervalMedCard extends ConsumerWidget {
       await repo.markGiven(medication.id, now);
     }
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            given
-                ? l10n.doseMarkedNotGiven(medication.name)
-                : l10n.doseMarkedGiven(medication.name),
-          ),
-          action: given
-              ? null
-              : SnackBarAction(
-                  label: l10n.undo,
-                  onPressed: () =>
-                      repo.undoGiven(medication.id, DateTime.now()),
-                ),
-        ),
-      );
+    showAppSnackBar(
+      context,
+      given
+          ? l10n.doseMarkedNotGiven(medication.name)
+          : l10n.doseMarkedGiven(medication.name),
+      actionLabel: given ? null : l10n.undo,
+      onAction: given
+          ? null
+          : () => repo.undoGiven(medication.id, DateTime.now()),
+    );
   }
 
   StatusChip _statusChip(BuildContext context, DateTime today) {
