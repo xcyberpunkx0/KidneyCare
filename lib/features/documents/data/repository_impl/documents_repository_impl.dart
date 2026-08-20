@@ -14,6 +14,10 @@ class DocumentsRepositoryImpl implements DocumentsRepository {
 
   @override
   Future<Document?> getById(String id) => _db.documentDao.getById(id);
+
+  @override
+  Future<List<DocumentPage>> pagesFor(String documentId) =>
+      _db.documentDao.pagesFor(documentId);
 }
 
 final documentsRepositoryProvider = Provider<DocumentsRepository>((ref) {

@@ -1384,4 +1384,120 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get moreOptions => 'और विकल्प';
+
+  @override
+  String get importDocuments => 'दस्तावेज़ इम्पोर्ट करें';
+
+  @override
+  String get importPhotos => 'फ़ोटो इम्पोर्ट करें';
+
+  @override
+  String get importPdfFiles => 'PDF फ़ाइलें इम्पोर्ट करें';
+
+  @override
+  String get importEmptyMessage =>
+      'स्कैन की गई फ़ोटो या PDF फ़ाइलें जोड़ें।\nRecora हर एक को आपके लिए पढ़ेगा।';
+
+  @override
+  String nItemsToImport(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दस्तावेज़',
+      one: '1 दस्तावेज़',
+      zero: 'कोई दस्तावेज़ नहीं',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nSelected(int count) {
+    return '$count चुने गए';
+  }
+
+  @override
+  String nPages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count पेज',
+      one: '1 पेज',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combineIntoOneDocument => 'एक दस्तावेज़ बनाएँ';
+
+  @override
+  String get ungroupPages => 'अलग करें';
+
+  @override
+  String get removeDocument => 'हटाएँ';
+
+  @override
+  String get addMore => 'और जोड़ें';
+
+  @override
+  String get startImport => 'इम्पोर्ट शुरू करें';
+
+  @override
+  String reviewingItemOfTotal(int index, int total) {
+    return '$total में से $index की जाँच';
+  }
+
+  @override
+  String get skipDocument => 'छोड़ें';
+
+  @override
+  String get saveAndNext => 'सहेजें और आगे';
+
+  @override
+  String get waitingForExtraction => 'यह दस्तावेज़ पढ़ा जा रहा है…';
+
+  @override
+  String get extractionFailedTitle => 'यह दस्तावेज़ पढ़ा नहीं जा सका';
+
+  @override
+  String get retryExtraction => 'फिर कोशिश करें';
+
+  @override
+  String get importSummary => 'इम्पोर्ट पूरा हुआ';
+
+  @override
+  String nDocumentsSaved(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count दस्तावेज़ सहेजे गए',
+      one: '1 दस्तावेज़ सहेजा गया',
+      zero: 'कुछ सहेजा नहीं गया',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nDocumentsSkipped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count छोड़े गए',
+      one: '1 छोड़ा गया',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nDocumentsFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count विफल',
+      one: '1 विफल',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importDone => 'हो गया';
 }

@@ -26,9 +26,9 @@ class AppSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo;
-    final passive = controller == null && onChanged == null;
+    final AppColors colors = context.colors;
+    final AppTypography typo = context.typo;
+    final bool passive = controller == null && onChanged == null;
 
     final decoration = BoxDecoration(
       color: colors.card,

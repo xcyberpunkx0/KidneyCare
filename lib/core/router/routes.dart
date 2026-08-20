@@ -10,6 +10,7 @@ abstract final class AppRoutes {
   static const timeline = '/timeline';
   static const search = '/search';
   static const capture = '/capture';
+  static const import = '/import';
   static const onboarding = '/onboarding';
   static const claims = '/claims';
 
@@ -21,5 +22,6 @@ abstract final class AppRoutes {
   static const timelineName = 'timeline';
   static const searchName = 'search';
   static const captureName = 'capture';
+  static const importName = 'import';
   static const claimsName = 'claims';
 }

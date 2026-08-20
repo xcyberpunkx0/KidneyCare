@@ -7,12 +7,22 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../utils/app_failure.dart';
+import 'scan_page.dart';
 
 /// Paths of a stored scan: the untouched original plus a small preview.
 class StoredScan {
   const StoredScan({required this.originalPath, required this.previewPath});
 
   final String originalPath;
+  final String previewPath;
+}
+
+/// Paths of a stored multi-page scan: one file per page plus a single
+/// preview taken from the first page.
+class StoredPages {
+  const StoredPages({required this.pagePaths, required this.previewPath});
+
+  final List<String> pagePaths;
   final String previewPath;
 }
 
@@ -37,6 +47,36 @@ class ImageStore {
       await File(previewPath).writeAsBytes(previewBytes, flush: true);
 
       return StoredScan(originalPath: originalPath, previewPath: previewPath);
+    } on AppFailure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw ImageFailure(cause: error, stackTrace: stackTrace);
+    }
+  }
+
+  /// Persists every page of a multi-page document as
+  /// `scans/<id>_p<index>.<ext>`; the preview comes from the first page.
+  Future<StoredPages> persistPages(List<ScanPage> pages, String id) async {
+    try {
+      final baseDir = await getApplicationDocumentsDirectory();
+      final originalsDir =
+          await Directory(p.join(baseDir.path, 'scans')).create(recursive: true);
+      final previewsDir = await Directory(p.join(baseDir.path, 'previews'))
+          .create(recursive: true);
+
+      final pagePaths = <String>[];
+      for (var i = 0; i < pages.length; i++) {
+        final page = pages[i];
+        final path = p.join(originalsDir.path, '${id}_p$i.${page.extension}');
+        await File(path).writeAsBytes(page.bytes, flush: true);
+        pagePaths.add(path);
+      }
+
+      final previewPath = p.join(previewsDir.path, '$id.png');
+      final previewBytes = await _downscale(pages.first.bytes);
+      await File(previewPath).writeAsBytes(previewBytes, flush: true);
+
+      return StoredPages(pagePaths: pagePaths, previewPath: previewPath);
     } on AppFailure {
       rethrow;
     } catch (error, stackTrace) {

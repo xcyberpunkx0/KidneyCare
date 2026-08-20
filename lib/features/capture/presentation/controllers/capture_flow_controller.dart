@@ -3,9 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/services/photo_picker.dart';
+import '../../../../core/services/scan_page.dart';
 import '../../../../core/utils/app_failure.dart';
 import '../../data/repository_impl/capture_repository_impl.dart';
 import '../../domain/entities/extraction.dart';
+import 'review_draft.dart';
 
 enum CaptureStep { camera, cropping, extracting, review, saving, saved }
 
@@ -35,21 +37,26 @@ class CaptureFlowState {
 
   final AppFailure? failure;
 
+  /// The review logic, shared with the batch import flow.
+  ReviewDraft? get draft {
+    final extraction = this.extraction;
+    if (extraction == null) return null;
+    return ReviewDraft(
+      extraction: extraction,
+      editedValues: editedValues,
+      verifiedKeys: verifiedKeys,
+    );
+  }
+
   /// Fields with caregiver edits applied.
-  List<ExtractedField> get reviewFields => [
-        for (final field in extraction?.fields ?? const <ExtractedField>[])
-          field.copyWith(value: editedValues[field.key]),
-      ];
+  List<ExtractedField> get reviewFields =>
+      draft?.reviewFields ?? const <ExtractedField>[];
 
   /// A field counts as checked when confidence is high, it was edited, or
   /// it was explicitly confirmed.
-  bool isChecked(ExtractedField field) =>
-      !field.requiresVerification ||
-      verifiedKeys.contains(field.key) ||
-      editedValues.containsKey(field.key);
+  bool isChecked(ExtractedField field) => draft?.isChecked(field) ?? true;
 
-  int get uncheckedCount =>
-      reviewFields.where((f) => !isChecked(f)).length;
+  int get uncheckedCount => draft?.uncheckedCount ?? 0;
 
   bool get allChecked => uncheckedCount == 0;
 
@@ -110,8 +117,9 @@ class CaptureFlowController extends Notifier<CaptureFlowState> {
       croppedBytes: croppedBytes,
       clearFailure: true,
     );
-    final result =
-        await ref.read(captureRepositoryProvider).extract(croppedBytes);
+    final result = await ref
+        .read(captureRepositoryProvider)
+        .extract([ScanPage.jpeg(croppedBytes)]);
     result.when(
       ok: (extraction) {
         state = state.copyWith(
@@ -146,13 +154,13 @@ class CaptureFlowController extends Notifier<CaptureFlowState> {
 
   /// Validates, persists, and reports success via [CaptureStep.saved].
   Future<void> save() async {
-    final extraction = state.extraction;
+    final draft = state.draft;
     final bytes = state.croppedBytes;
-    if (extraction == null || bytes == null) return;
-    if (!state.allChecked) {
+    if (draft == null || bytes == null) return;
+    if (!draft.allChecked) {
       state = state.copyWith(
         failure: ValidationFailure(
-          message: '${state.uncheckedCount} field(s) still need a check '
+          message: '${draft.uncheckedCount} field(s) still need a check '
               'before saving.',
         ),
       );
@@ -160,21 +168,8 @@ class CaptureFlowController extends Notifier<CaptureFlowState> {
     }
 
     state = state.copyWith(step: CaptureStep.saving, clearFailure: true);
-    final reviewed = ExtractionResult(
-      documentType: extraction.documentType,
-      title: extraction.title,
-      hospital: extraction.hospital,
-      doctor: extraction.doctor,
-      documentDate: extraction.documentDate,
-      fields: state.reviewFields,
-      medicines: extraction.medicines,
-      labValues: extraction.labValues,
-      tags: extraction.tags,
-      ocrText: extraction.ocrText,
-    );
-    final result = await ref
-        .read(captureRepositoryProvider)
-        .saveReviewed(originalBytes: bytes, reviewed: reviewed);
+    final result = await ref.read(captureRepositoryProvider).saveReviewed(
+        pages: [ScanPage.jpeg(bytes)], reviewed: draft.reviewedResult());
     result.when(
       ok: (_) => state = state.copyWith(step: CaptureStep.saved),
       err: (failure) => state =

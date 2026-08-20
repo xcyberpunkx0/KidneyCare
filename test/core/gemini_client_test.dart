@@ -49,4 +49,51 @@ void main() {
     expect(failure, isA<ExtractionFailure>());
     expect(failure.message, contains('could not be read'));
   });
+
+  test('each image becomes its own inline_data part, before the prompt',
+      () async {
+    late Map<String, dynamic> body;
+    final dio = Dio();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        body = options.data as Map<String, dynamic>;
+        handler.resolve(Response(
+          requestOptions: options,
+          statusCode: 200,
+          data: {
+            'candidates': [
+              {
+                'content': {
+                  'parts': [
+                    {'text': '{"ok": true}'},
+                  ],
+                },
+              },
+            ],
+          },
+        ));
+      },
+    ));
+
+    final json = await GeminiClient(dio, 'test-key').generateJson(
+      prompt: 'Extract this medical document.',
+      images: [
+        (mimeType: 'image/png', base64: 'AAA'),
+        (mimeType: 'image/jpeg', base64: 'BBB'),
+        (mimeType: 'image/png', base64: 'CCC'),
+      ],
+    );
+
+    expect(json, {'ok': true});
+    final parts =
+        ((body['contents'] as List).single as Map)['parts'] as List;
+    expect(parts, hasLength(4));
+    expect((parts[0] as Map)['inline_data'],
+        {'mime_type': 'image/png', 'data': 'AAA'});
+    expect((parts[1] as Map)['inline_data'],
+        {'mime_type': 'image/jpeg', 'data': 'BBB'});
+    expect((parts[2] as Map)['inline_data'],
+        {'mime_type': 'image/png', 'data': 'CCC'});
+    expect((parts[3] as Map)['text'], 'Extract this medical document.');
+  });
 }

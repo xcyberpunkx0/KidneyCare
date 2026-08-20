@@ -1389,4 +1389,120 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreOptions => 'More options';
+
+  @override
+  String get importDocuments => 'Import documents';
+
+  @override
+  String get importPhotos => 'Import photos';
+
+  @override
+  String get importPdfFiles => 'Import PDF files';
+
+  @override
+  String get importEmptyMessage =>
+      'Add scanned photos or PDF files.\nRecora will read each one for you.';
+
+  @override
+  String nItemsToImport(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count documents',
+      one: '1 document',
+      zero: 'No documents',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nSelected(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String nPages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages',
+      one: '1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get combineIntoOneDocument => 'Combine into one';
+
+  @override
+  String get ungroupPages => 'Ungroup';
+
+  @override
+  String get removeDocument => 'Remove';
+
+  @override
+  String get addMore => 'Add more';
+
+  @override
+  String get startImport => 'Start import';
+
+  @override
+  String reviewingItemOfTotal(int index, int total) {
+    return 'Reviewing $index of $total';
+  }
+
+  @override
+  String get skipDocument => 'Skip';
+
+  @override
+  String get saveAndNext => 'Save & next';
+
+  @override
+  String get waitingForExtraction => 'Reading this document…';
+
+  @override
+  String get extractionFailedTitle => 'This document could not be read';
+
+  @override
+  String get retryExtraction => 'Retry';
+
+  @override
+  String get importSummary => 'Import finished';
+
+  @override
+  String nDocumentsSaved(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count documents saved',
+      one: '1 document saved',
+      zero: 'Nothing saved',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nDocumentsSkipped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count skipped',
+      one: '1 skipped',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nDocumentsFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count failed',
+      one: '1 failed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importDone => 'Done';
 }

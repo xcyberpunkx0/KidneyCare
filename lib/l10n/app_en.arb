@@ -731,5 +731,49 @@
   "@markGivenSemantics": {
     "placeholders": {"name": {"type": "String"}}
   },
-  "moreOptions": "More options"
+  "moreOptions": "More options",
+  "importDocuments": "Import documents",
+  "importPhotos": "Import photos",
+  "importPdfFiles": "Import PDF files",
+  "importEmptyMessage": "Add scanned photos or PDF files.\nRecora will read each one for you.",
+  "nItemsToImport": "{count, plural, =0{No documents} =1{1 document} other{{count} documents}}",
+  "@nItemsToImport": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "nSelected": "{count} selected",
+  "@nSelected": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "nPages": "{count, plural, =1{1 page} other{{count} pages}}",
+  "@nPages": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "combineIntoOneDocument": "Combine into one",
+  "ungroupPages": "Ungroup",
+  "removeDocument": "Remove",
+  "addMore": "Add more",
+  "startImport": "Start import",
+  "reviewingItemOfTotal": "Reviewing {index} of {total}",
+  "@reviewingItemOfTotal": {
+    "placeholders": {"index": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "skipDocument": "Skip",
+  "saveAndNext": "Save & next",
+  "waitingForExtraction": "Reading this document…",
+  "extractionFailedTitle": "This document could not be read",
+  "retryExtraction": "Retry",
+  "importSummary": "Import finished",
+  "nDocumentsSaved": "{count, plural, =0{Nothing saved} =1{1 document saved} other{{count} documents saved}}",
+  "@nDocumentsSaved": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "nDocumentsSkipped": "{count, plural, =1{1 skipped} other{{count} skipped}}",
+  "@nDocumentsSkipped": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "nDocumentsFailed": "{count, plural, =1{1 failed} other{{count} failed}}",
+  "@nDocumentsFailed": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "importDone": "Done"
 }

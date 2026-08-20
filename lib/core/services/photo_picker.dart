@@ -17,6 +17,25 @@ class PhotoPicker {
 
   Future<Uint8List?> pickFromGallery() => _pick(ImageSource.gallery);
 
+  /// Multi-select from the gallery for batch import. Returns an empty
+  /// list when the user cancels.
+  Future<List<Uint8List>> pickManyFromGallery() async {
+    try {
+      final files = await _picker.pickMultiImage(
+        maxWidth: 2400,
+        imageQuality: 92,
+      );
+      return [for (final file in files) await file.readAsBytes()];
+    } catch (error, stackTrace) {
+      throw PermissionFailure(
+        message: 'Photos could not be opened. Check photo permission in '
+            'system settings.',
+        cause: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
   Future<Uint8List?> _pick(ImageSource source) async {
     try {
       final file = await _picker.pickImage(

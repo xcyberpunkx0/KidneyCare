@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/services/image_store.dart';
+import '../../../../core/services/scan_page.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/storage/database_provider.dart';
 import '../../../../core/utils/result.dart';
@@ -25,24 +26,50 @@ class CaptureRepositoryImpl implements CaptureRepository {
   static const _uuid = Uuid();
 
   @override
-  Future<Result<ExtractionResult>> extract(Uint8List jpegBytes) {
+  Future<Result<ExtractionResult>> extract(List<ScanPage> pages) {
     return Result.guard(() async {
-      final dto = await _datasource.extract(jpegBytes);
+      final dto = await _datasource.extract(pages);
       return dto.toDomain();
     });
   }
 
   @override
   Future<Result<String>> saveReviewed({
-    required Uint8List originalBytes,
+    required List<ScanPage> pages,
     required ExtractionResult reviewed,
   }) {
     return Result.guard(() async {
       final documentId = _uuid.v4();
-      final scan = await _imageStore.persist(originalBytes, documentId);
+
+      // Single-page documents keep the original storage layout; multi-page
+      // ones store every page and additionally get DocumentPages rows.
+      final String originalPath;
+      final String previewPath;
+      List<String> pagePaths = const [];
+      if (pages.length == 1) {
+        final scan = await _imageStore.persist(pages.single.bytes, documentId);
+        originalPath = scan.originalPath;
+        previewPath = scan.previewPath;
+      } else {
+        final stored = await _imageStore.persistPages(pages, documentId);
+        pagePaths = stored.pagePaths;
+        originalPath = stored.pagePaths.first;
+        previewPath = stored.previewPath;
+      }
       final now = DateTime.now();
 
       await _db.transaction(() async {
+        if (pagePaths.length > 1) {
+          await _db.documentDao.insertPages([
+            for (var i = 0; i < pagePaths.length; i++)
+              DocumentPagesCompanion(
+                id: Value(_uuid.v4()),
+                documentId: Value(documentId),
+                pageIndex: Value(i),
+                originalPath: Value(pagePaths[i]),
+              ),
+          ]);
+        }
         await _db.documentDao.upsert(DocumentsCompanion(
           id: Value(documentId),
           type: Value(reviewed.documentType),
@@ -51,8 +78,8 @@ class CaptureRepositoryImpl implements CaptureRepository {
           doctor: Value(reviewed.doctor),
           documentDate: Value(reviewed.documentDate),
           capturedAt: Value(now),
-          originalPath: Value(scan.originalPath),
-          previewPath: Value(scan.previewPath),
+          originalPath: Value(originalPath),
+          previewPath: Value(previewPath),
           ocrText: Value(reviewed.ocrText),
           tagsJson: Value(jsonEncode(reviewed.tags)),
         ));

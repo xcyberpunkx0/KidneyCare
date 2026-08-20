@@ -20,11 +20,13 @@ class GeminiClient {
   final Dio _dio;
   final String _apiKey;
 
-  /// Sends [prompt] (optionally with an inline [imageBase64] JPEG) and
-  /// returns the decoded JSON object the model was instructed to produce.
+  /// Sends [prompt] (optionally with inline [images], each a base64 body
+  /// with its mime type — multiple images are the pages of one document)
+  /// and returns the decoded JSON object the model was instructed to
+  /// produce.
   Future<Map<String, dynamic>> generateJson({
     required String prompt,
-    String? imageBase64,
+    List<({String mimeType, String base64})> images = const [],
     String? systemInstruction,
   }) async {
     if (_apiKey.isEmpty) {
@@ -35,9 +37,12 @@ class GeminiClient {
     }
 
     final parts = <Map<String, dynamic>>[
-      if (imageBase64 != null)
+      for (final image in images)
         {
-          'inline_data': {'mime_type': 'image/jpeg', 'data': imageBase64},
+          'inline_data': {
+            'mime_type': image.mimeType,
+            'data': image.base64,
+          },
         },
       {'text': prompt},
     ];

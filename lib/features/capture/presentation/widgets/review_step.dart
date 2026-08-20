@@ -4,21 +4,29 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/date_format_x.dart';
-import '../controllers/capture_flow_controller.dart';
+import '../controllers/review_draft.dart';
 import 'review_field_card.dart';
 
 /// The trust screen: every extracted field, editable, with confidence
 /// indicators. Saving stays blocked until each uncertain field is checked.
+/// Shared by the single capture flow and the batch import queue; batch
+/// mode adds a [header] (queue progress) and its own [saveLabel].
 class ReviewStep extends StatelessWidget {
   const ReviewStep({
     super.key,
-    required this.state,
+    required this.draft,
+    required this.saving,
+    this.header,
+    this.saveLabel,
     required this.onEdit,
     required this.onChooseAlternative,
     required this.onSave,
   });
 
-  final CaptureFlowState state;
+  final ReviewDraft draft;
+  final bool saving;
+  final Widget? header;
+  final String? saveLabel;
   final void Function(String key, String value) onEdit;
   final void Function(String key, String value) onChooseAlternative;
   final VoidCallback onSave;
@@ -28,15 +36,15 @@ class ReviewStep extends StatelessWidget {
     final colors = context.colors;
     final typo = context.typo;
     final l10n = context.l10n;
-    final extraction = state.extraction!;
-    final fields = state.reviewFields;
-    final unchecked = state.uncheckedCount;
-    final saving = state.step == CaptureStep.saving;
+    final extraction = draft.extraction;
+    final fields = draft.reviewFields;
+    final unchecked = draft.uncheckedCount;
 
     return Container(
       color: colors.bgSection,
       child: Column(
         children: [
+          ?header,
           Padding(
             padding: const EdgeInsets.fromLTRB(22, 14, 22, 6),
             child: Align(
@@ -113,7 +121,7 @@ class ReviewStep extends StatelessWidget {
                 final field = fields[index];
                 return ReviewFieldCard(
                   field: field,
-                  checked: state.isChecked(field),
+                  checked: draft.isChecked(field),
                   onChanged: (value) => onEdit(field.key, value),
                   onChooseAlternative: (value) =>
                       onChooseAlternative(field.key, value),
@@ -128,7 +136,7 @@ class ReviewStep extends StatelessWidget {
               child: Semantics(
                 button: true,
                 enabled: !saving,
-                label: l10n.saveToTimeline,
+                label: saveLabel ?? l10n.saveToTimeline,
                 child: Material(
                   color: colors.accent,
                   borderRadius: BorderRadius.circular(99),
@@ -140,7 +148,9 @@ class ReviewStep extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       child: Center(
                         child: Text(
-                          saving ? l10n.saving : l10n.saveToTimeline,
+                          saving
+                              ? l10n.saving
+                              : saveLabel ?? l10n.saveToTimeline,
                           style: typo.cardTitle.copyWith(
                             fontSize: 15,
                             color: colors.onAccent,

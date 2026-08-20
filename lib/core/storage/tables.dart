@@ -55,6 +55,22 @@ class Documents extends Table {
   Set<Column<Object>> get primaryKey => {id};
 }
 
+/// Ordered page images of a multi-page document (photographed page by
+/// page or imported from a PDF). Documents captured as a single image
+/// have no rows here — Documents.originalPath is the fallback, and it
+/// always mirrors page 0 for documents that do have rows.
+class DocumentPages extends Table {
+  TextColumn get id => text()();
+  TextColumn get documentId => text()();
+
+  /// 0-based position within the document, in pick/page order.
+  IntColumn get pageIndex => integer()();
+  TextColumn get originalPath => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
 class Medications extends Table {
   TextColumn get id => text()();
   TextColumn get name => text()();
