@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/card_more_button.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../home/presentation/widgets/dialysis_hero_card.dart';
 
@@ -136,7 +137,7 @@ class _SessionCard extends ConsumerWidget {
 
   final DialysisSession session;
 
-  /// Long-press menu: correct or remove a wrongly logged session.
+  /// The ⋮ / long-press menu: correct or remove a wrongly logged session.
   Future<void> _showActions(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
     await showModalBottomSheet<void>(
@@ -276,6 +277,8 @@ class _SessionCard extends ConsumerWidget {
                 ),
               ),
             ],
+            const SizedBox(width: 4),
+            CardMoreButton(onTap: () => _showActions(context, ref)),
           ],
         ),
       ),

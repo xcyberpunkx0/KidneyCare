@@ -1386,4 +1386,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String markGivenSemantics(String name) {
     return 'Mark $name given today';
   }
+
+  @override
+  String get moreOptions => 'More options';
 }

@@ -1381,4 +1381,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String markGivenSemantics(String name) {
     return '$name आज दी गई दर्ज करें';
   }
+
+  @override
+  String get moreOptions => 'और विकल्प';
 }
