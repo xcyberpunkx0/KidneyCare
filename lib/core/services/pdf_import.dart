@@ -32,7 +32,7 @@ class PdfImport {
   Future<List<PickedPdf>> pickPdfs() async {
     final FilePickerResult? result;
     try {
-      result = await FilePicker.pickFiles(
+      result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: const ['pdf'],
         allowMultiple: true,
