@@ -18,6 +18,7 @@ import '../controllers/home_providers.dart';
 import '../widgets/attention_card.dart';
 import '../widgets/dialysis_hero_card.dart';
 import '../widgets/dose_strip.dart';
+import '../widgets/due_meds_card.dart';
 import '../widgets/folders_grid.dart';
 import '../widgets/home_header.dart';
 import '../widgets/quick_actions_row.dart';
@@ -72,6 +73,7 @@ class HomePage extends ConsumerWidget {
                 ),
               ],
             ),
+            const DueMedsCard(),
             GestureDetector(
               onTap: () => context.go(AppRoutes.dialysis),
               child: DialysisHeroCard(next: nextDialysis, last: lastDialysis),

@@ -27,4 +27,14 @@ abstract interface class MedicationsRepository {
   /// the timeline entries recorded for it. A medicine that was really
   /// taken and then stopped should be ended, not deleted.
   Future<Result<void>> deleteMedication(String id);
+
+  /// Ticks off an interval medicine for the day of [on]: stamps its last
+  /// given day and records "Given X" on the timeline, which rolls the
+  /// next due date forward by the medicine's interval.
+  Future<Result<void>> markGiven(String id, DateTime on);
+
+  /// Undoes a same-day [markGiven] tap: removes that day's "Given X"
+  /// timeline entry and restores the previous given day (or none). Does
+  /// nothing when the medicine was not marked given on that day.
+  Future<Result<void>> undoGiven(String id, DateTime on);
 }

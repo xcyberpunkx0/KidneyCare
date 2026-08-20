@@ -704,5 +704,31 @@
   "doseMarkedNotGiven": "{name} marked not given",
   "@doseMarkedNotGiven": {
     "placeholders": {"name": {"type": "String"}}
+  },
+  "repeatEveryDays": "GIVEN EVERY HOW MANY DAYS?",
+  "everyNDays": "Every {n} days",
+  "@everyNDays": {
+    "placeholders": {"n": {"type": "int"}}
+  },
+  "nDaysChip": "{n} days",
+  "@nDaysChip": {
+    "placeholders": {"n": {"type": "int"}}
+  },
+  "intervalGroup": "EVERY FEW DAYS",
+  "dueToday": "Due today",
+  "overdueByDays": "Overdue by {n, plural, =1{1 day} other{{n} days}}",
+  "@overdueByDays": {
+    "placeholders": {"n": {"type": "int"}}
+  },
+  "nextOnDate": "Next on {date}",
+  "@nextOnDate": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "givenToday": "Given today",
+  "markGivenToday": "Mark given today",
+  "medicinesDue": "MEDICINES DUE",
+  "markGivenSemantics": "Mark {name} given today",
+  "@markGivenSemantics": {
+    "placeholders": {"name": {"type": "String"}}
   }
 }
