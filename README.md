@@ -4,10 +4,6 @@ KidneyCare (formerly Recora) is a mobile medical-history vault for a dialysis pa
 prescriptions, lab reports, discharge summaries and bills; verify what the
 AI extracted; and build a searchable longitudinal record that works offline.
 
-Implemented from the **Sanjeevani Medical Vault** Claude Design project
-(final combined direction: light "Recora" language, dark "Nightingale"
-night-shift theme).
-
 ## Running
 
 ```sh
