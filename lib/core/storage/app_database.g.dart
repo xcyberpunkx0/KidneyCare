@@ -1645,6 +1645,28 @@ class $MedicationsTable extends Medications
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _intervalDaysMeta = const VerificationMeta(
+    'intervalDays',
+  );
+  @override
+  late final GeneratedColumn<int> intervalDays = GeneratedColumn<int>(
+    'interval_days',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastGivenOnMeta = const VerificationMeta(
+    'lastGivenOn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastGivenOn = GeneratedColumn<DateTime>(
+    'last_given_on',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1661,6 +1683,8 @@ class $MedicationsTable extends Medications
     changeNote,
     changeDate,
     sourceDocumentId,
+    intervalDays,
+    lastGivenOn,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1773,6 +1797,24 @@ class $MedicationsTable extends Medications
         ),
       );
     }
+    if (data.containsKey('interval_days')) {
+      context.handle(
+        _intervalDaysMeta,
+        intervalDays.isAcceptableOrUnknown(
+          data['interval_days']!,
+          _intervalDaysMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_given_on')) {
+      context.handle(
+        _lastGivenOnMeta,
+        lastGivenOn.isAcceptableOrUnknown(
+          data['last_given_on']!,
+          _lastGivenOnMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1840,6 +1882,14 @@ class $MedicationsTable extends Medications
         DriftSqlType.string,
         data['${effectivePrefix}source_document_id'],
       ),
+      intervalDays: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}interval_days'],
+      ),
+      lastGivenOn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_given_on'],
+      ),
     );
   }
 
@@ -1869,6 +1919,14 @@ class Medication extends DataClass implements Insertable<Medication> {
   final String changeNote;
   final DateTime? changeDate;
   final String? sourceDocumentId;
+
+  /// For medicines given every few days (EPO shots etc.): the gap in days.
+  /// Null for medicines on a daily pattern.
+  final int? intervalDays;
+
+  /// The day an interval medicine was last marked given. Drives the
+  /// due-today checklist; null until the first dose is ticked off.
+  final DateTime? lastGivenOn;
   const Medication({
     required this.id,
     required this.name,
@@ -1884,6 +1942,8 @@ class Medication extends DataClass implements Insertable<Medication> {
     required this.changeNote,
     this.changeDate,
     this.sourceDocumentId,
+    this.intervalDays,
+    this.lastGivenOn,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1912,6 +1972,12 @@ class Medication extends DataClass implements Insertable<Medication> {
     if (!nullToAbsent || sourceDocumentId != null) {
       map['source_document_id'] = Variable<String>(sourceDocumentId);
     }
+    if (!nullToAbsent || intervalDays != null) {
+      map['interval_days'] = Variable<int>(intervalDays);
+    }
+    if (!nullToAbsent || lastGivenOn != null) {
+      map['last_given_on'] = Variable<DateTime>(lastGivenOn);
+    }
     return map;
   }
 
@@ -1937,6 +2003,12 @@ class Medication extends DataClass implements Insertable<Medication> {
       sourceDocumentId: sourceDocumentId == null && nullToAbsent
           ? const Value.absent()
           : Value(sourceDocumentId),
+      intervalDays: intervalDays == null && nullToAbsent
+          ? const Value.absent()
+          : Value(intervalDays),
+      lastGivenOn: lastGivenOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastGivenOn),
     );
   }
 
@@ -1962,6 +2034,8 @@ class Medication extends DataClass implements Insertable<Medication> {
       changeNote: serializer.fromJson<String>(json['changeNote']),
       changeDate: serializer.fromJson<DateTime?>(json['changeDate']),
       sourceDocumentId: serializer.fromJson<String?>(json['sourceDocumentId']),
+      intervalDays: serializer.fromJson<int?>(json['intervalDays']),
+      lastGivenOn: serializer.fromJson<DateTime?>(json['lastGivenOn']),
     );
   }
   @override
@@ -1984,6 +2058,8 @@ class Medication extends DataClass implements Insertable<Medication> {
       'changeNote': serializer.toJson<String>(changeNote),
       'changeDate': serializer.toJson<DateTime?>(changeDate),
       'sourceDocumentId': serializer.toJson<String?>(sourceDocumentId),
+      'intervalDays': serializer.toJson<int?>(intervalDays),
+      'lastGivenOn': serializer.toJson<DateTime?>(lastGivenOn),
     };
   }
 
@@ -2002,6 +2078,8 @@ class Medication extends DataClass implements Insertable<Medication> {
     String? changeNote,
     Value<DateTime?> changeDate = const Value.absent(),
     Value<String?> sourceDocumentId = const Value.absent(),
+    Value<int?> intervalDays = const Value.absent(),
+    Value<DateTime?> lastGivenOn = const Value.absent(),
   }) => Medication(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -2019,6 +2097,8 @@ class Medication extends DataClass implements Insertable<Medication> {
     sourceDocumentId: sourceDocumentId.present
         ? sourceDocumentId.value
         : this.sourceDocumentId,
+    intervalDays: intervalDays.present ? intervalDays.value : this.intervalDays,
+    lastGivenOn: lastGivenOn.present ? lastGivenOn.value : this.lastGivenOn,
   );
   Medication copyWithCompanion(MedicationsCompanion data) {
     return Medication(
@@ -2050,6 +2130,12 @@ class Medication extends DataClass implements Insertable<Medication> {
       sourceDocumentId: data.sourceDocumentId.present
           ? data.sourceDocumentId.value
           : this.sourceDocumentId,
+      intervalDays: data.intervalDays.present
+          ? data.intervalDays.value
+          : this.intervalDays,
+      lastGivenOn: data.lastGivenOn.present
+          ? data.lastGivenOn.value
+          : this.lastGivenOn,
     );
   }
 
@@ -2069,7 +2155,9 @@ class Medication extends DataClass implements Insertable<Medication> {
           ..write('endDate: $endDate, ')
           ..write('changeNote: $changeNote, ')
           ..write('changeDate: $changeDate, ')
-          ..write('sourceDocumentId: $sourceDocumentId')
+          ..write('sourceDocumentId: $sourceDocumentId, ')
+          ..write('intervalDays: $intervalDays, ')
+          ..write('lastGivenOn: $lastGivenOn')
           ..write(')'))
         .toString();
   }
@@ -2090,6 +2178,8 @@ class Medication extends DataClass implements Insertable<Medication> {
     changeNote,
     changeDate,
     sourceDocumentId,
+    intervalDays,
+    lastGivenOn,
   );
   @override
   bool operator ==(Object other) =>
@@ -2108,7 +2198,9 @@ class Medication extends DataClass implements Insertable<Medication> {
           other.endDate == this.endDate &&
           other.changeNote == this.changeNote &&
           other.changeDate == this.changeDate &&
-          other.sourceDocumentId == this.sourceDocumentId);
+          other.sourceDocumentId == this.sourceDocumentId &&
+          other.intervalDays == this.intervalDays &&
+          other.lastGivenOn == this.lastGivenOn);
 }
 
 class MedicationsCompanion extends UpdateCompanion<Medication> {
@@ -2126,6 +2218,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
   final Value<String> changeNote;
   final Value<DateTime?> changeDate;
   final Value<String?> sourceDocumentId;
+  final Value<int?> intervalDays;
+  final Value<DateTime?> lastGivenOn;
   final Value<int> rowid;
   const MedicationsCompanion({
     this.id = const Value.absent(),
@@ -2142,6 +2236,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     this.changeNote = const Value.absent(),
     this.changeDate = const Value.absent(),
     this.sourceDocumentId = const Value.absent(),
+    this.intervalDays = const Value.absent(),
+    this.lastGivenOn = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   MedicationsCompanion.insert({
@@ -2159,6 +2255,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     this.changeNote = const Value.absent(),
     this.changeDate = const Value.absent(),
     this.sourceDocumentId = const Value.absent(),
+    this.intervalDays = const Value.absent(),
+    this.lastGivenOn = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -2182,6 +2280,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     Expression<String>? changeNote,
     Expression<DateTime>? changeDate,
     Expression<String>? sourceDocumentId,
+    Expression<int>? intervalDays,
+    Expression<DateTime>? lastGivenOn,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2199,6 +2299,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
       if (changeNote != null) 'change_note': changeNote,
       if (changeDate != null) 'change_date': changeDate,
       if (sourceDocumentId != null) 'source_document_id': sourceDocumentId,
+      if (intervalDays != null) 'interval_days': intervalDays,
+      if (lastGivenOn != null) 'last_given_on': lastGivenOn,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2218,6 +2320,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     Value<String>? changeNote,
     Value<DateTime?>? changeDate,
     Value<String?>? sourceDocumentId,
+    Value<int?>? intervalDays,
+    Value<DateTime?>? lastGivenOn,
     Value<int>? rowid,
   }) {
     return MedicationsCompanion(
@@ -2235,6 +2339,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
       changeNote: changeNote ?? this.changeNote,
       changeDate: changeDate ?? this.changeDate,
       sourceDocumentId: sourceDocumentId ?? this.sourceDocumentId,
+      intervalDays: intervalDays ?? this.intervalDays,
+      lastGivenOn: lastGivenOn ?? this.lastGivenOn,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2286,6 +2392,12 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     if (sourceDocumentId.present) {
       map['source_document_id'] = Variable<String>(sourceDocumentId.value);
     }
+    if (intervalDays.present) {
+      map['interval_days'] = Variable<int>(intervalDays.value);
+    }
+    if (lastGivenOn.present) {
+      map['last_given_on'] = Variable<DateTime>(lastGivenOn.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2309,6 +2421,8 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
           ..write('changeNote: $changeNote, ')
           ..write('changeDate: $changeDate, ')
           ..write('sourceDocumentId: $sourceDocumentId, ')
+          ..write('intervalDays: $intervalDays, ')
+          ..write('lastGivenOn: $lastGivenOn, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6963,6 +7077,8 @@ typedef $$MedicationsTableCreateCompanionBuilder =
       Value<String> changeNote,
       Value<DateTime?> changeDate,
       Value<String?> sourceDocumentId,
+      Value<int?> intervalDays,
+      Value<DateTime?> lastGivenOn,
       Value<int> rowid,
     });
 typedef $$MedicationsTableUpdateCompanionBuilder =
@@ -6981,6 +7097,8 @@ typedef $$MedicationsTableUpdateCompanionBuilder =
       Value<String> changeNote,
       Value<DateTime?> changeDate,
       Value<String?> sourceDocumentId,
+      Value<int?> intervalDays,
+      Value<DateTime?> lastGivenOn,
       Value<int> rowid,
     });
 
@@ -7063,6 +7181,16 @@ class $$MedicationsTableFilterComposer
     column: $table.sourceDocumentId,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<int> get intervalDays => $composableBuilder(
+    column: $table.intervalDays,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastGivenOn => $composableBuilder(
+    column: $table.lastGivenOn,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$MedicationsTableOrderingComposer
@@ -7143,6 +7271,16 @@ class $$MedicationsTableOrderingComposer
     column: $table.sourceDocumentId,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get intervalDays => $composableBuilder(
+    column: $table.intervalDays,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastGivenOn => $composableBuilder(
+    column: $table.lastGivenOn,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MedicationsTableAnnotationComposer
@@ -7210,6 +7348,16 @@ class $$MedicationsTableAnnotationComposer
     column: $table.sourceDocumentId,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get intervalDays => $composableBuilder(
+    column: $table.intervalDays,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastGivenOn => $composableBuilder(
+    column: $table.lastGivenOn,
+    builder: (column) => column,
+  );
 }
 
 class $$MedicationsTableTableManager
@@ -7257,6 +7405,8 @@ class $$MedicationsTableTableManager
                 Value<String> changeNote = const Value.absent(),
                 Value<DateTime?> changeDate = const Value.absent(),
                 Value<String?> sourceDocumentId = const Value.absent(),
+                Value<int?> intervalDays = const Value.absent(),
+                Value<DateTime?> lastGivenOn = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MedicationsCompanion(
                 id: id,
@@ -7273,6 +7423,8 @@ class $$MedicationsTableTableManager
                 changeNote: changeNote,
                 changeDate: changeDate,
                 sourceDocumentId: sourceDocumentId,
+                intervalDays: intervalDays,
+                lastGivenOn: lastGivenOn,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7291,6 +7443,8 @@ class $$MedicationsTableTableManager
                 Value<String> changeNote = const Value.absent(),
                 Value<DateTime?> changeDate = const Value.absent(),
                 Value<String?> sourceDocumentId = const Value.absent(),
+                Value<int?> intervalDays = const Value.absent(),
+                Value<DateTime?> lastGivenOn = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MedicationsCompanion.insert(
                 id: id,
@@ -7307,6 +7461,8 @@ class $$MedicationsTableTableManager
                 changeNote: changeNote,
                 changeDate: changeDate,
                 sourceDocumentId: sourceDocumentId,
+                intervalDays: intervalDays,
+                lastGivenOn: lastGivenOn,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

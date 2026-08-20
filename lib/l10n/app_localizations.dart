@@ -2455,6 +2455,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} marked not given'**
   String doseMarkedNotGiven(String name);
+
+  /// No description provided for @repeatEveryDays.
+  ///
+  /// In en, this message translates to:
+  /// **'GIVEN EVERY HOW MANY DAYS?'**
+  String get repeatEveryDays;
+
+  /// No description provided for @everyNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {n} days'**
+  String everyNDays(int n);
+
+  /// No description provided for @nDaysChip.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} days'**
+  String nDaysChip(int n);
+
+  /// No description provided for @intervalGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'EVERY FEW DAYS'**
+  String get intervalGroup;
+
+  /// No description provided for @dueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due today'**
+  String get dueToday;
+
+  /// No description provided for @overdueByDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue by {n, plural, =1{1 day} other{{n} days}}'**
+  String overdueByDays(int n);
+
+  /// No description provided for @nextOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next on {date}'**
+  String nextOnDate(String date);
+
+  /// No description provided for @givenToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Given today'**
+  String get givenToday;
+
+  /// No description provided for @markGivenToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark given today'**
+  String get markGivenToday;
+
+  /// No description provided for @medicinesDue.
+  ///
+  /// In en, this message translates to:
+  /// **'MEDICINES DUE'**
+  String get medicinesDue;
+
+  /// No description provided for @markGivenSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark {name} given today'**
+  String markGivenSemantics(String name);
 }
 
 class _AppLocalizationsDelegate

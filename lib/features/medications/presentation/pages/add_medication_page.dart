@@ -32,6 +32,7 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
   final _purpose = TextEditingController();
   final _doctor = TextEditingController();
   final _note = TextEditingController();
+  final _interval = TextEditingController(text: '7');
   MedScheduleGroup _group = MedScheduleGroup.withFood;
   Set<MedTimingCue> _cues = {MedTimingCue.withFood};
 
@@ -56,6 +57,9 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
       _note.text = med.scheduleNote;
       _group = med.scheduleGroup;
       _cues = _decodeCues(med.timingCuesJson);
+      if (med.intervalDays != null) {
+        _interval.text = '${med.intervalDays}';
+      }
     });
   }
 
@@ -71,7 +75,14 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
 
   @override
   void dispose() {
-    for (final controller in [_name, _frequency, _purpose, _doctor, _note]) {
+    for (final controller in [
+      _name,
+      _frequency,
+      _purpose,
+      _doctor,
+      _note,
+      _interval,
+    ]) {
       controller.dispose();
     }
     super.dispose();
@@ -89,6 +100,9 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
       timingCues: Set.of(_cues),
       scheduleNote: _note.text.trim(),
       startDate: DateTime.now(),
+      intervalDays: _group == MedScheduleGroup.weekly
+          ? int.tryParse(_interval.text.trim())
+          : null,
     );
     final controller = ref.read(addMedicationProvider.notifier);
     final saved = _isEditing
@@ -221,6 +235,62 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
                 ],
               ),
             ),
+            if (_group == MedScheduleGroup.weekly) ...[
+              const SizedBox(height: 9),
+              LabeledFieldCard(
+                label: l10n.repeatEveryDays,
+                child: Wrap(
+                  spacing: 7,
+                  runSpacing: 7,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    for (final days in const [5, 7, 15, 30])
+                      AppChoiceChip(
+                        label: l10n.nDaysChip(days),
+                        selected: int.tryParse(_interval.text.trim()) == days,
+                        onTap: () => setState(() => _interval.text = '$days'),
+                      ),
+                    SizedBox(
+                      width: 76,
+                      child: TextField(
+                        controller: _interval,
+                        keyboardType: TextInputType.number,
+                        onChanged: (_) => setState(() {}),
+                        style: typo.cardTitle.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: colors.ink,
+                        ),
+                        cursorColor: colors.accent,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor: colors.fieldBg,
+                          hintText: '7',
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: colors.fieldBorder,
+                              width: 1.5,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: colors.accent,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 9),
             LabeledFieldCard(
               label: l10n.instructions,

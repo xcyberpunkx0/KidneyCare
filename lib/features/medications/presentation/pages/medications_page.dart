@@ -9,8 +9,10 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../shared/domain/med_schedule.dart';
 import '../../data/repository_impl/medications_repository_impl.dart';
+import '../../domain/usecases/interval_due.dart';
 import '../controllers/medications_controllers.dart';
 import '../widgets/ended_meds_section.dart';
+import '../widgets/interval_med_card.dart';
 import '../widgets/medication_card.dart';
 
 /// Medicines — active medications grouped by schedule, with a collapsible
@@ -27,11 +29,18 @@ class MedicationsPage extends ConsumerWidget {
     final ended = ref.watch(endedMedicationsProvider).value ?? const [];
     final showEnded = ref.watch(showEndedProvider);
 
+    final interval = active.where((m) => m.isIntervalMed).toList();
     final withFood = active
-        .where((m) => m.scheduleGroup == MedScheduleGroup.withFood)
+        .where(
+          (m) =>
+              !m.isIntervalMed && m.scheduleGroup == MedScheduleGroup.withFood,
+        )
         .toList();
     final byClock = active
-        .where((m) => m.scheduleGroup != MedScheduleGroup.withFood)
+        .where(
+          (m) =>
+              !m.isIntervalMed && m.scheduleGroup != MedScheduleGroup.withFood,
+        )
         .toList();
 
     return Scaffold(
@@ -75,8 +84,7 @@ class MedicationsPage extends ConsumerWidget {
                         ),
                         Text(
                           l10n.nActive(active.length),
-                          style: typo.bodySmall
-                              .copyWith(color: colors.muted),
+                          style: typo.bodySmall.copyWith(color: colors.muted),
                         ),
                         const SizedBox(width: 10),
                         const _AddMedicineButton(),
@@ -88,6 +96,13 @@ class MedicationsPage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (interval.isNotEmpty) ...[
+                          _GroupLabel(label: l10n.intervalGroup),
+                          for (final med in interval) ...[
+                            IntervalMedCard(medication: med),
+                            const SizedBox(height: 9),
+                          ],
+                        ],
                         if (withFood.isNotEmpty) ...[
                           _GroupLabel(label: l10n.withFoodGroup),
                           for (final med in withFood) ...[
@@ -157,8 +172,7 @@ class _AddMedicineButton extends StatelessWidget {
           onTap: () => context.pushNamed('addMedication'),
           customBorder: const StadiumBorder(),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
