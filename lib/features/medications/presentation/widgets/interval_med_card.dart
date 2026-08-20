@@ -6,14 +6,16 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/date_format_x.dart';
+import '../../../../core/widgets/card_more_button.dart';
 import '../../../../core/widgets/status_chip.dart';
 import '../../data/repository_impl/medications_repository_impl.dart';
 import '../../domain/usecases/interval_due.dart';
 import 'medication_actions_sheet.dart';
 
 /// Checklist card for an every-few-days medicine: due status plus a
-/// tick to mark it given today (tap again the same day to undo).
-/// Long-press opens the edit/end/delete menu like other medicine cards.
+/// tick to mark it given today (tap again the same day to undo). The ⋮
+/// button (or long-press) opens the edit/end/delete menu like other
+/// medicine cards.
 class IntervalMedCard extends ConsumerWidget {
   const IntervalMedCard({super.key, required this.medication});
 
@@ -145,6 +147,10 @@ class IntervalMedCard extends ConsumerWidget {
                   ),
                 ),
               ),
+            ),
+            const SizedBox(width: 2),
+            CardMoreButton(
+              onTap: () => showMedicationActions(context, ref, medication),
             ),
           ],
         ),

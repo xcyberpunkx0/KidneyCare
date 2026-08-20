@@ -730,5 +730,6 @@
   "markGivenSemantics": "Mark {name} given today",
   "@markGivenSemantics": {
     "placeholders": {"name": {"type": "String"}}
-  }
+  },
+  "moreOptions": "More options"
 }

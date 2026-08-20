@@ -8,13 +8,14 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/card_more_button.dart';
 import '../../../../core/widgets/status_chip.dart';
 import '../../../../shared/domain/med_schedule.dart';
 import 'medication_actions_sheet.dart';
 
 /// One active medication card: timing chip, name, purpose/schedule line,
-/// and the dose pattern (or a dose-change badge). Long-press opens the
-/// edit/end/delete menu.
+/// and the dose pattern (or a dose-change badge). The ⋮ button (or a
+/// long-press anywhere on the card) opens the edit/end/delete menu.
 class MedicationCard extends ConsumerWidget {
   const MedicationCard({super.key, required this.medication});
 
@@ -83,6 +84,10 @@ class MedicationCard extends ConsumerWidget {
                   },
                 ),
               ),
+            const SizedBox(width: 4),
+            CardMoreButton(
+              onTap: () => showMedicationActions(context, ref, medication),
+            ),
           ],
         ),
       ),

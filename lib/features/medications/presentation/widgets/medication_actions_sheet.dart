@@ -8,8 +8,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../data/repository_impl/medications_repository_impl.dart';
 
-/// Long-press menu on a medication card: correct a wrongly entered
-/// medicine, mark it ended, or delete it outright.
+/// The ⋮ / long-press menu on a medication card: correct a wrongly
+/// entered medicine, mark it ended, or delete it outright.
 Future<void> showMedicationActions(
   BuildContext context,
   WidgetRef ref,

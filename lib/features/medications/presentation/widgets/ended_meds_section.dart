@@ -6,6 +6,7 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/card_more_button.dart';
 import 'medication_actions_sheet.dart';
 
 /// Collapsible "Ended medicines" section: a dashed-outline toggle when
@@ -154,6 +155,10 @@ class _EndedCard extends ConsumerWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(width: 4),
+              CardMoreButton(
+                onTap: () => showMedicationActions(context, ref, medication),
               ),
             ],
           ),

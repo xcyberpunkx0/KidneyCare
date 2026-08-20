@@ -405,5 +405,6 @@
   "givenToday": "आज दे दी गई",
   "markGivenToday": "आज दी गई दर्ज करें",
   "medicinesDue": "देनी हैं ये दवाइयाँ",
-  "markGivenSemantics": "{name} आज दी गई दर्ज करें"
+  "markGivenSemantics": "{name} आज दी गई दर्ज करें",
+  "moreOptions": "और विकल्प"
 }
