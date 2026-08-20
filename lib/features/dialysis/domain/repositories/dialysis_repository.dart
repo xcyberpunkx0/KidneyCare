@@ -16,4 +16,17 @@ abstract interface class DialysisRepository {
   /// Returns:
   ///   Ok on success; Err with a [StorageFailure] when persistence fails.
   Future<Result<void>> logSession(SessionLog log);
+
+  /// The stored session as an editable [SessionLog] — blood pressure is
+  /// read back from the lab observations recorded with it. Null when [id]
+  /// is unknown.
+  Future<SessionLog?> getSessionLog(String id);
+
+  /// Rewrites a logged session and the weight/BP observations and timeline
+  /// entry it created. The standing "next session" schedule is untouched.
+  Future<Result<void>> updateSession(String id, SessionLog log);
+
+  /// Removes a logged session along with the weight/BP observations and
+  /// timeline entry it created.
+  Future<Result<void>> deleteSession(String id);
 }

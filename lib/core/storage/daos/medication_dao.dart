@@ -35,14 +35,24 @@ class MedicationDao extends DatabaseAccessor<AppDatabase>
   Future<List<Medication>> search(String term) {
     final pattern = '%${term.toLowerCase()}%';
     final query = select(medications)
-      ..where((t) =>
-          t.name.lower().like(pattern) |
-          t.purpose.lower().like(pattern) |
-          t.doctor.lower().like(pattern));
+      ..where(
+        (t) =>
+            t.name.lower().like(pattern) |
+            t.purpose.lower().like(pattern) |
+            t.doctor.lower().like(pattern),
+      );
     return query.get();
+  }
+
+  Future<Medication?> getById(String id) {
+    final query = select(medications)..where((t) => t.id.equals(id));
+    return query.getSingleOrNull();
   }
 
   Future<void> upsert(MedicationsCompanion entry) {
     return into(medications).insertOnConflictUpdate(entry);
   }
+
+  Future<void> deleteById(String id) =>
+      (delete(medications)..where((t) => t.id.equals(id))).go();
 }

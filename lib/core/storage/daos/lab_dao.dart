@@ -56,10 +56,29 @@ class LabDao extends DatabaseAccessor<AppDatabase> with _$LabDaoMixin {
   }
 
   Future<void> updateValue(String id, double value) {
-    return (update(labResults)..where((t) => t.id.equals(id)))
-        .write(LabResultsCompanion(value: Value(value)));
+    return (update(labResults)..where((t) => t.id.equals(id))).write(
+      LabResultsCompanion(value: Value(value)),
+    );
   }
 
   Future<void> deleteById(String id) =>
       (delete(labResults)..where((t) => t.id.equals(id))).go();
+
+  /// Observations for [metricCodes] stamped exactly [at] — how the rows a
+  /// dialysis session auto-recorded are found again, since they carry no
+  /// link back to the session.
+  Future<List<LabResult>> getByMetricsAt(
+    List<String> metricCodes,
+    DateTime at,
+  ) {
+    final query = select(labResults)
+      ..where((t) => t.metricCode.isIn(metricCodes) & t.takenAt.equals(at));
+    return query.get();
+  }
+
+  Future<void> deleteByMetricsAt(List<String> metricCodes, DateTime at) {
+    return (delete(labResults)
+          ..where((t) => t.metricCode.isIn(metricCodes) & t.takenAt.equals(at)))
+        .go();
+  }
 }

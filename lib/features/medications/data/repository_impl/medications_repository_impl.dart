@@ -19,8 +19,7 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
   static const _uuid = Uuid();
 
   @override
-  Stream<List<Medication>> watchActive() =>
-      _db.medicationDao.watchActive();
+  Stream<List<Medication>> watchActive() => _db.medicationDao.watchActive();
 
   @override
   Stream<List<Medication>> watchEnded() => _db.medicationDao.watchEnded();
@@ -29,29 +28,80 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
   Future<Result<void>> addManual(NewMedication medication) {
     return Result.guard(() async {
       await _db.transaction(() async {
-        await _db.medicationDao.upsert(MedicationsCompanion(
-          id: Value(_uuid.v4()),
-          name: Value(medication.name),
-          dose: Value(medication.name),
-          frequencyCode: Value(medication.frequencyCode),
-          purpose: Value(medication.purpose),
-          doctor: Value(medication.doctor),
-          scheduleGroup: Value(medication.scheduleGroup),
-          timingCuesJson: Value(jsonEncode(
-              [for (final cue in medication.timingCues) cue.name])),
-          scheduleNote: Value(medication.scheduleNote),
-          startDate: Value(medication.startDate),
-        ));
-        await _db.timelineDao.insert(TimelineEventsCompanion(
-          id: Value(_uuid.v4()),
-          type: const Value(TimelineEventType.medicationChange),
-          title: Value('Started ${medication.name}'),
-          subtitle: Value([
-            'Manual entry',
-            if (medication.doctor.isNotEmpty) medication.doctor,
-          ].join(' · ')),
-          occurredAt: Value(medication.startDate),
-        ));
+        await _db.medicationDao.upsert(
+          MedicationsCompanion(
+            id: Value(_uuid.v4()),
+            name: Value(medication.name),
+            // Strength is typed as part of the name ("Sevelamer 400 mg");
+            // the standalone dose column stays empty for manual entries.
+            dose: const Value(''),
+            frequencyCode: Value(medication.frequencyCode),
+            purpose: Value(medication.purpose),
+            doctor: Value(medication.doctor),
+            scheduleGroup: Value(medication.scheduleGroup),
+            timingCuesJson: Value(
+              jsonEncode([for (final cue in medication.timingCues) cue.name]),
+            ),
+            scheduleNote: Value(medication.scheduleNote),
+            startDate: Value(medication.startDate),
+          ),
+        );
+        await _db.timelineDao.insert(
+          TimelineEventsCompanion(
+            id: Value(_uuid.v4()),
+            type: const Value(TimelineEventType.medicationChange),
+            title: Value('Started ${medication.name}'),
+            subtitle: Value(
+              [
+                'Manual entry',
+                if (medication.doctor.isNotEmpty) medication.doctor,
+              ].join(' · '),
+            ),
+            occurredAt: Value(medication.startDate),
+          ),
+        );
+      });
+    });
+  }
+
+  @override
+  Future<Medication?> getMedication(String id) => _db.medicationDao.getById(id);
+
+  @override
+  Future<Result<void>> updateManual(String id, NewMedication medication) {
+    return Result.guard(() async {
+      final existing = await _db.medicationDao.getById(id);
+      if (existing == null) return;
+      await _db.medicationDao.upsert(
+        existing
+            .toCompanion(false)
+            .copyWith(
+              name: Value(medication.name),
+              frequencyCode: Value(medication.frequencyCode),
+              purpose: Value(medication.purpose),
+              doctor: Value(medication.doctor),
+              scheduleGroup: Value(medication.scheduleGroup),
+              timingCuesJson: Value(
+                jsonEncode([for (final cue in medication.timingCues) cue.name]),
+              ),
+              scheduleNote: Value(medication.scheduleNote),
+            ),
+      );
+    });
+  }
+
+  @override
+  Future<Result<void>> deleteMedication(String id) {
+    return Result.guard(() async {
+      final med = await _db.medicationDao.getById(id);
+      if (med == null) return;
+      await _db.transaction(() async {
+        await _db.doseDao.deleteForMedication(id);
+        await _db.timelineDao.deleteByTypeAndTitles(
+          TimelineEventType.medicationChange,
+          ['Started ${med.name}', 'Stopped ${med.name}'],
+        );
+        await _db.medicationDao.deleteById(id);
       });
     });
   }
@@ -63,23 +113,24 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
       final med = active.where((m) => m.id == id).firstOrNull;
       if (med == null) return;
       await _db.transaction(() async {
-        await _db.medicationDao.upsert(med
-            .toCompanion(false)
-            .copyWith(endDate: Value(DateTime.now())));
-        await _db.timelineDao.insert(TimelineEventsCompanion(
-          id: Value(_uuid.v4()),
-          type: const Value(TimelineEventType.medicationChange),
-          title: Value('Stopped ${med.name}'),
-          subtitle: const Value('Marked ended by caregiver'),
-          occurredAt: Value(DateTime.now()),
-        ));
+        await _db.medicationDao.upsert(
+          med.toCompanion(false).copyWith(endDate: Value(DateTime.now())),
+        );
+        await _db.timelineDao.insert(
+          TimelineEventsCompanion(
+            id: Value(_uuid.v4()),
+            type: const Value(TimelineEventType.medicationChange),
+            title: Value('Stopped ${med.name}'),
+            subtitle: const Value('Marked ended by caregiver'),
+            occurredAt: Value(DateTime.now()),
+          ),
+        );
       });
     });
   }
 }
 
-final medicationsRepositoryProvider =
-    Provider<MedicationsRepository>((ref) {
+final medicationsRepositoryProvider = Provider<MedicationsRepository>((ref) {
   return MedicationsRepositoryImpl(ref.watch(databaseProvider));
 });
 

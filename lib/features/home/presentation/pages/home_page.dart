@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/router/app_shell.dart';
 import '../../../../core/router/routes.dart';
+import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/app_search_bar.dart';
@@ -37,8 +38,7 @@ class HomePage extends ConsumerWidget {
     final lastDialysis = ref.watch(lastDialysisProvider).value;
     final doses = ref.watch(todaysDosesProvider).value ?? const [];
     final recent = ref.watch(recentEventsProvider).value ?? const [];
-    final docCounts =
-        ref.watch(documentCountsProvider).value ?? const {};
+    final docCounts = ref.watch(documentCountsProvider).value ?? const {};
 
     final takenCount = doses.where((d) => d.taken).length;
 
@@ -74,8 +74,7 @@ class HomePage extends ConsumerWidget {
             ),
             GestureDetector(
               onTap: () => context.go(AppRoutes.dialysis),
-              child: DialysisHeroCard(
-                  next: nextDialysis, last: lastDialysis),
+              child: DialysisHeroCard(next: nextDialysis, last: lastDialysis),
             ),
             const QuickActionsRow(),
             const ClaimsGlanceCard(),
@@ -88,7 +87,7 @@ class HomePage extends ConsumerWidget {
             if (doses.isNotEmpty)
               DoseStrip(
                 doses: doses,
-                onToggle: (dose) => ref.read(doseToggleProvider)(dose),
+                onToggle: (dose) => _toggleDose(context, ref, dose),
               ),
             SectionHeader(
               title: l10n.folders,
@@ -128,6 +127,34 @@ class HomePage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// Flips a dose chip and confirms it with an undo — a mistaken tap is
+  /// reversed from the snackbar instead of hunting the chip again.
+  Future<void> _toggleDose(
+    BuildContext context,
+    WidgetRef ref,
+    Dose dose,
+  ) async {
+    final l10n = context.l10n;
+    await ref.read(doseToggleProvider)(dose);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            dose.taken
+                ? l10n.doseMarkedNotGiven(dose.medicationLabel)
+                : l10n.doseMarkedGiven(dose.medicationLabel),
+          ),
+          action: SnackBarAction(
+            label: l10n.undo,
+            onPressed: () =>
+                ref.read(doseToggleProvider)(dose.copyWith(taken: !dose.taken)),
+          ),
+        ),
+      );
   }
 
   void _openMetric(BuildContext context, String? metricCode) {

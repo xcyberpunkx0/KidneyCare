@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,17 +10,20 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_choice_chip.dart';
 import '../../../../core/widgets/labeled_field_card.dart';
 import '../../../../shared/domain/med_schedule.dart';
+import '../../data/repository_impl/medications_repository_impl.dart';
 import '../../domain/entities/new_medication.dart';
 import '../controllers/add_medication_controller.dart';
 
 /// Manual medicine entry — for prescriptions given verbally or lost, with
-/// the same schedule vocabulary the rest of the app uses.
+/// the same schedule vocabulary the rest of the app uses. With a
+/// [medicationId] the same form corrects that stored medicine instead.
 class AddMedicationPage extends ConsumerStatefulWidget {
-  const AddMedicationPage({super.key});
+  const AddMedicationPage({super.key, this.medicationId});
+
+  final String? medicationId;
 
   @override
-  ConsumerState<AddMedicationPage> createState() =>
-      _AddMedicationPageState();
+  ConsumerState<AddMedicationPage> createState() => _AddMedicationPageState();
 }
 
 class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
@@ -28,7 +33,41 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
   final _doctor = TextEditingController();
   final _note = TextEditingController();
   MedScheduleGroup _group = MedScheduleGroup.withFood;
-  final Set<MedTimingCue> _cues = {MedTimingCue.withFood};
+  Set<MedTimingCue> _cues = {MedTimingCue.withFood};
+
+  bool get _isEditing => widget.medicationId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_isEditing) _prefill();
+  }
+
+  Future<void> _prefill() async {
+    final med = await ref
+        .read(medicationsRepositoryProvider)
+        .getMedication(widget.medicationId!);
+    if (med == null || !mounted) return;
+    setState(() {
+      _name.text = med.name;
+      _frequency.text = med.frequencyCode;
+      _purpose.text = med.purpose;
+      _doctor.text = med.doctor;
+      _note.text = med.scheduleNote;
+      _group = med.scheduleGroup;
+      _cues = _decodeCues(med.timingCuesJson);
+    });
+  }
+
+  Set<MedTimingCue> _decodeCues(String json) {
+    final raw = jsonDecode(json);
+    if (raw is! List) return {};
+    return {
+      for (final name in raw.whereType<String>())
+        if (MedTimingCue.values.asNameMap().containsKey(name))
+          MedTimingCue.values.byName(name),
+    };
+  }
 
   @override
   void dispose() {
@@ -39,22 +78,31 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
   }
 
   Future<void> _save() async {
-    final saved =
-        await ref.read(addMedicationProvider.notifier).save(NewMedication(
-              name: _name.text.trim(),
-              frequencyCode: _frequency.text.trim().isEmpty
-                  ? '—'
-                  : _frequency.text.trim(),
-              purpose: _purpose.text.trim(),
-              doctor: _doctor.text.trim(),
-              scheduleGroup: _group,
-              timingCues: Set.of(_cues),
-              scheduleNote: _note.text.trim(),
-              startDate: DateTime.now(),
-            ));
+    final medication = NewMedication(
+      name: _name.text.trim(),
+      frequencyCode: _frequency.text.trim().isEmpty
+          ? '—'
+          : _frequency.text.trim(),
+      purpose: _purpose.text.trim(),
+      doctor: _doctor.text.trim(),
+      scheduleGroup: _group,
+      timingCues: Set.of(_cues),
+      scheduleNote: _note.text.trim(),
+      startDate: DateTime.now(),
+    );
+    final controller = ref.read(addMedicationProvider.notifier);
+    final saved = _isEditing
+        ? await controller.update(widget.medicationId!, medication)
+        : await controller.save(medication);
     if (saved && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.medicineAdded)),
+        SnackBar(
+          content: Text(
+            _isEditing
+                ? context.l10n.medicineUpdated
+                : context.l10n.medicineAdded,
+          ),
+        ),
       );
       context.pop();
     }
@@ -70,8 +118,9 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
     ref.listen(addMedicationProvider, (previous, next) {
       final failure = next.failure;
       if (failure != null && failure != previous?.failure) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
         ref.read(addMedicationProvider.notifier).dismissFailure();
       }
     });
@@ -87,8 +136,10 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 0, 22, 24),
           children: [
-            Text(l10n.addAMedicine,
-                style: typo.pageTitle.copyWith(fontSize: 24)),
+            Text(
+              _isEditing ? l10n.editMedicine : l10n.addAMedicine,
+              style: typo.pageTitle.copyWith(fontSize: 24),
+            ),
             const SizedBox(height: 4),
             Text(
               l10n.addMedicineCopy,
@@ -187,9 +238,15 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Center(
                     child: Text(
-                      state.saving ? l10n.saving : l10n.addMedicineButton,
-                      style: typo.cardTitle
-                          .copyWith(fontSize: 15, color: colors.onAccent),
+                      state.saving
+                          ? l10n.saving
+                          : _isEditing
+                          ? l10n.saveChanges
+                          : l10n.addMedicineButton,
+                      style: typo.cardTitle.copyWith(
+                        fontSize: 15,
+                        color: colors.onAccent,
+                      ),
                     ),
                   ),
                 ),

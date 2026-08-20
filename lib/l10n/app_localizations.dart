@@ -2359,6 +2359,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this reading? This cannot be undone.'**
   String get deleteReadingConfirm;
+
+  /// No description provided for @editSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit session'**
+  String get editSession;
+
+  /// No description provided for @deleteSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete session'**
+  String get deleteSession;
+
+  /// No description provided for @deleteSessionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this session? The weight and BP values it recorded are removed too.'**
+  String get deleteSessionConfirm;
+
+  /// No description provided for @sessionUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Session updated'**
+  String get sessionUpdated;
+
+  /// No description provided for @sessionDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Session deleted'**
+  String get sessionDeleted;
+
+  /// No description provided for @sessionActionsFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Session of {date}'**
+  String sessionActionsFor(String date);
+
+  /// No description provided for @editMedicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit medicine'**
+  String get editMedicine;
+
+  /// No description provided for @endMedicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as ended'**
+  String get endMedicine;
+
+  /// No description provided for @medicineEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as ended'**
+  String get medicineEnded;
+
+  /// No description provided for @deleteMedicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete medicine'**
+  String get deleteMedicine;
+
+  /// No description provided for @deleteMedicineConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this medicine completely? If it was really taken and then stopped, mark it as ended instead.'**
+  String get deleteMedicineConfirm;
+
+  /// No description provided for @medicineUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine updated'**
+  String get medicineUpdated;
+
+  /// No description provided for @medicineDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine deleted'**
+  String get medicineDeleted;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @doseMarkedGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} marked given'**
+  String doseMarkedGiven(String name);
+
+  /// No description provided for @doseMarkedNotGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} marked not given'**
+  String doseMarkedNotGiven(String name);
 }
 
 class _AppLocalizationsDelegate
