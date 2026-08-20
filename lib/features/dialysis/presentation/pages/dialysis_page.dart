@@ -12,6 +12,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../home/presentation/widgets/dialysis_hero_card.dart';
 
+import '../../data/repository_impl/dialysis_repository_impl.dart';
 import '../controllers/dialysis_providers.dart';
 
 /// Dialysis — the schedule and every completed session, newest first.
@@ -50,8 +51,7 @@ class DialysisPage extends ConsumerWidget {
                     style: typo.bodySmall.copyWith(color: colors.muted),
                   ),
                   const SizedBox(width: 10),
-                  _LogButton(
-                      onTap: () => context.pushNamed('sessionLog')),
+                  _LogButton(onTap: () => context.pushNamed('sessionLog')),
                 ],
               ),
             ),
@@ -109,8 +109,7 @@ class _LogButton extends StatelessWidget {
           onTap: onTap,
           customBorder: const StadiumBorder(),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -132,13 +131,87 @@ class _LogButton extends StatelessWidget {
   }
 }
 
-class _SessionCard extends StatelessWidget {
+class _SessionCard extends ConsumerWidget {
   const _SessionCard({required this.session});
 
   final DialysisSession session;
 
+  /// Long-press menu: correct or remove a wrongly logged session.
+  Future<void> _showActions(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: context.colors.bgSection,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(22, 18, 22, 6),
+              child: Text(
+                l10n.sessionActionsFor(session.scheduledAt.monthDayYear),
+                style: context.typo.sectionTitle.copyWith(fontSize: 15),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_outlined, size: 20),
+              title: Text(l10n.editSession),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                context.pushNamed(
+                  'sessionLog',
+                  queryParameters: {'id': session.id},
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, size: 20),
+              title: Text(l10n.deleteSession),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                _confirmDelete(context, ref);
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        content: Text(l10n.deleteSessionConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.deleteSession),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    await ref.read(dialysisRepositoryProvider).deleteSession(session.id);
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.sessionDeleted)));
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final typo = context.typo;
     final duration = session.durationHours;
@@ -152,52 +225,59 @@ class _SessionCard extends StatelessWidget {
       if (session.note.isNotEmpty) session.note,
     ];
 
-    return AppCard(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: colors.blueBg,
-              borderRadius: BorderRadius.circular(14),
+    return GestureDetector(
+      onLongPress: () => _showActions(context, ref),
+      child: AppCard(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colors.blueBg,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                Icons.water_drop_outlined,
+                size: 18,
+                color: colors.blue,
+              ),
             ),
-            child: Icon(Icons.water_drop_outlined,
-                size: 18, color: colors.blue),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  session.scheduledAt.monthDayYear,
-                  style: typo.cardTitle.copyWith(fontSize: 14),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    session.scheduledAt.monthDayYear,
+                    style: typo.cardTitle.copyWith(fontSize: 14),
+                  ),
+                  const SizedBox(height: 1),
+                  Text(
+                    details.isEmpty ? context.l10n.logged : details.join(' · '),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: typo.caption.copyWith(color: colors.muted),
+                  ),
+                ],
+              ),
+            ),
+            if (duration != null) ...[
+              const SizedBox(width: 8),
+              Text(
+                duration % 1 == 0
+                    ? '${duration.toInt()} h'
+                    : '${duration.toStringAsFixed(1)} h',
+                style: typo.number(
+                  13,
+                  weight: FontWeight.w600,
+                  color: colors.blue,
                 ),
-                const SizedBox(height: 1),
-                Text(
-                  details.isEmpty
-                      ? context.l10n.logged
-                      : details.join(' · '),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: typo.caption.copyWith(color: colors.muted),
-                ),
-              ],
-            ),
-          ),
-          if (duration != null) ...[
-            const SizedBox(width: 8),
-            Text(
-              duration % 1 == 0
-                  ? '${duration.toInt()} h'
-                  : '${duration.toStringAsFixed(1)} h',
-              style: typo.number(13,
-                  weight: FontWeight.w600, color: colors.blue),
-            ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

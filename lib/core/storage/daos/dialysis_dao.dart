@@ -12,9 +12,11 @@ class DialysisDao extends DatabaseAccessor<AppDatabase>
 
   Stream<DialysisSession?> watchNextSession(DateTime after) {
     final query = select(dialysisSessions)
-      ..where((t) =>
-          t.completed.equals(false) &
-          t.scheduledAt.isBiggerOrEqualValue(after))
+      ..where(
+        (t) =>
+            t.completed.equals(false) &
+            t.scheduledAt.isBiggerOrEqualValue(after),
+      )
       ..orderBy([(t) => OrderingTerm.asc(t.scheduledAt)])
       ..limit(1);
     return query.watchSingleOrNull();
@@ -36,7 +38,15 @@ class DialysisDao extends DatabaseAccessor<AppDatabase>
     return query.watchSingleOrNull();
   }
 
+  Future<DialysisSession?> getById(String id) {
+    final query = select(dialysisSessions)..where((t) => t.id.equals(id));
+    return query.getSingleOrNull();
+  }
+
   Future<void> upsert(DialysisSessionsCompanion entry) {
     return into(dialysisSessions).insertOnConflictUpdate(entry);
   }
+
+  Future<void> deleteById(String id) =>
+      (delete(dialysisSessions)..where((t) => t.id.equals(id))).go();
 }

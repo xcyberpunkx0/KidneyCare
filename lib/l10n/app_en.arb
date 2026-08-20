@@ -678,5 +678,31 @@
   },
   "deleteReading": "Delete reading",
   "deleteReadingConfirm": "Delete this reading? This cannot be undone.",
-  "invalidNumber": "Enter a valid number"
+  "invalidNumber": "Enter a valid number",
+  "editSession": "Edit session",
+  "deleteSession": "Delete session",
+  "deleteSessionConfirm": "Delete this session? The weight and BP values it recorded are removed too.",
+  "sessionUpdated": "Session updated",
+  "sessionDeleted": "Session deleted",
+  "saveChanges": "Save changes",
+  "sessionActionsFor": "Session of {date}",
+  "@sessionActionsFor": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "editMedicine": "Edit medicine",
+  "endMedicine": "Mark as ended",
+  "medicineEnded": "Marked as ended",
+  "deleteMedicine": "Delete medicine",
+  "deleteMedicineConfirm": "Delete this medicine completely? If it was really taken and then stopped, mark it as ended instead.",
+  "medicineUpdated": "Medicine updated",
+  "medicineDeleted": "Medicine deleted",
+  "undo": "Undo",
+  "doseMarkedGiven": "{name} marked given",
+  "@doseMarkedGiven": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "doseMarkedNotGiven": "{name} marked not given",
+  "@doseMarkedNotGiven": {
+    "placeholders": {"name": {"type": "String"}}
+  }
 }

@@ -40,8 +40,8 @@ class StartupLocationController extends Notifier<String> {
 
 final initialLocationProvider =
     NotifierProvider<StartupLocationController, String>(
-  StartupLocationController.new,
-);
+      StartupLocationController.new,
+    );
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -88,8 +88,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       GoRoute(
                         path: 'patient',
                         name: 'patientEdit',
-                        builder: (context, state) =>
-                            const PatientEditPage(),
+                        builder: (context, state) => const PatientEditPage(),
                       ),
                     ],
                   ),
@@ -153,7 +152,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/session-log',
         name: 'sessionLog',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const LogSessionPage(),
+        builder: (context, state) =>
+            LogSessionPage(sessionId: state.uri.queryParameters['id']),
       ),
       GoRoute(
         path: '/symptom-log',
@@ -177,7 +177,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/medication-entry',
         name: 'addMedication',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const AddMedicationPage(),
+        builder: (context, state) =>
+            AddMedicationPage(medicationId: state.uri.queryParameters['id']),
       ),
       GoRoute(
         path: AppRoutes.capture,
@@ -201,17 +202,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'new',
             name: 'claimEdit',
             parentNavigatorKey: _rootNavigatorKey,
-            builder: (context, state) => ClaimEditPage(
-              claimId: state.uri.queryParameters['id'],
-            ),
+            builder: (context, state) =>
+                ClaimEditPage(claimId: state.uri.queryParameters['id']),
           ),
           GoRoute(
             path: ':id',
             name: 'claimDetail',
             parentNavigatorKey: _rootNavigatorKey,
-            builder: (context, state) => ClaimDetailPage(
-              claimId: state.pathParameters['id']!,
-            ),
+            builder: (context, state) =>
+                ClaimDetailPage(claimId: state.pathParameters['id']!),
           ),
         ],
       ),

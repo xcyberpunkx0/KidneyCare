@@ -377,5 +377,22 @@
   "editReadingOn": "{date} की रीडिंग बदलें",
   "deleteReading": "रीडिंग हटाएँ",
   "deleteReadingConfirm": "यह रीडिंग हटाएँ? इसे वापस नहीं लाया जा सकता।",
-  "invalidNumber": "सही संख्या लिखें"
+  "invalidNumber": "सही संख्या लिखें",
+  "editSession": "सत्र बदलें",
+  "deleteSession": "सत्र हटाएँ",
+  "deleteSessionConfirm": "यह सत्र हटाएँ? इसके साथ दर्ज वज़न और BP रीडिंग भी हट जाएँगी।",
+  "sessionUpdated": "सत्र अपडेट हुआ",
+  "sessionDeleted": "सत्र हटा दिया गया",
+  "saveChanges": "बदलाव सहेजें",
+  "sessionActionsFor": "{date} का सत्र",
+  "editMedicine": "दवा बदलें",
+  "endMedicine": "बंद हुई दर्ज करें",
+  "medicineEnded": "बंद हुई दर्ज की गई",
+  "deleteMedicine": "दवा हटाएँ",
+  "deleteMedicineConfirm": "यह दवा पूरी तरह हटाएँ? अगर यह सच में ली जाती थी और अब बंद है, तो इसे बंद हुई दर्ज करें।",
+  "medicineUpdated": "दवा अपडेट हुई",
+  "medicineDeleted": "दवा हटा दी गई",
+  "undo": "वापस लें",
+  "doseMarkedGiven": "{name} — दी गई दर्ज हुई",
+  "doseMarkedNotGiven": "{name} — नहीं दी गई दर्ज हुई"
 }

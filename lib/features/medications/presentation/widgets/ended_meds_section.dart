@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import 'medication_actions_sheet.dart';
 
 /// Collapsible "Ended medicines" section: a dashed-outline toggle when
 /// collapsed, faded strikethrough cards when expanded.
@@ -94,13 +96,13 @@ class EndedMedsSection extends StatelessWidget {
   }
 }
 
-class _EndedCard extends StatelessWidget {
+class _EndedCard extends ConsumerWidget {
   const _EndedCard({required this.medication});
 
   final Medication medication;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final typo = context.typo;
     final l10n = context.l10n;
@@ -108,51 +110,53 @@ class _EndedCard extends StatelessWidget {
     final endLabel = endDate == null
         ? l10n.ended
         : l10n.endedOn(DateFormat('MMM y').format(endDate));
-    final byDoctor =
-        medication.doctor.isEmpty ? '' : ' · ${medication.doctor}';
+    final byDoctor = medication.doctor.isEmpty ? '' : ' · ${medication.doctor}';
 
-    return Opacity(
-      opacity: 0.6,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-        decoration: BoxDecoration(
-          color: colors.cardTranslucent,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: colors.cardBorder),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: colors.divider,
-                borderRadius: BorderRadius.circular(14),
+    return GestureDetector(
+      onLongPress: () => showMedicationActions(context, ref, medication),
+      child: Opacity(
+        opacity: 0.6,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          decoration: BoxDecoration(
+            color: colors.cardTranslucent,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: colors.cardBorder),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colors.divider,
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    medication.name,
-                    style: typo.cardTitle.copyWith(
-                      fontSize: 14,
-                      color: colors.muted,
-                      decoration: TextDecoration.lineThrough,
-                      decorationColor: colors.muted,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      medication.name,
+                      style: typo.cardTitle.copyWith(
+                        fontSize: 14,
+                        color: colors.muted,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: colors.muted,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '$endLabel$byDoctor',
-                    style: typo.bodySmall.copyWith(color: colors.muted),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      '$endLabel$byDoctor',
+                      style: typo.bodySmall.copyWith(color: colors.muted),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

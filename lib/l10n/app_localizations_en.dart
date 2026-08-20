@@ -1281,4 +1281,60 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteReadingConfirm =>
       'Delete this reading? This cannot be undone.';
+
+  @override
+  String get editSession => 'Edit session';
+
+  @override
+  String get deleteSession => 'Delete session';
+
+  @override
+  String get deleteSessionConfirm =>
+      'Delete this session? The weight and BP values it recorded are removed too.';
+
+  @override
+  String get sessionUpdated => 'Session updated';
+
+  @override
+  String get sessionDeleted => 'Session deleted';
+
+  @override
+  String sessionActionsFor(String date) {
+    return 'Session of $date';
+  }
+
+  @override
+  String get editMedicine => 'Edit medicine';
+
+  @override
+  String get endMedicine => 'Mark as ended';
+
+  @override
+  String get medicineEnded => 'Marked as ended';
+
+  @override
+  String get deleteMedicine => 'Delete medicine';
+
+  @override
+  String get deleteMedicineConfirm =>
+      'Delete this medicine completely? If it was really taken and then stopped, mark it as ended instead.';
+
+  @override
+  String get medicineUpdated => 'Medicine updated';
+
+  @override
+  String get medicineDeleted => 'Medicine deleted';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String doseMarkedGiven(String name) {
+    return '$name marked given';
+  }
+
+  @override
+  String doseMarkedNotGiven(String name) {
+    return '$name marked not given';
+  }
 }

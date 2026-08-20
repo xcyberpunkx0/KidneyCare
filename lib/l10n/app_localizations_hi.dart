@@ -1276,4 +1276,60 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get deleteReadingConfirm =>
       'यह रीडिंग हटाएँ? इसे वापस नहीं लाया जा सकता।';
+
+  @override
+  String get editSession => 'सत्र बदलें';
+
+  @override
+  String get deleteSession => 'सत्र हटाएँ';
+
+  @override
+  String get deleteSessionConfirm =>
+      'यह सत्र हटाएँ? इसके साथ दर्ज वज़न और BP रीडिंग भी हट जाएँगी।';
+
+  @override
+  String get sessionUpdated => 'सत्र अपडेट हुआ';
+
+  @override
+  String get sessionDeleted => 'सत्र हटा दिया गया';
+
+  @override
+  String sessionActionsFor(String date) {
+    return '$date का सत्र';
+  }
+
+  @override
+  String get editMedicine => 'दवा बदलें';
+
+  @override
+  String get endMedicine => 'बंद हुई दर्ज करें';
+
+  @override
+  String get medicineEnded => 'बंद हुई दर्ज की गई';
+
+  @override
+  String get deleteMedicine => 'दवा हटाएँ';
+
+  @override
+  String get deleteMedicineConfirm =>
+      'यह दवा पूरी तरह हटाएँ? अगर यह सच में ली जाती थी और अब बंद है, तो इसे बंद हुई दर्ज करें।';
+
+  @override
+  String get medicineUpdated => 'दवा अपडेट हुई';
+
+  @override
+  String get medicineDeleted => 'दवा हटा दी गई';
+
+  @override
+  String get undo => 'वापस लें';
+
+  @override
+  String doseMarkedGiven(String name) {
+    return '$name — दी गई दर्ज हुई';
+  }
+
+  @override
+  String doseMarkedNotGiven(String name) {
+    return '$name — नहीं दी गई दर्ज हुई';
+  }
 }
