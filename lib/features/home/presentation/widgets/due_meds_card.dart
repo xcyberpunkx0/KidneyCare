@@ -6,6 +6,7 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/app_snackbar.dart';
 import '../../../medications/data/repository_impl/medications_repository_impl.dart';
 import '../../../medications/domain/usecases/interval_due.dart';
 
@@ -23,17 +24,12 @@ class DueMedsCard extends ConsumerWidget {
     final repo = ref.read(medicationsRepositoryProvider);
     await repo.markGiven(med.id, DateTime.now());
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(l10n.doseMarkedGiven(med.name)),
-          action: SnackBarAction(
-            label: l10n.undo,
-            onPressed: () => repo.undoGiven(med.id, DateTime.now()),
-          ),
-        ),
-      );
+    showAppSnackBar(
+      context,
+      l10n.doseMarkedGiven(med.name),
+      actionLabel: l10n.undo,
+      onAction: () => repo.undoGiven(med.id, DateTime.now()),
+    );
   }
 
   @override

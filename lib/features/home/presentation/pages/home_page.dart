@@ -7,6 +7,7 @@ import '../../../../core/router/app_shell.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/app_snackbar.dart';
 import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/app_search_bar.dart';
 import '../../../../core/widgets/capture_button.dart';
@@ -141,22 +142,15 @@ class HomePage extends ConsumerWidget {
     final l10n = context.l10n;
     await ref.read(doseToggleProvider)(dose);
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            dose.taken
-                ? l10n.doseMarkedNotGiven(dose.medicationLabel)
-                : l10n.doseMarkedGiven(dose.medicationLabel),
-          ),
-          action: SnackBarAction(
-            label: l10n.undo,
-            onPressed: () =>
-                ref.read(doseToggleProvider)(dose.copyWith(taken: !dose.taken)),
-          ),
-        ),
-      );
+    showAppSnackBar(
+      context,
+      dose.taken
+          ? l10n.doseMarkedNotGiven(dose.medicationLabel)
+          : l10n.doseMarkedGiven(dose.medicationLabel),
+      actionLabel: l10n.undo,
+      onAction: () =>
+          ref.read(doseToggleProvider)(dose.copyWith(taken: !dose.taken)),
+    );
   }
 
   void _openMetric(BuildContext context, String? metricCode) {
