@@ -62,4 +62,33 @@ class TimelineDao extends DatabaseAccessor<AppDatabase>
       timelineEvents,
     )..where((t) => t.type.equalsValue(type) & t.title.isIn(titles))).go();
   }
+
+  /// Removes one auto-created event matched by type, exact title and
+  /// timestamp — e.g. undoing today's "Given X" entry.
+  Future<void> deleteByTypeTitleAt(
+    TimelineEventType type,
+    String title,
+    DateTime at,
+  ) {
+    return (delete(timelineEvents)..where(
+          (t) =>
+              t.type.equalsValue(type) &
+              t.title.equals(title) &
+              t.occurredAt.equals(at),
+        ))
+        .go();
+  }
+
+  /// The most recent event of [type] with exactly [title], or null — used
+  /// to roll an interval medicine back to its previous given day.
+  Future<TimelineEvent?> getLatestByTypeAndTitle(
+    TimelineEventType type,
+    String title,
+  ) {
+    final query = select(timelineEvents)
+      ..where((t) => t.type.equalsValue(type) & t.title.equals(title))
+      ..orderBy([(t) => OrderingTerm.desc(t.occurredAt)])
+      ..limit(1);
+    return query.getSingleOrNull();
+  }
 }

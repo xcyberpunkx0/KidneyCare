@@ -44,6 +44,7 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
             ),
             scheduleNote: Value(medication.scheduleNote),
             startDate: Value(medication.startDate),
+            intervalDays: Value(medication.intervalDays),
           ),
         );
         await _db.timelineDao.insert(
@@ -85,6 +86,7 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
                 jsonEncode([for (final cue in medication.timingCues) cue.name]),
               ),
               scheduleNote: Value(medication.scheduleNote),
+              intervalDays: Value(medication.intervalDays),
             ),
       );
     });
@@ -99,9 +101,57 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
         await _db.doseDao.deleteForMedication(id);
         await _db.timelineDao.deleteByTypeAndTitles(
           TimelineEventType.medicationChange,
-          ['Started ${med.name}', 'Stopped ${med.name}'],
+          ['Started ${med.name}', 'Stopped ${med.name}', 'Given ${med.name}'],
         );
         await _db.medicationDao.deleteById(id);
+      });
+    });
+  }
+
+  @override
+  Future<Result<void>> markGiven(String id, DateTime on) {
+    return Result.guard(() async {
+      final med = await _db.medicationDao.getById(id);
+      if (med == null) return;
+      final day = DateTime(on.year, on.month, on.day);
+      await _db.transaction(() async {
+        await _db.medicationDao.upsert(
+          med.toCompanion(false).copyWith(lastGivenOn: Value(day)),
+        );
+        await _db.timelineDao.insert(
+          TimelineEventsCompanion(
+            id: Value(_uuid.v4()),
+            type: const Value(TimelineEventType.medicationChange),
+            title: Value('Given ${med.name}'),
+            subtitle: Value('Every ${med.intervalDays} days'),
+            occurredAt: Value(day),
+          ),
+        );
+      });
+    });
+  }
+
+  @override
+  Future<Result<void>> undoGiven(String id, DateTime on) {
+    return Result.guard(() async {
+      final med = await _db.medicationDao.getById(id);
+      final day = DateTime(on.year, on.month, on.day);
+      if (med == null || med.lastGivenOn != day) return;
+      await _db.transaction(() async {
+        await _db.timelineDao.deleteByTypeTitleAt(
+          TimelineEventType.medicationChange,
+          'Given ${med.name}',
+          day,
+        );
+        final previous = await _db.timelineDao.getLatestByTypeAndTitle(
+          TimelineEventType.medicationChange,
+          'Given ${med.name}',
+        );
+        await _db.medicationDao.upsert(
+          med
+              .toCompanion(false)
+              .copyWith(lastGivenOn: Value(previous?.occurredAt)),
+        );
       });
     });
   }

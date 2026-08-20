@@ -1332,4 +1332,53 @@ class AppLocalizationsHi extends AppLocalizations {
   String doseMarkedNotGiven(String name) {
     return '$name — नहीं दी गई दर्ज हुई';
   }
+
+  @override
+  String get repeatEveryDays => 'कितने दिनों में दी जाती है?';
+
+  @override
+  String everyNDays(int n) {
+    return 'हर $n दिन में';
+  }
+
+  @override
+  String nDaysChip(int n) {
+    return '$n दिन';
+  }
+
+  @override
+  String get intervalGroup => 'हर कुछ दिनों में';
+
+  @override
+  String get dueToday => 'आज देनी है';
+
+  @override
+  String overdueByDays(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n दिन',
+      one: '1 दिन',
+    );
+    return '$_temp0 देर हो चुकी';
+  }
+
+  @override
+  String nextOnDate(String date) {
+    return 'अगली $date को';
+  }
+
+  @override
+  String get givenToday => 'आज दे दी गई';
+
+  @override
+  String get markGivenToday => 'आज दी गई दर्ज करें';
+
+  @override
+  String get medicinesDue => 'देनी हैं ये दवाइयाँ';
+
+  @override
+  String markGivenSemantics(String name) {
+    return '$name आज दी गई दर्ज करें';
+  }
 }

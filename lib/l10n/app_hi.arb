@@ -394,5 +394,16 @@
   "medicineDeleted": "दवा हटा दी गई",
   "undo": "वापस लें",
   "doseMarkedGiven": "{name} — दी गई दर्ज हुई",
-  "doseMarkedNotGiven": "{name} — नहीं दी गई दर्ज हुई"
+  "doseMarkedNotGiven": "{name} — नहीं दी गई दर्ज हुई",
+  "repeatEveryDays": "कितने दिनों में दी जाती है?",
+  "everyNDays": "हर {n} दिन में",
+  "nDaysChip": "{n} दिन",
+  "intervalGroup": "हर कुछ दिनों में",
+  "dueToday": "आज देनी है",
+  "overdueByDays": "{n, plural, =1{1 दिन} other{{n} दिन}} देर हो चुकी",
+  "nextOnDate": "अगली {date} को",
+  "givenToday": "आज दे दी गई",
+  "markGivenToday": "आज दी गई दर्ज करें",
+  "medicinesDue": "देनी हैं ये दवाइयाँ",
+  "markGivenSemantics": "{name} आज दी गई दर्ज करें"
 }

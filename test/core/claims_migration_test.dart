@@ -12,10 +12,21 @@ void main() {
 
   setUpAll(() => verifier = SchemaVerifier(GeneratedHelper()));
 
-  test('v5 vault upgrades cleanly to v6', () async {
+  // Each historical version must reach the current schema in one upgrade,
+  // exactly as a real vault does. (The onUpgrade if-chain always applies
+  // every step up to schemaVersion, so intermediate targets can't be
+  // validated in isolation.)
+  test('v5 vault upgrades cleanly to the current schema', () async {
     final connection = await verifier.startAt(5);
     final db = AppDatabase.forTesting(connection);
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 6);
+    await verifier.migrateAndValidate(db, 7);
+  });
+
+  test('v6 vault upgrades cleanly to the current schema', () async {
+    final connection = await verifier.startAt(6);
+    final db = AppDatabase.forTesting(connection);
+    addTearDown(db.close);
+    await verifier.migrateAndValidate(db, 7);
   });
 }

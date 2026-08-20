@@ -11,6 +11,7 @@ class NewMedication {
     required this.timingCues,
     required this.scheduleNote,
     required this.startDate,
+    this.intervalDays,
   });
 
   /// Drug with strength, e.g. "Sevelamer 400 mg".
@@ -25,4 +26,8 @@ class NewMedication {
   final Set<MedTimingCue> timingCues;
   final String scheduleNote;
   final DateTime startDate;
+
+  /// Gap in days for medicines given every few days; null for daily
+  /// patterns.
+  final int? intervalDays;
 }

@@ -24,8 +24,7 @@ class Patients extends Table {
   /// Emergency-card details.
   TextColumn get bloodGroup => text().withDefault(const Constant(''))();
   TextColumn get allergies => text().withDefault(const Constant(''))();
-  TextColumn get emergencyContact =>
-      text().withDefault(const Constant(''))();
+  TextColumn get emergencyContact => text().withDefault(const Constant(''))();
 
   /// Comma-separated other conditions, e.g.
   /// "Diabetes, Hypertension, Chronic pancreatitis". Kept in English so
@@ -71,6 +70,14 @@ class Medications extends Table {
   TextColumn get changeNote => text().withDefault(const Constant(''))();
   DateTimeColumn get changeDate => dateTime().nullable()();
   TextColumn get sourceDocumentId => text().nullable()();
+
+  /// For medicines given every few days (EPO shots etc.): the gap in days.
+  /// Null for medicines on a daily pattern.
+  IntColumn get intervalDays => integer().nullable()();
+
+  /// The day an interval medicine was last marked given. Drives the
+  /// due-today checklist; null until the first dose is ticked off.
+  DateTimeColumn get lastGivenOn => dateTime().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -152,8 +159,7 @@ class InsurancePolicies extends Table {
   TextColumn get tpaName => text().withDefault(const Constant(''))();
 
   /// Days from a bill's date until the insurer stops accepting it.
-  IntColumn get claimWindowDays =>
-      integer().withDefault(const Constant(30))();
+  IntColumn get claimWindowDays => integer().withDefault(const Constant(30))();
   TextColumn get note => text().withDefault(const Constant(''))();
 
   @override

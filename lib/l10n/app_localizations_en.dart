@@ -1337,4 +1337,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String doseMarkedNotGiven(String name) {
     return '$name marked not given';
   }
+
+  @override
+  String get repeatEveryDays => 'GIVEN EVERY HOW MANY DAYS?';
+
+  @override
+  String everyNDays(int n) {
+    return 'Every $n days';
+  }
+
+  @override
+  String nDaysChip(int n) {
+    return '$n days';
+  }
+
+  @override
+  String get intervalGroup => 'EVERY FEW DAYS';
+
+  @override
+  String get dueToday => 'Due today';
+
+  @override
+  String overdueByDays(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n days',
+      one: '1 day',
+    );
+    return 'Overdue by $_temp0';
+  }
+
+  @override
+  String nextOnDate(String date) {
+    return 'Next on $date';
+  }
+
+  @override
+  String get givenToday => 'Given today';
+
+  @override
+  String get markGivenToday => 'Mark given today';
+
+  @override
+  String get medicinesDue => 'MEDICINES DUE';
+
+  @override
+  String markGivenSemantics(String name) {
+    return 'Mark $name given today';
+  }
 }

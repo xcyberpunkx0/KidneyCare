@@ -59,7 +59,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -75,8 +75,7 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(patients, patients.emergencyContact);
         }
         if (from < 4) {
-          await m.addColumn(
-              dialysisSessions, dialysisSessions.durationHours);
+          await m.addColumn(dialysisSessions, dialysisSessions.durationHours);
         }
         if (from < 5) {
           await m.addColumn(patients, patients.comorbidities);
@@ -86,6 +85,10 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(claims);
           await m.createTable(claimDocuments);
           await m.createTable(claimChecklistItems);
+        }
+        if (from < 7) {
+          await m.addColumn(medications, medications.intervalDays);
+          await m.addColumn(medications, medications.lastGivenOn);
         }
       },
     );
@@ -115,8 +118,7 @@ class AppDatabase extends _$AppDatabase {
         // wired up here.
         isolateSetup: () {
           if (Platform.isAndroid) {
-            open.overrideFor(
-                OperatingSystem.android, openCipherOnAndroid);
+            open.overrideFor(OperatingSystem.android, openCipherOnAndroid);
           }
         },
         setup: (database) {
@@ -124,12 +126,12 @@ class AppDatabase extends _$AppDatabase {
           database.execute("PRAGMA key = '$key';");
           // Fail loudly if a plain SQLite build was linked by mistake —
           // medical data must never be written unencrypted.
-          final version =
-              database.select('PRAGMA cipher_version;');
+          final version = database.select('PRAGMA cipher_version;');
           if (version.isEmpty) {
             throw StateError(
-                'SQLCipher is unavailable; refusing to open the vault '
-                'unencrypted.');
+              'SQLCipher is unavailable; refusing to open the vault '
+              'unencrypted.',
+            );
           }
         },
       );
