@@ -72,14 +72,8 @@ class ClaimsPage extends ConsumerWidget {
                 children: [
                   Text(l10n.claimsTitle,
                       style: typo.pageTitle.copyWith(fontSize: 25)),
-                  const SizedBox(height: 6),
-                  Text(
-                    l10n.claimsYtdLine(
-                      formatPaise(totals.claimedPaise),
-                      formatPaise(totals.recoveredPaise),
-                    ),
-                    style: typo.caption.copyWith(color: colors.muted),
-                  ),
+                  const SizedBox(height: 10),
+                  _YtdSummaryCard(totals: totals),
                   if (unclaimed.isNotEmpty) ...[
                     const SizedBox(height: 10),
                     _UnclaimedStrip(bills: unclaimed),
@@ -105,6 +99,57 @@ class ClaimsPage extends ConsumerWidget {
                     ],
                 ],
               ),
+      ),
+    );
+  }
+}
+
+/// The year's two headline numbers, side by side: what was asked from
+/// the insurer and what actually came back.
+class _YtdSummaryCard extends StatelessWidget {
+  const _YtdSummaryCard({required this.totals});
+
+  final ({int claimedPaise, int recoveredPaise}) totals;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final typo = context.typo;
+    final l10n = context.l10n;
+
+    Widget cell(String label, int paise, Color amountColor) {
+      return Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: typo.caption.copyWith(color: colors.muted)),
+            const SizedBox(height: 3),
+            Text(
+              formatPaise(paise),
+              style: typo.number(19,
+                  weight: FontWeight.w700, color: amountColor),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: colors.card,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colors.cardBorder),
+      ),
+      child: Row(
+        children: [
+          cell(l10n.claimsYtdClaimed, totals.claimedPaise, colors.ink),
+          cell(
+            l10n.claimsYtdRecovered,
+            totals.recoveredPaise,
+            totals.recoveredPaise > 0 ? colors.green : colors.ink,
+          ),
+        ],
       ),
     );
   }

@@ -46,10 +46,10 @@ void main() {
     )));
 
     expect(find.text('August dialysis and medicines'), findsOneWidget);
-    expect(find.text('Draft'), findsOneWidget);
+    expect(find.text('Getting ready'), findsOneWidget);
     expect(find.textContaining('2 documents'), findsOneWidget);
     expect(find.textContaining('Claimed'), findsNothing);
-    expect(find.textContaining('Approved'), findsNothing);
+    expect(find.textContaining('recovered'), findsNothing);
   });
 
   testWidgets('submitted claim with a claimed amount shows the money line',
@@ -63,11 +63,12 @@ void main() {
       docCount: 3,
     )));
 
-    expect(find.text('Submitted'), findsOneWidget);
-    expect(find.textContaining('Claimed ₹12,400'), findsOneWidget);
+    expect(find.text('With insurer'), findsOneWidget);
+    expect(
+        find.text('Claimed ₹12,400 · waiting on insurer'), findsOneWidget);
   });
 
-  testWidgets('approved claim shows the approved amount', (tester) async {
+  testWidgets('approved claim shows what came back', (tester) async {
     await tester.pumpWidget(_host(ClaimCard(
       claim: _claim(
         status: ClaimStatus.approved,
@@ -79,9 +80,41 @@ void main() {
       docCount: 3,
     )));
 
-    expect(find.text('Approved'), findsOneWidget);
-    expect(find.textContaining('Approved ₹10,000'), findsOneWidget);
+    expect(find.text('Paid in full'), findsOneWidget);
+    expect(find.text('₹10,000 recovered'), findsOneWidget);
     expect(find.textContaining('Claimed'), findsNothing);
+  });
+
+  testWidgets('partly paid claim shows recovered against claimed',
+      (tester) async {
+    await tester.pumpWidget(_host(ClaimCard(
+      claim: _claim(
+        status: ClaimStatus.partiallySettled,
+        submittedOn: DateTime(2026, 8, 3),
+        settledOn: DateTime(2026, 8, 10),
+        claimedPaise: 1240000,
+        approvedPaise: 1000000,
+      ),
+      docCount: 3,
+    )));
+
+    expect(find.text('Partly paid'), findsOneWidget);
+    expect(find.text('₹10,000 of ₹12,400 recovered'), findsOneWidget);
+  });
+
+  testWidgets('rejected claim says nothing was paid', (tester) async {
+    await tester.pumpWidget(_host(ClaimCard(
+      claim: _claim(
+        status: ClaimStatus.rejected,
+        submittedOn: DateTime(2026, 8, 3),
+        settledOn: DateTime(2026, 8, 10),
+        claimedPaise: 1240000,
+      ),
+      docCount: 3,
+    )));
+
+    expect(find.text('Rejected'), findsOneWidget);
+    expect(find.text('₹12,400 claimed · nothing paid'), findsOneWidget);
   });
 
   testWidgets('tapping the card reports the tap', (tester) async {

@@ -14,6 +14,7 @@ Claim _claim({
   required String id,
   required ClaimStatus status,
   DateTime? submittedOn,
+  int? claimedPaise,
 }) {
   return Claim(
     id: id,
@@ -23,7 +24,7 @@ Claim _claim({
     createdAt: DateTime(2026, 1, 1),
     submittedOn: submittedOn,
     settledOn: null,
-    claimedAmountPaise: null,
+    claimedAmountPaise: claimedPaise,
     approvedAmountPaise: null,
     insurerRef: '',
     note: '',
@@ -99,17 +100,16 @@ Widget _host({
 }
 
 void main() {
-  testWidgets('renders nothing when there is nothing to act on',
+  testWidgets('shows the quiet teaser when nothing is tracked yet',
       (tester) async {
     await tester.pumpWidget(_host());
     await tester.pumpAndSettle();
 
     expect(find.byType(ClaimsGlanceCard), findsOneWidget);
-    expect(find.byType(Container), findsNothing);
-    expect(find.byType(GestureDetector), findsNothing);
+    expect(find.textContaining('Track an insurance claim'), findsOneWidget);
   });
 
-  testWidgets('renders nothing when policies are empty even with bills',
+  testWidgets('bills without a policy stay off the urgent card',
       (tester) async {
     final now = DateTime.now();
     await tester.pumpWidget(_host(
@@ -118,7 +118,8 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(find.byType(Container), findsNothing);
+    expect(find.textContaining('bill-1'), findsNothing);
+    expect(find.textContaining('Track an insurance claim'), findsOneWidget);
   });
 
   testWidgets('shows an expiring bill within 7 days of its deadline',
@@ -160,7 +161,34 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(find.byType(Container), findsNothing);
+    expect(find.textContaining('Fresh bill'), findsNothing);
+    expect(find.textContaining('Track an insurance claim'), findsOneWidget);
+  });
+
+  testWidgets('shows a neutral summary while claims are simply in flight',
+      (tester) async {
+    final now = DateTime.now();
+    await tester.pumpWidget(_host(
+      claims: [
+        _claim(
+          id: 'August dialysis',
+          status: ClaimStatus.submitted,
+          submittedOn: now.subtract(const Duration(days: 5)),
+          claimedPaise: 1240000,
+        ),
+        _claim(id: 'September bills', status: ClaimStatus.draft),
+      ],
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('CLAIMS · 2'), findsOneWidget);
+    expect(
+      find.textContaining('1 claim with the insurer'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('₹12,400 awaiting'), findsOneWidget);
+    expect(find.textContaining('1 getting ready'), findsOneWidget);
+    expect(find.textContaining('follow-up call'), findsNothing);
   });
 
   testWidgets('shows a claim submitted more than 30 days ago',

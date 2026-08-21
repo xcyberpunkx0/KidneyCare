@@ -1090,12 +1090,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get claimsEmpty =>
-      'No claims yet. Bundle bills from the vault into a claim and track it to settlement.';
+      '1. Scan hospital bills into the vault\n2. Bundle them into a claim\n3. Track it until the insurer pays';
 
   @override
-  String claimsYtdLine(String claimed, String recovered) {
-    return '$claimed claimed · $recovered recovered this year';
-  }
+  String get claimsYtdClaimed => 'Claimed this year';
+
+  @override
+  String get claimsYtdRecovered => 'Recovered this year';
 
   @override
   String unclaimedBillsChip(int count) {
@@ -1109,13 +1110,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get claimSectionAttention => 'Needs attention';
+  String get claimSectionAttention => 'Needs your attention';
 
   @override
-  String get claimSectionInProgress => 'In progress';
+  String get claimSectionInProgress => 'Waiting for the insurer';
 
   @override
-  String get claimSectionHistory => 'Settled & rejected';
+  String get claimSectionHistory => 'Completed';
 
   @override
   String claimDocCount(int count) {
@@ -1129,19 +1130,39 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get claimStatusDraft => 'Draft';
+  String get claimStatusDraft => 'Getting ready';
 
   @override
-  String get claimStatusSubmitted => 'Submitted';
+  String get claimStatusSubmitted => 'With insurer';
 
   @override
-  String get claimStatusApproved => 'Approved';
+  String get claimStatusApproved => 'Paid in full';
 
   @override
-  String get claimStatusPartiallySettled => 'Partially settled';
+  String get claimStatusPartiallySettled => 'Partly paid';
 
   @override
   String get claimStatusRejected => 'Rejected';
+
+  @override
+  String claimMoneyWaiting(String amount) {
+    return 'Claimed $amount · waiting on insurer';
+  }
+
+  @override
+  String claimMoneyRecoveredOf(String recovered, String claimed) {
+    return '$recovered of $claimed recovered';
+  }
+
+  @override
+  String claimMoneyRecovered(String amount) {
+    return '$amount recovered';
+  }
+
+  @override
+  String claimMoneyRejected(String amount) {
+    return '$amount claimed · nothing paid';
+  }
 
   @override
   String get claimNew => 'New claim';
@@ -1218,6 +1239,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Delete this claim? Its documents stay in the vault.';
 
   @override
+  String get claimDeleteSettledConfirm =>
+      'Delete this completed claim? Its documents stay in the vault, but it will no longer count in this year\'s totals.';
+
+  @override
   String get claimSubmittedOn => 'Submitted on';
 
   @override
@@ -1266,6 +1291,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String claimGlanceTitle(int count) {
     return 'CLAIMS · $count';
   }
+
+  @override
+  String claimGlanceWithInsurer(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'claims',
+      one: 'claim',
+    );
+    return '$count $_temp0 with the insurer';
+  }
+
+  @override
+  String claimGlanceGettingReady(int count) {
+    return '$count getting ready';
+  }
+
+  @override
+  String claimGlanceAwaiting(String amount) {
+    return '$amount awaiting';
+  }
+
+  @override
+  String get claimGlanceTeaser => 'Track an insurance claim →';
 
   @override
   String get policyTitle => 'Insurance policy';

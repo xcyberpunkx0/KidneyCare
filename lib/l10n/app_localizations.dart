@@ -2057,14 +2057,20 @@ abstract class AppLocalizations {
   /// No description provided for @claimsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No claims yet. Bundle bills from the vault into a claim and track it to settlement.'**
+  /// **'1. Scan hospital bills into the vault\n2. Bundle them into a claim\n3. Track it until the insurer pays'**
   String get claimsEmpty;
 
-  /// No description provided for @claimsYtdLine.
+  /// No description provided for @claimsYtdClaimed.
   ///
   /// In en, this message translates to:
-  /// **'{claimed} claimed · {recovered} recovered this year'**
-  String claimsYtdLine(String claimed, String recovered);
+  /// **'Claimed this year'**
+  String get claimsYtdClaimed;
+
+  /// No description provided for @claimsYtdRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered this year'**
+  String get claimsYtdRecovered;
 
   /// No description provided for @unclaimedBillsChip.
   ///
@@ -2075,19 +2081,19 @@ abstract class AppLocalizations {
   /// No description provided for @claimSectionAttention.
   ///
   /// In en, this message translates to:
-  /// **'Needs attention'**
+  /// **'Needs your attention'**
   String get claimSectionAttention;
 
   /// No description provided for @claimSectionInProgress.
   ///
   /// In en, this message translates to:
-  /// **'In progress'**
+  /// **'Waiting for the insurer'**
   String get claimSectionInProgress;
 
   /// No description provided for @claimSectionHistory.
   ///
   /// In en, this message translates to:
-  /// **'Settled & rejected'**
+  /// **'Completed'**
   String get claimSectionHistory;
 
   /// No description provided for @claimDocCount.
@@ -2099,25 +2105,25 @@ abstract class AppLocalizations {
   /// No description provided for @claimStatusDraft.
   ///
   /// In en, this message translates to:
-  /// **'Draft'**
+  /// **'Getting ready'**
   String get claimStatusDraft;
 
   /// No description provided for @claimStatusSubmitted.
   ///
   /// In en, this message translates to:
-  /// **'Submitted'**
+  /// **'With insurer'**
   String get claimStatusSubmitted;
 
   /// No description provided for @claimStatusApproved.
   ///
   /// In en, this message translates to:
-  /// **'Approved'**
+  /// **'Paid in full'**
   String get claimStatusApproved;
 
   /// No description provided for @claimStatusPartiallySettled.
   ///
   /// In en, this message translates to:
-  /// **'Partially settled'**
+  /// **'Partly paid'**
   String get claimStatusPartiallySettled;
 
   /// No description provided for @claimStatusRejected.
@@ -2125,6 +2131,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rejected'**
   String get claimStatusRejected;
+
+  /// No description provided for @claimMoneyWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed {amount} · waiting on insurer'**
+  String claimMoneyWaiting(String amount);
+
+  /// No description provided for @claimMoneyRecoveredOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{recovered} of {claimed} recovered'**
+  String claimMoneyRecoveredOf(String recovered, String claimed);
+
+  /// No description provided for @claimMoneyRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} recovered'**
+  String claimMoneyRecovered(String amount);
+
+  /// No description provided for @claimMoneyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} claimed · nothing paid'**
+  String claimMoneyRejected(String amount);
 
   /// No description provided for @claimNew.
   ///
@@ -2270,6 +2300,12 @@ abstract class AppLocalizations {
   /// **'Delete this claim? Its documents stay in the vault.'**
   String get claimDeleteConfirm;
 
+  /// No description provided for @claimDeleteSettledConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this completed claim? Its documents stay in the vault, but it will no longer count in this year\'s totals.'**
+  String get claimDeleteSettledConfirm;
+
   /// No description provided for @claimSubmittedOn.
   ///
   /// In en, this message translates to:
@@ -2341,6 +2377,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CLAIMS · {count}'**
   String claimGlanceTitle(int count);
+
+  /// No description provided for @claimGlanceWithInsurer.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{claim} other{claims}} with the insurer'**
+  String claimGlanceWithInsurer(int count);
+
+  /// No description provided for @claimGlanceGettingReady.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} getting ready'**
+  String claimGlanceGettingReady(int count);
+
+  /// No description provided for @claimGlanceAwaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} awaiting'**
+  String claimGlanceAwaiting(String amount);
+
+  /// No description provided for @claimGlanceTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Track an insurance claim →'**
+  String get claimGlanceTeaser;
 
   /// No description provided for @policyTitle.
   ///

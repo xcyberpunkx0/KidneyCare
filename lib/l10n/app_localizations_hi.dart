@@ -1085,12 +1085,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get claimsEmpty =>
-      'अभी कोई क्लेम नहीं। वॉल्ट के बिलों को एक क्लेम में जोड़ें और निपटान तक ट्रैक करें।';
+      '1. अस्पताल के बिल वॉल्ट में स्कैन करें\n2. उन्हें एक क्लेम में जोड़ें\n3. भुगतान मिलने तक ट्रैक करें';
 
   @override
-  String claimsYtdLine(String claimed, String recovered) {
-    return 'इस साल $claimed क्लेम किया · $recovered वापस मिला';
-  }
+  String get claimsYtdClaimed => 'इस साल क्लेम किया';
+
+  @override
+  String get claimsYtdRecovered => 'इस साल वापस मिला';
 
   @override
   String unclaimedBillsChip(int count) {
@@ -1104,13 +1105,13 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get claimSectionAttention => 'ध्यान चाहिए';
+  String get claimSectionAttention => 'आपका ध्यान चाहिए';
 
   @override
-  String get claimSectionInProgress => 'प्रगति में';
+  String get claimSectionInProgress => 'बीमा कंपनी के जवाब का इंतज़ार';
 
   @override
-  String get claimSectionHistory => 'निपटाए और अस्वीकृत';
+  String get claimSectionHistory => 'पूरे हुए';
 
   @override
   String claimDocCount(int count) {
@@ -1124,19 +1125,39 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get claimStatusDraft => 'ड्राफ़्ट';
+  String get claimStatusDraft => 'तैयारी में';
 
   @override
-  String get claimStatusSubmitted => 'जमा किया गया';
+  String get claimStatusSubmitted => 'बीमा कंपनी के पास';
 
   @override
-  String get claimStatusApproved => 'स्वीकृत';
+  String get claimStatusApproved => 'पूरा भुगतान मिला';
 
   @override
-  String get claimStatusPartiallySettled => 'आंशिक रूप से निपटाया';
+  String get claimStatusPartiallySettled => 'आंशिक भुगतान मिला';
 
   @override
   String get claimStatusRejected => 'अस्वीकृत';
+
+  @override
+  String claimMoneyWaiting(String amount) {
+    return '$amount क्लेम किया · जवाब का इंतज़ार';
+  }
+
+  @override
+  String claimMoneyRecoveredOf(String recovered, String claimed) {
+    return '$claimed में से $recovered वापस मिला';
+  }
+
+  @override
+  String claimMoneyRecovered(String amount) {
+    return '$amount वापस मिला';
+  }
+
+  @override
+  String claimMoneyRejected(String amount) {
+    return '$amount क्लेम किया · कुछ नहीं मिला';
+  }
 
   @override
   String get claimNew => 'नया क्लेम';
@@ -1213,6 +1234,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'यह क्लेम हटाएँ? दस्तावेज़ वॉल्ट में बने रहेंगे।';
 
   @override
+  String get claimDeleteSettledConfirm =>
+      'यह पूरा हुआ क्लेम हटाएँ? दस्तावेज़ वॉल्ट में बने रहेंगे, पर यह इस साल के जोड़ में नहीं गिना जाएगा।';
+
+  @override
   String get claimSubmittedOn => 'जमा करने की तारीख़';
 
   @override
@@ -1261,6 +1286,30 @@ class AppLocalizationsHi extends AppLocalizations {
   String claimGlanceTitle(int count) {
     return 'क्लेम · $count';
   }
+
+  @override
+  String claimGlanceWithInsurer(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'क्लेम',
+      one: 'क्लेम',
+    );
+    return '$count $_temp0 बीमा कंपनी के पास';
+  }
+
+  @override
+  String claimGlanceGettingReady(int count) {
+    return '$count तैयारी में';
+  }
+
+  @override
+  String claimGlanceAwaiting(String amount) {
+    return '$amount का इंतज़ार';
+  }
+
+  @override
+  String get claimGlanceTeaser => 'बीमा क्लेम ट्रैक करें →';
 
   @override
   String get policyTitle => 'बीमा पॉलिसी';
