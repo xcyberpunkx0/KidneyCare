@@ -1,25 +1,13 @@
-/// How a medication's doses relate to meals and time of day.
-enum MedScheduleGroup {
-  withFood('With food'),
-  byClock('By the clock'),
-  weekly('Weekly');
+// A medication's schedule is three independent answers:
+// how it relates to food, which parts of the day it is taken,
+// and how often.
 
-  const MedScheduleGroup(this.label);
+/// FOOD & MEDICINE — how a dose relates to meals.
+enum MedFoodRelation { beforeFood, withFood, afterFood, noRelation }
 
-  final String label;
-}
+/// TIME OF DAY — which parts of the day doses fall in (multi-select).
+enum MedTimeOfDay { morning, noon, night }
 
-/// Timing cue icons shown on medication cards.
-enum MedTimingCue {
-  morning('Morning'),
-  noon('Noon'),
-  night('Night'),
-  beforeFood('Before food'),
-  afterFood('After food'),
-  withFood('With food'),
-  dialysisDayOnly('Dialysis day only');
-
-  const MedTimingCue(this.label);
-
-  final String label;
-}
+/// HOW OFTEN — the repeat pattern. [everyNDays] pairs with
+/// Medications.intervalDays.
+enum MedFrequency { daily, weekly, everyNDays, dialysisDaysOnly }

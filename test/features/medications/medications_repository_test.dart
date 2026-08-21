@@ -23,10 +23,11 @@ void main() {
     frequencyCode: '1-0-1',
     purpose: 'Phosphate binder',
     doctor: 'Dr. Rao',
-    scheduleGroup: intervalDays == null
-        ? MedScheduleGroup.withFood
-        : MedScheduleGroup.weekly,
-    timingCues: const {MedTimingCue.withFood},
+    foodRelation: MedFoodRelation.withFood,
+    timesOfDay: const {},
+    frequency: intervalDays == null
+        ? MedFrequency.daily
+        : MedFrequency.everyNDays,
     scheduleNote: '',
     startDate: DateTime(2026, 8, 1),
     intervalDays: intervalDays,
@@ -88,8 +89,9 @@ void main() {
         frequencyCode: '1-1-1',
         purpose: 'Phosphate binder',
         doctor: 'Dr. Rao',
-        scheduleGroup: MedScheduleGroup.byClock,
-        timingCues: const {MedTimingCue.morning},
+        foodRelation: MedFoodRelation.noRelation,
+        timesOfDay: const {MedTimeOfDay.morning},
+        frequency: MedFrequency.daily,
         scheduleNote: 'after breakfast',
         startDate: DateTime(2026, 8, 19),
       ),
@@ -100,7 +102,9 @@ void main() {
     expect(updated.id, med.id);
     expect(updated.name, 'Sevelamer 400 mg');
     expect(updated.frequencyCode, '1-1-1');
-    expect(updated.scheduleGroup, MedScheduleGroup.byClock);
+    expect(updated.foodRelation, MedFoodRelation.noRelation);
+    expect(updated.timeOfDayJson, '["morning"]');
+    expect(updated.frequency, MedFrequency.daily);
     expect(updated.startDate, DateTime(2026, 8, 1));
 
     // A correction adds no timeline noise.

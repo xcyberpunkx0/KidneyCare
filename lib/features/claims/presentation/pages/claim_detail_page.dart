@@ -15,6 +15,7 @@ import '../../../../shared/domain/claim_status.dart';
 import '../../data/repository_impl/claims_repository_impl.dart';
 import '../controllers/claims_providers.dart';
 import '../widgets/claim_checklist.dart';
+import '../widgets/claim_status_chip.dart';
 
 /// One claim: status trail, amounts, attached documents, checklist, and
 /// the status-appropriate primary action.
@@ -84,10 +85,14 @@ class ClaimDetailPage extends ConsumerWidget {
   Future<void> _delete(
       BuildContext context, WidgetRef ref, Claim claim) async {
     final l10n = context.l10n;
+    // A completed claim's deletion also changes the year's totals — say so.
+    final message = claim.status.isOutcome
+        ? l10n.claimDeleteSettledConfirm
+        : l10n.claimDeleteConfirm;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        content: Text(l10n.claimDeleteConfirm),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -134,18 +139,20 @@ class ClaimDetailPage extends ConsumerWidget {
         leading: BackButton(color: colors.ink),
         toolbarHeight: 44,
         actions: [
-          if (claim.status == ClaimStatus.draft) ...[
+          if (claim.status == ClaimStatus.draft)
             IconButton(
               icon: Icon(Icons.edit_outlined, color: colors.ink, size: 20),
               onPressed: () => context.pushNamed('claimEdit',
                   queryParameters: {'id': claim.id}),
             ),
+          // Drafts and completed claims can go; a claim that is with the
+          // insurer stays until its outcome is recorded.
+          if (claim.status == ClaimStatus.draft || claim.status.isOutcome)
             IconButton(
               icon:
                   Icon(Icons.delete_outline, color: colors.ink, size: 20),
               onPressed: () => _delete(context, ref, claim),
             ),
-          ],
         ],
       ),
       body: SafeArea(
@@ -160,7 +167,7 @@ class ClaimDetailPage extends ConsumerWidget {
                       style: typo.pageTitle.copyWith(fontSize: 25)),
                 ),
                 const SizedBox(width: 8),
-                _StatusChip(status: claim.status),
+                ClaimStatusChip(status: claim.status),
               ],
             ),
             const SizedBox(height: 10),
@@ -254,39 +261,6 @@ class ClaimDetailPage extends ConsumerWidget {
           Text(label, style: typo.caption.copyWith(color: colors.muted)),
           Text(value, style: typo.body),
         ],
-      ),
-    );
-  }
-}
-
-/// Colored status pill, matching [ClaimCard]'s status presentation so a
-/// claim reads the same way in the list and on its detail page.
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.status});
-
-  final ClaimStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final typo = context.typo;
-    final (bg, fg) = switch (status) {
-      ClaimStatus.draft => (colors.card, colors.muted),
-      ClaimStatus.submitted => (colors.blueBg, colors.blue),
-      ClaimStatus.approved => (colors.greenBg, colors.green),
-      ClaimStatus.partiallySettled => (colors.amberBg, colors.amber),
-      ClaimStatus.rejected => (colors.orangeBg, colors.orange),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(99),
-      ),
-      child: Text(
-        status.localizedLabel(context.l10n),
-        style: typo.caption
-            .copyWith(color: fg, fontWeight: FontWeight.w600, fontSize: 11),
       ),
     );
   }

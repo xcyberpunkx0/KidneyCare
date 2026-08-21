@@ -1881,26 +1881,37 @@ class $MedicationsTable extends Medications
     defaultValue: const Constant(''),
   );
   @override
-  late final GeneratedColumnWithTypeConverter<MedScheduleGroup, String>
-  scheduleGroup = GeneratedColumn<String>(
-    'schedule_group',
+  late final GeneratedColumnWithTypeConverter<MedFoodRelation, String>
+  foodRelation = GeneratedColumn<String>(
+    'food_relation',
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  ).withConverter<MedScheduleGroup>($MedicationsTable.$converterscheduleGroup);
-  static const VerificationMeta _timingCuesJsonMeta = const VerificationMeta(
-    'timingCuesJson',
+    requiredDuringInsert: false,
+    defaultValue: const Constant('noRelation'),
+  ).withConverter<MedFoodRelation>($MedicationsTable.$converterfoodRelation);
+  static const VerificationMeta _timeOfDayJsonMeta = const VerificationMeta(
+    'timeOfDayJson',
   );
   @override
-  late final GeneratedColumn<String> timingCuesJson = GeneratedColumn<String>(
-    'timing_cues_json',
+  late final GeneratedColumn<String> timeOfDayJson = GeneratedColumn<String>(
+    'time_of_day_json',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant('[]'),
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<MedFrequency, String> frequency =
+      GeneratedColumn<String>(
+        'frequency',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('daily'),
+      ).withConverter<MedFrequency>($MedicationsTable.$converterfrequency);
   static const VerificationMeta _scheduleNoteMeta = const VerificationMeta(
     'scheduleNote',
   );
@@ -1999,8 +2010,9 @@ class $MedicationsTable extends Medications
     frequencyCode,
     purpose,
     doctor,
-    scheduleGroup,
-    timingCuesJson,
+    foodRelation,
+    timeOfDayJson,
+    frequency,
     scheduleNote,
     startDate,
     endDate,
@@ -2068,12 +2080,12 @@ class $MedicationsTable extends Medications
         doctor.isAcceptableOrUnknown(data['doctor']!, _doctorMeta),
       );
     }
-    if (data.containsKey('timing_cues_json')) {
+    if (data.containsKey('time_of_day_json')) {
       context.handle(
-        _timingCuesJsonMeta,
-        timingCuesJson.isAcceptableOrUnknown(
-          data['timing_cues_json']!,
-          _timingCuesJsonMeta,
+        _timeOfDayJsonMeta,
+        timeOfDayJson.isAcceptableOrUnknown(
+          data['time_of_day_json']!,
+          _timeOfDayJsonMeta,
         ),
       );
     }
@@ -2172,16 +2184,22 @@ class $MedicationsTable extends Medications
         DriftSqlType.string,
         data['${effectivePrefix}doctor'],
       )!,
-      scheduleGroup: $MedicationsTable.$converterscheduleGroup.fromSql(
+      foodRelation: $MedicationsTable.$converterfoodRelation.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
-          data['${effectivePrefix}schedule_group'],
+          data['${effectivePrefix}food_relation'],
         )!,
       ),
-      timingCuesJson: attachedDatabase.typeMapping.read(
+      timeOfDayJson: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}timing_cues_json'],
+        data['${effectivePrefix}time_of_day_json'],
       )!,
+      frequency: $MedicationsTable.$converterfrequency.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}frequency'],
+        )!,
+      ),
       scheduleNote: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}schedule_note'],
@@ -2222,10 +2240,12 @@ class $MedicationsTable extends Medications
     return $MedicationsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<MedScheduleGroup, String, String>
-  $converterscheduleGroup = const EnumNameConverter<MedScheduleGroup>(
-    MedScheduleGroup.values,
+  static JsonTypeConverter2<MedFoodRelation, String, String>
+  $converterfoodRelation = const EnumNameConverter<MedFoodRelation>(
+    MedFoodRelation.values,
   );
+  static JsonTypeConverter2<MedFrequency, String, String> $converterfrequency =
+      const EnumNameConverter<MedFrequency>(MedFrequency.values);
 }
 
 class Medication extends DataClass implements Insertable<Medication> {
@@ -2235,8 +2255,9 @@ class Medication extends DataClass implements Insertable<Medication> {
   final String frequencyCode;
   final String purpose;
   final String doctor;
-  final MedScheduleGroup scheduleGroup;
-  final String timingCuesJson;
+  final MedFoodRelation foodRelation;
+  final String timeOfDayJson;
+  final MedFrequency frequency;
   final String scheduleNote;
   final DateTime startDate;
   final DateTime? endDate;
@@ -2258,8 +2279,9 @@ class Medication extends DataClass implements Insertable<Medication> {
     required this.frequencyCode,
     required this.purpose,
     required this.doctor,
-    required this.scheduleGroup,
-    required this.timingCuesJson,
+    required this.foodRelation,
+    required this.timeOfDayJson,
+    required this.frequency,
     required this.scheduleNote,
     required this.startDate,
     this.endDate,
@@ -2279,11 +2301,16 @@ class Medication extends DataClass implements Insertable<Medication> {
     map['purpose'] = Variable<String>(purpose);
     map['doctor'] = Variable<String>(doctor);
     {
-      map['schedule_group'] = Variable<String>(
-        $MedicationsTable.$converterscheduleGroup.toSql(scheduleGroup),
+      map['food_relation'] = Variable<String>(
+        $MedicationsTable.$converterfoodRelation.toSql(foodRelation),
       );
     }
-    map['timing_cues_json'] = Variable<String>(timingCuesJson);
+    map['time_of_day_json'] = Variable<String>(timeOfDayJson);
+    {
+      map['frequency'] = Variable<String>(
+        $MedicationsTable.$converterfrequency.toSql(frequency),
+      );
+    }
     map['schedule_note'] = Variable<String>(scheduleNote);
     map['start_date'] = Variable<DateTime>(startDate);
     if (!nullToAbsent || endDate != null) {
@@ -2313,8 +2340,9 @@ class Medication extends DataClass implements Insertable<Medication> {
       frequencyCode: Value(frequencyCode),
       purpose: Value(purpose),
       doctor: Value(doctor),
-      scheduleGroup: Value(scheduleGroup),
-      timingCuesJson: Value(timingCuesJson),
+      foodRelation: Value(foodRelation),
+      timeOfDayJson: Value(timeOfDayJson),
+      frequency: Value(frequency),
       scheduleNote: Value(scheduleNote),
       startDate: Value(startDate),
       endDate: endDate == null && nullToAbsent
@@ -2348,10 +2376,13 @@ class Medication extends DataClass implements Insertable<Medication> {
       frequencyCode: serializer.fromJson<String>(json['frequencyCode']),
       purpose: serializer.fromJson<String>(json['purpose']),
       doctor: serializer.fromJson<String>(json['doctor']),
-      scheduleGroup: $MedicationsTable.$converterscheduleGroup.fromJson(
-        serializer.fromJson<String>(json['scheduleGroup']),
+      foodRelation: $MedicationsTable.$converterfoodRelation.fromJson(
+        serializer.fromJson<String>(json['foodRelation']),
       ),
-      timingCuesJson: serializer.fromJson<String>(json['timingCuesJson']),
+      timeOfDayJson: serializer.fromJson<String>(json['timeOfDayJson']),
+      frequency: $MedicationsTable.$converterfrequency.fromJson(
+        serializer.fromJson<String>(json['frequency']),
+      ),
       scheduleNote: serializer.fromJson<String>(json['scheduleNote']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime?>(json['endDate']),
@@ -2372,10 +2403,13 @@ class Medication extends DataClass implements Insertable<Medication> {
       'frequencyCode': serializer.toJson<String>(frequencyCode),
       'purpose': serializer.toJson<String>(purpose),
       'doctor': serializer.toJson<String>(doctor),
-      'scheduleGroup': serializer.toJson<String>(
-        $MedicationsTable.$converterscheduleGroup.toJson(scheduleGroup),
+      'foodRelation': serializer.toJson<String>(
+        $MedicationsTable.$converterfoodRelation.toJson(foodRelation),
       ),
-      'timingCuesJson': serializer.toJson<String>(timingCuesJson),
+      'timeOfDayJson': serializer.toJson<String>(timeOfDayJson),
+      'frequency': serializer.toJson<String>(
+        $MedicationsTable.$converterfrequency.toJson(frequency),
+      ),
       'scheduleNote': serializer.toJson<String>(scheduleNote),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime?>(endDate),
@@ -2394,8 +2428,9 @@ class Medication extends DataClass implements Insertable<Medication> {
     String? frequencyCode,
     String? purpose,
     String? doctor,
-    MedScheduleGroup? scheduleGroup,
-    String? timingCuesJson,
+    MedFoodRelation? foodRelation,
+    String? timeOfDayJson,
+    MedFrequency? frequency,
     String? scheduleNote,
     DateTime? startDate,
     Value<DateTime?> endDate = const Value.absent(),
@@ -2411,8 +2446,9 @@ class Medication extends DataClass implements Insertable<Medication> {
     frequencyCode: frequencyCode ?? this.frequencyCode,
     purpose: purpose ?? this.purpose,
     doctor: doctor ?? this.doctor,
-    scheduleGroup: scheduleGroup ?? this.scheduleGroup,
-    timingCuesJson: timingCuesJson ?? this.timingCuesJson,
+    foodRelation: foodRelation ?? this.foodRelation,
+    timeOfDayJson: timeOfDayJson ?? this.timeOfDayJson,
+    frequency: frequency ?? this.frequency,
     scheduleNote: scheduleNote ?? this.scheduleNote,
     startDate: startDate ?? this.startDate,
     endDate: endDate.present ? endDate.value : this.endDate,
@@ -2434,12 +2470,13 @@ class Medication extends DataClass implements Insertable<Medication> {
           : this.frequencyCode,
       purpose: data.purpose.present ? data.purpose.value : this.purpose,
       doctor: data.doctor.present ? data.doctor.value : this.doctor,
-      scheduleGroup: data.scheduleGroup.present
-          ? data.scheduleGroup.value
-          : this.scheduleGroup,
-      timingCuesJson: data.timingCuesJson.present
-          ? data.timingCuesJson.value
-          : this.timingCuesJson,
+      foodRelation: data.foodRelation.present
+          ? data.foodRelation.value
+          : this.foodRelation,
+      timeOfDayJson: data.timeOfDayJson.present
+          ? data.timeOfDayJson.value
+          : this.timeOfDayJson,
+      frequency: data.frequency.present ? data.frequency.value : this.frequency,
       scheduleNote: data.scheduleNote.present
           ? data.scheduleNote.value
           : this.scheduleNote,
@@ -2472,8 +2509,9 @@ class Medication extends DataClass implements Insertable<Medication> {
           ..write('frequencyCode: $frequencyCode, ')
           ..write('purpose: $purpose, ')
           ..write('doctor: $doctor, ')
-          ..write('scheduleGroup: $scheduleGroup, ')
-          ..write('timingCuesJson: $timingCuesJson, ')
+          ..write('foodRelation: $foodRelation, ')
+          ..write('timeOfDayJson: $timeOfDayJson, ')
+          ..write('frequency: $frequency, ')
           ..write('scheduleNote: $scheduleNote, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
@@ -2494,8 +2532,9 @@ class Medication extends DataClass implements Insertable<Medication> {
     frequencyCode,
     purpose,
     doctor,
-    scheduleGroup,
-    timingCuesJson,
+    foodRelation,
+    timeOfDayJson,
+    frequency,
     scheduleNote,
     startDate,
     endDate,
@@ -2515,8 +2554,9 @@ class Medication extends DataClass implements Insertable<Medication> {
           other.frequencyCode == this.frequencyCode &&
           other.purpose == this.purpose &&
           other.doctor == this.doctor &&
-          other.scheduleGroup == this.scheduleGroup &&
-          other.timingCuesJson == this.timingCuesJson &&
+          other.foodRelation == this.foodRelation &&
+          other.timeOfDayJson == this.timeOfDayJson &&
+          other.frequency == this.frequency &&
           other.scheduleNote == this.scheduleNote &&
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
@@ -2534,8 +2574,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
   final Value<String> frequencyCode;
   final Value<String> purpose;
   final Value<String> doctor;
-  final Value<MedScheduleGroup> scheduleGroup;
-  final Value<String> timingCuesJson;
+  final Value<MedFoodRelation> foodRelation;
+  final Value<String> timeOfDayJson;
+  final Value<MedFrequency> frequency;
   final Value<String> scheduleNote;
   final Value<DateTime> startDate;
   final Value<DateTime?> endDate;
@@ -2552,8 +2593,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     this.frequencyCode = const Value.absent(),
     this.purpose = const Value.absent(),
     this.doctor = const Value.absent(),
-    this.scheduleGroup = const Value.absent(),
-    this.timingCuesJson = const Value.absent(),
+    this.foodRelation = const Value.absent(),
+    this.timeOfDayJson = const Value.absent(),
+    this.frequency = const Value.absent(),
     this.scheduleNote = const Value.absent(),
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -2571,8 +2613,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     required String frequencyCode,
     required String purpose,
     this.doctor = const Value.absent(),
-    required MedScheduleGroup scheduleGroup,
-    this.timingCuesJson = const Value.absent(),
+    this.foodRelation = const Value.absent(),
+    this.timeOfDayJson = const Value.absent(),
+    this.frequency = const Value.absent(),
     this.scheduleNote = const Value.absent(),
     required DateTime startDate,
     this.endDate = const Value.absent(),
@@ -2587,7 +2630,6 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
        dose = Value(dose),
        frequencyCode = Value(frequencyCode),
        purpose = Value(purpose),
-       scheduleGroup = Value(scheduleGroup),
        startDate = Value(startDate);
   static Insertable<Medication> custom({
     Expression<String>? id,
@@ -2596,8 +2638,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     Expression<String>? frequencyCode,
     Expression<String>? purpose,
     Expression<String>? doctor,
-    Expression<String>? scheduleGroup,
-    Expression<String>? timingCuesJson,
+    Expression<String>? foodRelation,
+    Expression<String>? timeOfDayJson,
+    Expression<String>? frequency,
     Expression<String>? scheduleNote,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
@@ -2615,8 +2658,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
       if (frequencyCode != null) 'frequency_code': frequencyCode,
       if (purpose != null) 'purpose': purpose,
       if (doctor != null) 'doctor': doctor,
-      if (scheduleGroup != null) 'schedule_group': scheduleGroup,
-      if (timingCuesJson != null) 'timing_cues_json': timingCuesJson,
+      if (foodRelation != null) 'food_relation': foodRelation,
+      if (timeOfDayJson != null) 'time_of_day_json': timeOfDayJson,
+      if (frequency != null) 'frequency': frequency,
       if (scheduleNote != null) 'schedule_note': scheduleNote,
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
@@ -2636,8 +2680,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     Value<String>? frequencyCode,
     Value<String>? purpose,
     Value<String>? doctor,
-    Value<MedScheduleGroup>? scheduleGroup,
-    Value<String>? timingCuesJson,
+    Value<MedFoodRelation>? foodRelation,
+    Value<String>? timeOfDayJson,
+    Value<MedFrequency>? frequency,
     Value<String>? scheduleNote,
     Value<DateTime>? startDate,
     Value<DateTime?>? endDate,
@@ -2655,8 +2700,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
       frequencyCode: frequencyCode ?? this.frequencyCode,
       purpose: purpose ?? this.purpose,
       doctor: doctor ?? this.doctor,
-      scheduleGroup: scheduleGroup ?? this.scheduleGroup,
-      timingCuesJson: timingCuesJson ?? this.timingCuesJson,
+      foodRelation: foodRelation ?? this.foodRelation,
+      timeOfDayJson: timeOfDayJson ?? this.timeOfDayJson,
+      frequency: frequency ?? this.frequency,
       scheduleNote: scheduleNote ?? this.scheduleNote,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -2690,13 +2736,18 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
     if (doctor.present) {
       map['doctor'] = Variable<String>(doctor.value);
     }
-    if (scheduleGroup.present) {
-      map['schedule_group'] = Variable<String>(
-        $MedicationsTable.$converterscheduleGroup.toSql(scheduleGroup.value),
+    if (foodRelation.present) {
+      map['food_relation'] = Variable<String>(
+        $MedicationsTable.$converterfoodRelation.toSql(foodRelation.value),
       );
     }
-    if (timingCuesJson.present) {
-      map['timing_cues_json'] = Variable<String>(timingCuesJson.value);
+    if (timeOfDayJson.present) {
+      map['time_of_day_json'] = Variable<String>(timeOfDayJson.value);
+    }
+    if (frequency.present) {
+      map['frequency'] = Variable<String>(
+        $MedicationsTable.$converterfrequency.toSql(frequency.value),
+      );
     }
     if (scheduleNote.present) {
       map['schedule_note'] = Variable<String>(scheduleNote.value);
@@ -2737,8 +2788,9 @@ class MedicationsCompanion extends UpdateCompanion<Medication> {
           ..write('frequencyCode: $frequencyCode, ')
           ..write('purpose: $purpose, ')
           ..write('doctor: $doctor, ')
-          ..write('scheduleGroup: $scheduleGroup, ')
-          ..write('timingCuesJson: $timingCuesJson, ')
+          ..write('foodRelation: $foodRelation, ')
+          ..write('timeOfDayJson: $timeOfDayJson, ')
+          ..write('frequency: $frequency, ')
           ..write('scheduleNote: $scheduleNote, ')
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
@@ -7580,8 +7632,9 @@ typedef $$MedicationsTableCreateCompanionBuilder =
       required String frequencyCode,
       required String purpose,
       Value<String> doctor,
-      required MedScheduleGroup scheduleGroup,
-      Value<String> timingCuesJson,
+      Value<MedFoodRelation> foodRelation,
+      Value<String> timeOfDayJson,
+      Value<MedFrequency> frequency,
       Value<String> scheduleNote,
       required DateTime startDate,
       Value<DateTime?> endDate,
@@ -7600,8 +7653,9 @@ typedef $$MedicationsTableUpdateCompanionBuilder =
       Value<String> frequencyCode,
       Value<String> purpose,
       Value<String> doctor,
-      Value<MedScheduleGroup> scheduleGroup,
-      Value<String> timingCuesJson,
+      Value<MedFoodRelation> foodRelation,
+      Value<String> timeOfDayJson,
+      Value<MedFrequency> frequency,
       Value<String> scheduleNote,
       Value<DateTime> startDate,
       Value<DateTime?> endDate,
@@ -7652,15 +7706,21 @@ class $$MedicationsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<MedScheduleGroup, MedScheduleGroup, String>
-  get scheduleGroup => $composableBuilder(
-    column: $table.scheduleGroup,
+  ColumnWithTypeConverterFilters<MedFoodRelation, MedFoodRelation, String>
+  get foodRelation => $composableBuilder(
+    column: $table.foodRelation,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<String> get timingCuesJson => $composableBuilder(
-    column: $table.timingCuesJson,
+  ColumnFilters<String> get timeOfDayJson => $composableBuilder(
+    column: $table.timeOfDayJson,
     builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<MedFrequency, MedFrequency, String>
+  get frequency => $composableBuilder(
+    column: $table.frequency,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<String> get scheduleNote => $composableBuilder(
@@ -7743,13 +7803,18 @@ class $$MedicationsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get scheduleGroup => $composableBuilder(
-    column: $table.scheduleGroup,
+  ColumnOrderings<String> get foodRelation => $composableBuilder(
+    column: $table.foodRelation,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get timingCuesJson => $composableBuilder(
-    column: $table.timingCuesJson,
+  ColumnOrderings<String> get timeOfDayJson => $composableBuilder(
+    column: $table.timeOfDayJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get frequency => $composableBuilder(
+    column: $table.frequency,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -7823,16 +7888,19 @@ class $$MedicationsTableAnnotationComposer
   GeneratedColumn<String> get doctor =>
       $composableBuilder(column: $table.doctor, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<MedScheduleGroup, String>
-  get scheduleGroup => $composableBuilder(
-    column: $table.scheduleGroup,
+  GeneratedColumnWithTypeConverter<MedFoodRelation, String> get foodRelation =>
+      $composableBuilder(
+        column: $table.foodRelation,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get timeOfDayJson => $composableBuilder(
+    column: $table.timeOfDayJson,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get timingCuesJson => $composableBuilder(
-    column: $table.timingCuesJson,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<MedFrequency, String> get frequency =>
+      $composableBuilder(column: $table.frequency, builder: (column) => column);
 
   GeneratedColumn<String> get scheduleNote => $composableBuilder(
     column: $table.scheduleNote,
@@ -7908,8 +7976,9 @@ class $$MedicationsTableTableManager
                 Value<String> frequencyCode = const Value.absent(),
                 Value<String> purpose = const Value.absent(),
                 Value<String> doctor = const Value.absent(),
-                Value<MedScheduleGroup> scheduleGroup = const Value.absent(),
-                Value<String> timingCuesJson = const Value.absent(),
+                Value<MedFoodRelation> foodRelation = const Value.absent(),
+                Value<String> timeOfDayJson = const Value.absent(),
+                Value<MedFrequency> frequency = const Value.absent(),
                 Value<String> scheduleNote = const Value.absent(),
                 Value<DateTime> startDate = const Value.absent(),
                 Value<DateTime?> endDate = const Value.absent(),
@@ -7926,8 +7995,9 @@ class $$MedicationsTableTableManager
                 frequencyCode: frequencyCode,
                 purpose: purpose,
                 doctor: doctor,
-                scheduleGroup: scheduleGroup,
-                timingCuesJson: timingCuesJson,
+                foodRelation: foodRelation,
+                timeOfDayJson: timeOfDayJson,
+                frequency: frequency,
                 scheduleNote: scheduleNote,
                 startDate: startDate,
                 endDate: endDate,
@@ -7946,8 +8016,9 @@ class $$MedicationsTableTableManager
                 required String frequencyCode,
                 required String purpose,
                 Value<String> doctor = const Value.absent(),
-                required MedScheduleGroup scheduleGroup,
-                Value<String> timingCuesJson = const Value.absent(),
+                Value<MedFoodRelation> foodRelation = const Value.absent(),
+                Value<String> timeOfDayJson = const Value.absent(),
+                Value<MedFrequency> frequency = const Value.absent(),
                 Value<String> scheduleNote = const Value.absent(),
                 required DateTime startDate,
                 Value<DateTime?> endDate = const Value.absent(),
@@ -7964,8 +8035,9 @@ class $$MedicationsTableTableManager
                 frequencyCode: frequencyCode,
                 purpose: purpose,
                 doctor: doctor,
-                scheduleGroup: scheduleGroup,
-                timingCuesJson: timingCuesJson,
+                foodRelation: foodRelation,
+                timeOfDayJson: timeOfDayJson,
+                frequency: frequency,
                 scheduleNote: scheduleNote,
                 startDate: startDate,
                 endDate: endDate,

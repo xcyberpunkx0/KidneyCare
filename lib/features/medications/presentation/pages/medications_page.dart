@@ -30,16 +30,25 @@ class MedicationsPage extends ConsumerWidget {
     final showEnded = ref.watch(showEndedProvider);
 
     final interval = active.where((m) => m.isIntervalMed).toList();
-    final withFood = active
+    final rest = active.where((m) => !m.isIntervalMed).toList();
+    final dialysisDays = rest
+        .where((m) => m.frequency == MedFrequency.dialysisDaysOnly)
+        .toList();
+    final weekly =
+        rest.where((m) => m.frequency == MedFrequency.weekly).toList();
+    final aroundMeals = rest
         .where(
           (m) =>
-              !m.isIntervalMed && m.scheduleGroup == MedScheduleGroup.withFood,
+              m.frequency == MedFrequency.daily &&
+              m.foodRelation != MedFoodRelation.noRelation,
         )
         .toList();
-    final byClock = active
+    final byClock = rest
         .where(
           (m) =>
-              !m.isIntervalMed && m.scheduleGroup != MedScheduleGroup.withFood,
+              !dialysisDays.contains(m) &&
+              !weekly.contains(m) &&
+              !aroundMeals.contains(m),
         )
         .toList();
 
@@ -103,9 +112,23 @@ class MedicationsPage extends ConsumerWidget {
                             const SizedBox(height: 9),
                           ],
                         ],
-                        if (withFood.isNotEmpty) ...[
-                          _GroupLabel(label: l10n.withFoodGroup),
-                          for (final med in withFood) ...[
+                        if (dialysisDays.isNotEmpty) ...[
+                          _GroupLabel(label: l10n.dialysisDaysGroup),
+                          for (final med in dialysisDays) ...[
+                            MedicationCard(medication: med),
+                            const SizedBox(height: 9),
+                          ],
+                        ],
+                        if (weekly.isNotEmpty) ...[
+                          _GroupLabel(label: l10n.weeklyGroup),
+                          for (final med in weekly) ...[
+                            MedicationCard(medication: med),
+                            const SizedBox(height: 9),
+                          ],
+                        ],
+                        if (aroundMeals.isNotEmpty) ...[
+                          _GroupLabel(label: l10n.aroundMealsGroup),
+                          for (final med in aroundMeals) ...[
                             MedicationCard(medication: med),
                             const SizedBox(height: 9),
                           ],

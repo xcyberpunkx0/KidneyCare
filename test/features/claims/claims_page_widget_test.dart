@@ -143,12 +143,33 @@ void main() {
     await tester.pumpWidget(_host(claims: claims));
     await tester.pumpAndSettle();
 
-    expect(find.text('Needs attention'), findsOneWidget);
-    expect(find.text('In progress'), findsOneWidget);
-    expect(find.text('Settled & rejected'), findsOneWidget);
+    expect(find.text('Needs your attention'), findsOneWidget);
+    expect(find.text('Waiting for the insurer'), findsOneWidget);
+    expect(find.text('Completed'), findsOneWidget);
     expect(find.text('draft-1'), findsOneWidget);
     expect(find.text('submitted-1'), findsOneWidget);
     expect(find.text('approved-1'), findsOneWidget);
+  });
+
+  testWidgets('the YTD summary card shows claimed and recovered totals',
+      (tester) async {
+    await tester.pumpWidget(_host(claims: [
+      _claim(
+        id: 'approved-1',
+        status: ClaimStatus.approved,
+        submittedOn: DateTime.now(),
+        settledOn: DateTime.now(),
+        claimedPaise: 1240000,
+        approvedPaise: 1000000,
+      ),
+    ]));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Claimed this year'), findsOneWidget);
+    expect(find.text('Recovered this year'), findsOneWidget);
+    expect(find.text('₹12,400'), findsOneWidget);
+    // ₹10,000 appears in the summary card and on the claim's own card.
+    expect(find.textContaining('₹10,000'), findsWidgets);
   });
 
   testWidgets('unclaimed bills render the amber strip', (tester) async {

@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../shared/domain/document_type.dart';
 import '../controllers/batch_import_controller.dart';
+import 'type_pick_step.dart';
 
 /// Assembling the queue: picked documents as a tile grid, with
 /// long-press selection to combine several photos into one multi-page
@@ -185,6 +187,41 @@ class _ItemTile extends ConsumerWidget {
     // combined items stay as they are.
     final selectable = item.pages.length == 1 && !item.combined;
 
+    Future<void> showTypeSheet() {
+      return showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        builder: (sheetContext) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final type in DocumentType.values)
+                ListTile(
+                  leading: Icon(TypePickStep.icons[type]),
+                  title: Text(type.localizedLabel(l10n)),
+                  trailing: type == item.type
+                      ? Icon(Icons.check, color: colors.accent)
+                      : null,
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    controller.setItemType(item.id, type);
+                  },
+                ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.copy_all_outlined),
+                title: Text(l10n.applyTypeToAll),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  controller.setTypeForAll(item.type);
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onLongPress: selectable ? () => controller.toggleSelect(item.id) : null,
       onTap: selecting && selectable
@@ -207,28 +244,49 @@ class _ItemTile extends ConsumerWidget {
               fit: BoxFit.cover,
               gaplessPlayback: true,
             ),
-            if (item.sourceLabel.isNotEmpty || item.pages.length > 1)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  color: Colors.black.withValues(alpha: 0.55),
-                  child: Text(
-                    [
-                      if (item.sourceLabel.isNotEmpty) item.sourceLabel,
-                      if (item.pages.length > 1)
-                        l10n.nPages(item.pages.length),
-                    ].join(' · '),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: typo.caption
-                        .copyWith(fontSize: 10, color: Colors.white),
+            // Always-visible type badge; tapping it opens the type sheet.
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Semantics(
+                button: true,
+                label: l10n.changeDocType,
+                child: InkWell(
+                  onTap: selecting ? null : showTypeSheet,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 3),
+                    color: Colors.black.withValues(alpha: 0.55),
+                    child: Row(
+                      children: [
+                        Icon(TypePickStep.icons[item.type],
+                            size: 12, color: Colors.white),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            [
+                              item.type.localizedLabel(l10n),
+                              if (item.sourceLabel.isNotEmpty)
+                                item.sourceLabel,
+                              if (item.pages.length > 1)
+                                l10n.nPages(item.pages.length),
+                            ].join(' · '),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: typo.caption
+                                .copyWith(fontSize: 10, color: Colors.white),
+                          ),
+                        ),
+                        if (!selecting)
+                          const Icon(Icons.arrow_drop_down,
+                              size: 14, color: Colors.white),
+                      ],
+                    ),
                   ),
                 ),
               ),
+            ),
             Positioned(
               top: 2,
               right: 2,

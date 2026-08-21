@@ -39,6 +39,7 @@ class _FakeRepository implements CaptureRepository {
 
   final double confidence;
   final extractedPageCounts = <int>[];
+  final manualSaves = <({DocumentType type, String title})>[];
   var savedCount = 0;
 
   @override
@@ -58,6 +59,18 @@ class _FakeRepository implements CaptureRepository {
   }) async {
     savedCount++;
     return Result.ok('doc-$savedCount');
+  }
+
+  @override
+  Future<Result<String>> saveManual({
+    required List<ScanPage> pages,
+    required DocumentType type,
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) async {
+    manualSaves.add((type: type, title: title));
+    return Result.ok('doc-manual-${manualSaves.length}');
   }
 }
 
@@ -215,5 +228,68 @@ void main() {
     final ungrouped = container.read(batchImportProvider);
     expect(ungrouped.items, hasLength(3));
     expect(ungrouped.items.every((i) => i.pages.length == 1), isTrue);
+  });
+
+  test('mixed batch: only lab reports are extracted, others save manually',
+      () async {
+    final (container, repository) =
+        makeContainer([photo(1), photo(2), photo(3)]);
+    final controller = container.read(batchImportProvider.notifier);
+
+    await controller.addPhotos();
+    var state = container.read(batchImportProvider);
+    // Item defaults to labReport; retag the middle one as a prescription.
+    expect(state.items.every((i) => i.type == DocumentType.labReport),
+        isTrue);
+    controller.setItemType(
+        state.items[1].id, DocumentType.prescription);
+
+    controller.start();
+    await pumpEventQueue();
+
+    state = container.read(batchImportProvider);
+    // Only the two lab reports hit the extraction endpoint.
+    expect(repository.extractedPageCounts, hasLength(2));
+    // The prescription is ready immediately, with no draft to review.
+    expect(state.items[1].status, BatchItemStatus.ready);
+    expect(state.items[1].draft, isNull);
+
+    await controller.saveCurrent(); // lab item 0
+    expect(container.read(batchImportProvider).currentIndex, 1);
+    await controller.saveCurrentManual(
+      title: 'Dr Mehta prescription',
+      documentDate: DateTime(2026, 8, 12),
+    );
+    await controller.saveCurrent(); // lab item 2
+
+    state = container.read(batchImportProvider);
+    expect(state.phase, BatchPhase.summary);
+    expect(state.savedCount, 3);
+    expect(repository.savedCount, 2);
+    expect(repository.manualSaves, [
+      (type: DocumentType.prescription, title: 'Dr Mehta prescription'),
+    ]);
+  });
+
+  test('setTypeForAll retags every item; combine keeps the first type',
+      () async {
+    final (container, _) =
+        makeContainer([photo(1), photo(2), photo(3)]);
+    final controller = container.read(batchImportProvider.notifier);
+
+    await controller.addPhotos();
+    controller.setTypeForAll(DocumentType.bill);
+    var state = container.read(batchImportProvider);
+    expect(state.items.every((i) => i.type == DocumentType.bill), isTrue);
+
+    controller.toggleSelect(state.items[0].id);
+    controller.toggleSelect(state.items[1].id);
+    controller.combineSelected();
+    state = container.read(batchImportProvider);
+    expect(state.items[0].type, DocumentType.bill);
+
+    controller.ungroup(state.items[0].id);
+    state = container.read(batchImportProvider);
+    expect(state.items.every((i) => i.type == DocumentType.bill), isTrue);
   });
 }

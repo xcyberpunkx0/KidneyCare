@@ -78,8 +78,11 @@ class Medications extends Table {
   TextColumn get frequencyCode => text()();
   TextColumn get purpose => text()();
   TextColumn get doctor => text().withDefault(const Constant(''))();
-  TextColumn get scheduleGroup => textEnum<MedScheduleGroup>()();
-  TextColumn get timingCuesJson => text().withDefault(const Constant('[]'))();
+  TextColumn get foodRelation => textEnum<MedFoodRelation>()
+      .withDefault(const Constant('noRelation'))();
+  TextColumn get timeOfDayJson => text().withDefault(const Constant('[]'))();
+  TextColumn get frequency =>
+      textEnum<MedFrequency>().withDefault(const Constant('daily'))();
   TextColumn get scheduleNote => text().withDefault(const Constant(''))();
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime().nullable()();

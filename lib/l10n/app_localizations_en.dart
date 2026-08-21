@@ -291,7 +291,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get withFoodGroup => 'WITH FOOD';
+  String get dialysisDaysGroup => 'DIALYSIS DAYS';
+
+  @override
+  String get weeklyGroup => 'WEEKLY';
+
+  @override
+  String get aroundMealsGroup => 'AROUND MEALS';
 
   @override
   String get byTheClockGroup => 'BY THE CLOCK';
@@ -351,10 +357,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prescribedByHint => 'e.g. Dr. Menon';
 
   @override
-  String get whenTaken => 'WHEN IS IT TAKEN?';
+  String get foodRelationLabel => 'FOOD & MEDICINE';
 
   @override
-  String get timingCuesHint => 'Timing cues (shown as icons on the card)';
+  String get timeOfDayLabel => 'TIME OF DAY';
+
+  @override
+  String get howOftenLabel => 'HOW OFTEN?';
 
   @override
   String get instructions => 'INSTRUCTIONS';
@@ -408,6 +417,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get extractedText => 'EXTRACTED TEXT';
+
+  @override
+  String get shareDocument => 'Share document';
+
+  @override
+  String get whatIsThisDocument => 'What is this document?';
+
+  @override
+  String get typePickAiHint =>
+      'Lab reports are read by AI so values land in the charts. Everything else is stored exactly as photographed.';
+
+  @override
+  String get aiReadBadge => 'AI reads it';
+
+  @override
+  String get manualDetailsHint =>
+      'Kept exactly as photographed — nothing is read or changed.';
+
+  @override
+  String get docTitleLabel => 'TITLE';
+
+  @override
+  String get docTitleHint => 'e.g. Dr Mehta\'s prescription';
+
+  @override
+  String get docDoctorOptionalLabel => 'DOCTOR (OPTIONAL)';
+
+  @override
+  String get docDateLabel => 'DOCUMENT DATE';
+
+  @override
+  String get saveDocument => 'Save to vault';
+
+  @override
+  String get changeDocType => 'Change document type';
+
+  @override
+  String get applyTypeToAll => 'Apply to all pages';
 
   @override
   String get fillFrame => 'Fill the frame with the document';
@@ -908,34 +955,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventSymptom => 'Symptom';
 
   @override
-  String get groupWithFood => 'With food';
+  String get foodBeforeFood => 'Before food';
 
   @override
-  String get groupByClock => 'By the clock';
+  String get foodWithFood => 'With food';
 
   @override
-  String get groupWeekly => 'Weekly';
+  String get foodAfterFood => 'After food';
 
   @override
-  String get cueMorning => 'Morning';
+  String get foodNoRelation => 'Doesn\'t matter';
 
   @override
-  String get cueNoon => 'Noon';
+  String get timeMorning => 'Morning';
 
   @override
-  String get cueNight => 'Night';
+  String get timeNoon => 'Noon';
 
   @override
-  String get cueBeforeFood => 'Before food';
+  String get timeNight => 'Night';
 
   @override
-  String get cueAfterFood => 'After food';
+  String get freqDaily => 'Every day';
 
   @override
-  String get cueWithFood => 'With food';
+  String get freqWeekly => 'Once a week';
 
   @override
-  String get cueDialysisDayOnly => 'Dialysis day only';
+  String get freqEveryNDays => 'Every few days';
+
+  @override
+  String get freqDialysisDays => 'Dialysis days only';
 
   @override
   String get dayMon => 'Mon';
@@ -1040,12 +1090,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get claimsEmpty =>
-      'No claims yet. Bundle bills from the vault into a claim and track it to settlement.';
+      '1. Scan hospital bills into the vault\n2. Bundle them into a claim\n3. Track it until the insurer pays';
 
   @override
-  String claimsYtdLine(String claimed, String recovered) {
-    return '$claimed claimed · $recovered recovered this year';
-  }
+  String get claimsYtdClaimed => 'Claimed this year';
+
+  @override
+  String get claimsYtdRecovered => 'Recovered this year';
 
   @override
   String unclaimedBillsChip(int count) {
@@ -1059,13 +1110,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get claimSectionAttention => 'Needs attention';
+  String get claimSectionAttention => 'Needs your attention';
 
   @override
-  String get claimSectionInProgress => 'In progress';
+  String get claimSectionInProgress => 'Waiting for the insurer';
 
   @override
-  String get claimSectionHistory => 'Settled & rejected';
+  String get claimSectionHistory => 'Completed';
 
   @override
   String claimDocCount(int count) {
@@ -1079,19 +1130,39 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get claimStatusDraft => 'Draft';
+  String get claimStatusDraft => 'Getting ready';
 
   @override
-  String get claimStatusSubmitted => 'Submitted';
+  String get claimStatusSubmitted => 'With insurer';
 
   @override
-  String get claimStatusApproved => 'Approved';
+  String get claimStatusApproved => 'Paid in full';
 
   @override
-  String get claimStatusPartiallySettled => 'Partially settled';
+  String get claimStatusPartiallySettled => 'Partly paid';
 
   @override
   String get claimStatusRejected => 'Rejected';
+
+  @override
+  String claimMoneyWaiting(String amount) {
+    return 'Claimed $amount · waiting on insurer';
+  }
+
+  @override
+  String claimMoneyRecoveredOf(String recovered, String claimed) {
+    return '$recovered of $claimed recovered';
+  }
+
+  @override
+  String claimMoneyRecovered(String amount) {
+    return '$amount recovered';
+  }
+
+  @override
+  String claimMoneyRejected(String amount) {
+    return '$amount claimed · nothing paid';
+  }
 
   @override
   String get claimNew => 'New claim';
@@ -1168,6 +1239,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Delete this claim? Its documents stay in the vault.';
 
   @override
+  String get claimDeleteSettledConfirm =>
+      'Delete this completed claim? Its documents stay in the vault, but it will no longer count in this year\'s totals.';
+
+  @override
   String get claimSubmittedOn => 'Submitted on';
 
   @override
@@ -1216,6 +1291,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String claimGlanceTitle(int count) {
     return 'CLAIMS · $count';
   }
+
+  @override
+  String claimGlanceWithInsurer(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'claims',
+      one: 'claim',
+    );
+    return '$count $_temp0 with the insurer';
+  }
+
+  @override
+  String claimGlanceGettingReady(int count) {
+    return '$count getting ready';
+  }
+
+  @override
+  String claimGlanceAwaiting(String amount) {
+    return '$amount awaiting';
+  }
+
+  @override
+  String get claimGlanceTeaser => 'Track an insurance claim →';
 
   @override
   String get policyTitle => 'Insurance policy';
@@ -1401,7 +1500,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importEmptyMessage =>
-      'Add scanned photos or PDF files.\nRecora will read each one for you.';
+      'Add scanned photos or PDF files.\nRecora reads lab reports for you; other documents are stored as they are.';
 
   @override
   String nItemsToImport(int count) {

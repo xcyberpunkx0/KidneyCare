@@ -290,7 +290,13 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get withFoodGroup => 'खाने के साथ';
+  String get dialysisDaysGroup => 'डायलिसिस के दिन';
+
+  @override
+  String get weeklyGroup => 'साप्ताहिक';
+
+  @override
+  String get aroundMealsGroup => 'खाने के आसपास';
 
   @override
   String get byTheClockGroup => 'समय से';
@@ -348,10 +354,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get prescribedByHint => 'जैसे डॉ. मेनन';
 
   @override
-  String get whenTaken => 'कब लेनी है?';
+  String get foodRelationLabel => 'खाना और दवा';
 
   @override
-  String get timingCuesHint => 'समय के संकेत (कार्ड पर आइकन बनते हैं)';
+  String get timeOfDayLabel => 'दिन का समय';
+
+  @override
+  String get howOftenLabel => 'कितनी बार?';
 
   @override
   String get instructions => 'निर्देश';
@@ -405,6 +414,44 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get extractedText => 'निकाला गया टेक्स्ट';
+
+  @override
+  String get shareDocument => 'दस्तावेज़ साझा करें';
+
+  @override
+  String get whatIsThisDocument => 'यह कौन-सा दस्तावेज़ है?';
+
+  @override
+  String get typePickAiHint =>
+      'लैब रिपोर्ट AI से पढ़ी जाती हैं ताकि वैल्यू चार्ट में आ जाएँ। बाकी सब जैसा फ़ोटो लिया गया वैसा ही रखा जाता है।';
+
+  @override
+  String get aiReadBadge => 'AI पढ़ेगा';
+
+  @override
+  String get manualDetailsHint =>
+      'जैसा फ़ोटो लिया गया वैसा ही रखा जाएगा — कुछ भी पढ़ा या बदला नहीं जाता।';
+
+  @override
+  String get docTitleLabel => 'शीर्षक';
+
+  @override
+  String get docTitleHint => 'जैसे डॉ. मेहता का पर्चा';
+
+  @override
+  String get docDoctorOptionalLabel => 'डॉक्टर (वैकल्पिक)';
+
+  @override
+  String get docDateLabel => 'दस्तावेज़ की तारीख़';
+
+  @override
+  String get saveDocument => 'वॉल्ट में सहेजें';
+
+  @override
+  String get changeDocType => 'दस्तावेज़ का प्रकार बदलें';
+
+  @override
+  String get applyTypeToAll => 'सभी पेजों पर लागू करें';
 
   @override
   String get fillFrame => 'दस्तावेज़ को फ़्रेम में पूरा रखें';
@@ -902,34 +949,37 @@ class AppLocalizationsHi extends AppLocalizations {
   String get eventSymptom => 'लक्षण';
 
   @override
-  String get groupWithFood => 'खाने के साथ';
+  String get foodBeforeFood => 'खाने से पहले';
 
   @override
-  String get groupByClock => 'समय से';
+  String get foodWithFood => 'खाने के साथ';
 
   @override
-  String get groupWeekly => 'साप्ताहिक';
+  String get foodAfterFood => 'खाने के बाद';
 
   @override
-  String get cueMorning => 'सुबह';
+  String get foodNoRelation => 'कभी भी चलेगा';
 
   @override
-  String get cueNoon => 'दोपहर';
+  String get timeMorning => 'सुबह';
 
   @override
-  String get cueNight => 'रात';
+  String get timeNoon => 'दोपहर';
 
   @override
-  String get cueBeforeFood => 'खाने से पहले';
+  String get timeNight => 'रात';
 
   @override
-  String get cueAfterFood => 'खाने के बाद';
+  String get freqDaily => 'रोज़';
 
   @override
-  String get cueWithFood => 'खाने के साथ';
+  String get freqWeekly => 'हफ़्ते में एक बार';
 
   @override
-  String get cueDialysisDayOnly => 'सिर्फ़ डायलिसिस के दिन';
+  String get freqEveryNDays => 'हर कुछ दिनों में';
+
+  @override
+  String get freqDialysisDays => 'सिर्फ़ डायलिसिस के दिन';
 
   @override
   String get dayMon => 'सोम';
@@ -1035,12 +1085,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get claimsEmpty =>
-      'अभी कोई क्लेम नहीं। वॉल्ट के बिलों को एक क्लेम में जोड़ें और निपटान तक ट्रैक करें।';
+      '1. अस्पताल के बिल वॉल्ट में स्कैन करें\n2. उन्हें एक क्लेम में जोड़ें\n3. भुगतान मिलने तक ट्रैक करें';
 
   @override
-  String claimsYtdLine(String claimed, String recovered) {
-    return 'इस साल $claimed क्लेम किया · $recovered वापस मिला';
-  }
+  String get claimsYtdClaimed => 'इस साल क्लेम किया';
+
+  @override
+  String get claimsYtdRecovered => 'इस साल वापस मिला';
 
   @override
   String unclaimedBillsChip(int count) {
@@ -1054,13 +1105,13 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get claimSectionAttention => 'ध्यान चाहिए';
+  String get claimSectionAttention => 'आपका ध्यान चाहिए';
 
   @override
-  String get claimSectionInProgress => 'प्रगति में';
+  String get claimSectionInProgress => 'बीमा कंपनी के जवाब का इंतज़ार';
 
   @override
-  String get claimSectionHistory => 'निपटाए और अस्वीकृत';
+  String get claimSectionHistory => 'पूरे हुए';
 
   @override
   String claimDocCount(int count) {
@@ -1074,19 +1125,39 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get claimStatusDraft => 'ड्राफ़्ट';
+  String get claimStatusDraft => 'तैयारी में';
 
   @override
-  String get claimStatusSubmitted => 'जमा किया गया';
+  String get claimStatusSubmitted => 'बीमा कंपनी के पास';
 
   @override
-  String get claimStatusApproved => 'स्वीकृत';
+  String get claimStatusApproved => 'पूरा भुगतान मिला';
 
   @override
-  String get claimStatusPartiallySettled => 'आंशिक रूप से निपटाया';
+  String get claimStatusPartiallySettled => 'आंशिक भुगतान मिला';
 
   @override
   String get claimStatusRejected => 'अस्वीकृत';
+
+  @override
+  String claimMoneyWaiting(String amount) {
+    return '$amount क्लेम किया · जवाब का इंतज़ार';
+  }
+
+  @override
+  String claimMoneyRecoveredOf(String recovered, String claimed) {
+    return '$claimed में से $recovered वापस मिला';
+  }
+
+  @override
+  String claimMoneyRecovered(String amount) {
+    return '$amount वापस मिला';
+  }
+
+  @override
+  String claimMoneyRejected(String amount) {
+    return '$amount क्लेम किया · कुछ नहीं मिला';
+  }
 
   @override
   String get claimNew => 'नया क्लेम';
@@ -1163,6 +1234,10 @@ class AppLocalizationsHi extends AppLocalizations {
       'यह क्लेम हटाएँ? दस्तावेज़ वॉल्ट में बने रहेंगे।';
 
   @override
+  String get claimDeleteSettledConfirm =>
+      'यह पूरा हुआ क्लेम हटाएँ? दस्तावेज़ वॉल्ट में बने रहेंगे, पर यह इस साल के जोड़ में नहीं गिना जाएगा।';
+
+  @override
   String get claimSubmittedOn => 'जमा करने की तारीख़';
 
   @override
@@ -1211,6 +1286,30 @@ class AppLocalizationsHi extends AppLocalizations {
   String claimGlanceTitle(int count) {
     return 'क्लेम · $count';
   }
+
+  @override
+  String claimGlanceWithInsurer(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'क्लेम',
+      one: 'क्लेम',
+    );
+    return '$count $_temp0 बीमा कंपनी के पास';
+  }
+
+  @override
+  String claimGlanceGettingReady(int count) {
+    return '$count तैयारी में';
+  }
+
+  @override
+  String claimGlanceAwaiting(String amount) {
+    return '$amount का इंतज़ार';
+  }
+
+  @override
+  String get claimGlanceTeaser => 'बीमा क्लेम ट्रैक करें →';
 
   @override
   String get policyTitle => 'बीमा पॉलिसी';
@@ -1396,7 +1495,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get importEmptyMessage =>
-      'स्कैन की गई फ़ोटो या PDF फ़ाइलें जोड़ें।\nRecora हर एक को आपके लिए पढ़ेगा।';
+      'स्कैन की गई फ़ोटो या PDF फ़ाइलें जोड़ें।\nRecora लैब रिपोर्ट पढ़ता है; बाकी दस्तावेज़ जैसे हैं वैसे ही रखे जाते हैं।';
 
   @override
   String nItemsToImport(int count) {

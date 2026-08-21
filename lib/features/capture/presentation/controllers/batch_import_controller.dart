@@ -5,6 +5,7 @@ import '../../../../core/services/pdf_import.dart';
 import '../../../../core/services/photo_picker.dart';
 import '../../../../core/services/scan_page.dart';
 import '../../../../core/utils/app_failure.dart';
+import '../../../../shared/domain/document_type.dart';
 import '../../data/repository_impl/capture_repository_impl.dart';
 import 'review_draft.dart';
 
@@ -20,6 +21,7 @@ class BatchItem {
     required this.id,
     required this.sourceLabel,
     required this.pages,
+    this.type = DocumentType.labReport,
     this.status = BatchItemStatus.pending,
     this.draft,
     this.failure,
@@ -31,6 +33,11 @@ class BatchItem {
   /// Short origin hint shown on tiles: a PDF's filename or "Photo".
   final String sourceLabel;
   final List<ScanPage> pages;
+
+  /// What the caregiver said this document is. Only lab reports are sent
+  /// for AI extraction; everything else is stored as photographed.
+  final DocumentType type;
+
   final BatchItemStatus status;
   final ReviewDraft? draft;
   final AppFailure? failure;
@@ -43,6 +50,7 @@ class BatchItem {
       status == BatchItemStatus.saved || status == BatchItemStatus.skipped;
 
   BatchItem copyWith({
+    DocumentType? type,
     BatchItemStatus? status,
     ReviewDraft? draft,
     AppFailure? failure,
@@ -52,6 +60,7 @@ class BatchItem {
       id: id,
       sourceLabel: sourceLabel,
       pages: pages,
+      type: type ?? this.type,
       status: status ?? this.status,
       draft: draft ?? this.draft,
       failure: clearFailure ? null : failure ?? this.failure,
@@ -209,6 +218,15 @@ class BatchImportController extends Notifier<BatchImportState> {
 
   void clearSelection() => state = state.copyWith(selection: const {});
 
+  void setItemType(String id, DocumentType type) =>
+      _updateItem(id, (i) => i.copyWith(type: type));
+
+  void setTypeForAll(DocumentType type) {
+    state = state.copyWith(
+      items: [for (final i in state.items) i.copyWith(type: type)],
+    );
+  }
+
   /// Merges the selected photo items into one multi-page document, in
   /// pick order. PDFs cannot be part of a combination.
   void combineSelected() {
@@ -221,6 +239,7 @@ class BatchImportController extends Notifier<BatchImportState> {
       id: 'item-${_itemSeq++}',
       sourceLabel: '',
       pages: [for (final i in selected) ...i.pages],
+      type: selected.first.type,
       combined: true,
     );
     final items = <BatchItem>[];
@@ -248,6 +267,7 @@ class BatchImportController extends Notifier<BatchImportState> {
             id: 'item-${_itemSeq++}',
             sourceLabel: '',
             pages: [page],
+            type: item.type,
           ));
         }
       } else {
@@ -266,6 +286,14 @@ class BatchImportController extends Notifier<BatchImportState> {
       currentIndex: 0,
       selection: const {},
       clearFailure: true,
+      // Non-lab documents skip extraction entirely: they are ready for
+      // their details form the moment the queue starts.
+      items: [
+        for (final i in state.items)
+          i.type == DocumentType.labReport
+              ? i
+              : i.copyWith(status: BatchItemStatus.ready),
+      ],
     );
     _runExtractionLoop();
   }
@@ -275,8 +303,9 @@ class BatchImportController extends Notifier<BatchImportState> {
     _loopRunning = true;
     try {
       while (!_disposed) {
-        final index = state.items
-            .indexWhere((i) => i.status == BatchItemStatus.pending);
+        final index = state.items.indexWhere((i) =>
+            i.status == BatchItemStatus.pending &&
+            i.type == DocumentType.labReport);
         if (index == -1) return;
         final item = state.items[index];
         _updateItem(item.id,
@@ -355,6 +384,37 @@ class BatchImportController extends Notifier<BatchImportState> {
     state = state.copyWith(saving: true, clearFailure: true);
     final result = await ref.read(captureRepositoryProvider).saveReviewed(
         pages: item.pages, reviewed: draft.reviewedResult());
+    if (_disposed) return;
+    result.when(
+      ok: (_) {
+        _updateItem(
+            item.id, (i) => i.copyWith(status: BatchItemStatus.saved));
+        state = state.copyWith(saving: false);
+        _advance();
+      },
+      err: (failure) {
+        state = state.copyWith(saving: false, failure: failure);
+      },
+    );
+  }
+
+  /// Persists the current non-lab item with the typed details.
+  Future<void> saveCurrentManual({
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) async {
+    final item = state.currentItem;
+    if (item == null || state.saving) return;
+
+    state = state.copyWith(saving: true, clearFailure: true);
+    final result = await ref.read(captureRepositoryProvider).saveManual(
+          pages: item.pages,
+          type: item.type,
+          title: title,
+          doctor: doctor,
+          documentDate: documentDate,
+        );
     if (_disposed) return;
     result.when(
       ok: (_) {

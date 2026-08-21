@@ -1,9 +1,11 @@
 import '../../../../core/storage/app_database.dart';
+import '../../../../shared/domain/med_schedule.dart';
 
 /// Due-date arithmetic for interval medicines ("every N days"), kept as
 /// pure date math so the checklist, home card and tests all agree.
 extension IntervalDueX on Medication {
-  bool get isIntervalMed => intervalDays != null;
+  bool get isIntervalMed =>
+      frequency == MedFrequency.everyNDays && intervalDays != null;
 
   /// The day this medicine should next be given: [intervalDays] after the
   /// last given day, or today when it has never been marked given. Null

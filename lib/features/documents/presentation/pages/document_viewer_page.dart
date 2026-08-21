@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/l10n/l10n_x.dart';
+import '../../../../core/services/document_share.dart';
 import '../../../../core/storage/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/app_snackbar.dart';
 import '../../../../core/utils/date_format_x.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/status_chip.dart';
@@ -34,6 +36,7 @@ class DocumentViewerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
+    final l10n = context.l10n;
     final document = ref.watch(_documentByIdProvider(documentId));
 
     return Scaffold(
@@ -42,6 +45,21 @@ class DocumentViewerPage extends ConsumerWidget {
         backgroundColor: colors.bgSection,
         leading: BackButton(color: colors.ink),
         toolbarHeight: 44,
+        actions: [
+          if (document.value != null)
+            IconButton(
+              icon: Icon(Icons.share_outlined, color: colors.ink),
+              tooltip: l10n.shareDocument,
+              onPressed: () async {
+                final result =
+                    await ref.read(documentShareProvider).share(documentId);
+                final failure = result.failureOrNull;
+                if (failure != null && context.mounted) {
+                  showAppSnackBar(context, failure.message);
+                }
+              },
+            ),
+        ],
       ),
       body: document.when(
         loading: () => const Center(child: CircularProgressIndicator()),

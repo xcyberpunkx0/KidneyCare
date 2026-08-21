@@ -238,7 +238,9 @@
       }
     }
   },
-  "withFoodGroup": "WITH FOOD",
+  "dialysisDaysGroup": "DIALYSIS DAYS",
+  "weeklyGroup": "WEEKLY",
+  "aroundMealsGroup": "AROUND MEALS",
   "byTheClockGroup": "BY THE CLOCK",
   "endedMedicinesCollapsed": "Ended medicines ({count})  ▾",
   "@endedMedicinesCollapsed": {
@@ -270,8 +272,9 @@
   "purposeHint": "e.g. Phosphate binder",
   "prescribedBy": "PRESCRIBED BY",
   "prescribedByHint": "e.g. Dr. Menon",
-  "whenTaken": "WHEN IS IT TAKEN?",
-  "timingCuesHint": "Timing cues (shown as icons on the card)",
+  "foodRelationLabel": "FOOD & MEDICINE",
+  "timeOfDayLabel": "TIME OF DAY",
+  "howOftenLabel": "HOW OFTEN?",
   "instructions": "INSTRUCTIONS",
   "instructionsHint": "e.g. with every meal",
   "addMedicineButton": "Add medicine",
@@ -295,6 +298,18 @@
   "documentNotFoundTitle": "Document not found",
   "documentNotFoundMessage": "This record may have been removed from the vault.",
   "extractedText": "EXTRACTED TEXT",
+  "shareDocument": "Share document",
+  "whatIsThisDocument": "What is this document?",
+  "typePickAiHint": "Lab reports are read by AI so values land in the charts. Everything else is stored exactly as photographed.",
+  "aiReadBadge": "AI reads it",
+  "manualDetailsHint": "Kept exactly as photographed — nothing is read or changed.",
+  "docTitleLabel": "TITLE",
+  "docTitleHint": "e.g. Dr Mehta's prescription",
+  "docDoctorOptionalLabel": "DOCTOR (OPTIONAL)",
+  "docDateLabel": "DOCUMENT DATE",
+  "saveDocument": "Save to vault",
+  "changeDocType": "Change document type",
+  "applyTypeToAll": "Apply to all pages",
   "fillFrame": "Fill the frame with the document",
   "docInView": "prescription / lab report\nin view",
   "pickFromLibrary": "Pick from photo library",
@@ -525,16 +540,17 @@
   "eventBill": "Hospital bill",
   "eventDischarge": "Discharge summary",
   "eventSymptom": "Symptom",
-  "groupWithFood": "With food",
-  "groupByClock": "By the clock",
-  "groupWeekly": "Weekly",
-  "cueMorning": "Morning",
-  "cueNoon": "Noon",
-  "cueNight": "Night",
-  "cueBeforeFood": "Before food",
-  "cueAfterFood": "After food",
-  "cueWithFood": "With food",
-  "cueDialysisDayOnly": "Dialysis day only",
+  "foodBeforeFood": "Before food",
+  "foodWithFood": "With food",
+  "foodAfterFood": "After food",
+  "foodNoRelation": "Doesn't matter",
+  "timeMorning": "Morning",
+  "timeNoon": "Noon",
+  "timeNight": "Night",
+  "freqDaily": "Every day",
+  "freqWeekly": "Once a week",
+  "freqEveryNDays": "Every few days",
+  "freqDialysisDays": "Dialysis days only",
   "dayMon": "Mon",
   "dayTue": "Tue",
   "dayWed": "Wed",
@@ -581,30 +597,44 @@
   "claimsTitle": "Claims",
   "claimsAction": "Claims",
   "claimsEmptyTitle": "No claims yet",
-  "claimsEmpty": "No claims yet. Bundle bills from the vault into a claim and track it to settlement.",
-  "claimsYtdLine": "{claimed} claimed · {recovered} recovered this year",
-  "@claimsYtdLine": {
-    "placeholders": {
-      "claimed": {"type": "String"},
-      "recovered": {"type": "String"}
-    }
-  },
+  "claimsEmpty": "1. Scan hospital bills into the vault\n2. Bundle them into a claim\n3. Track it until the insurer pays",
+  "claimsYtdClaimed": "Claimed this year",
+  "claimsYtdRecovered": "Recovered this year",
   "unclaimedBillsChip": "{count} unclaimed {count, plural, =1{bill} other{bills}}",
   "@unclaimedBillsChip": {
     "placeholders": {"count": {"type": "int"}}
   },
-  "claimSectionAttention": "Needs attention",
-  "claimSectionInProgress": "In progress",
-  "claimSectionHistory": "Settled & rejected",
+  "claimSectionAttention": "Needs your attention",
+  "claimSectionInProgress": "Waiting for the insurer",
+  "claimSectionHistory": "Completed",
   "claimDocCount": "{count} {count, plural, =1{document} other{documents}}",
   "@claimDocCount": {
     "placeholders": {"count": {"type": "int"}}
   },
-  "claimStatusDraft": "Draft",
-  "claimStatusSubmitted": "Submitted",
-  "claimStatusApproved": "Approved",
-  "claimStatusPartiallySettled": "Partially settled",
+  "claimStatusDraft": "Getting ready",
+  "claimStatusSubmitted": "With insurer",
+  "claimStatusApproved": "Paid in full",
+  "claimStatusPartiallySettled": "Partly paid",
   "claimStatusRejected": "Rejected",
+  "claimMoneyWaiting": "Claimed {amount} · waiting on insurer",
+  "@claimMoneyWaiting": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "claimMoneyRecoveredOf": "{recovered} of {claimed} recovered",
+  "@claimMoneyRecoveredOf": {
+    "placeholders": {
+      "recovered": {"type": "String"},
+      "claimed": {"type": "String"}
+    }
+  },
+  "claimMoneyRecovered": "{amount} recovered",
+  "@claimMoneyRecovered": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "claimMoneyRejected": "{amount} claimed · nothing paid",
+  "@claimMoneyRejected": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
   "claimNew": "New claim",
   "claimEdit": "Edit claim",
   "claimTitleLabel": "Claim title",
@@ -629,6 +659,7 @@
   "claimReopen": "Reopen as draft",
   "claimDelete": "Delete claim",
   "claimDeleteConfirm": "Delete this claim? Its documents stay in the vault.",
+  "claimDeleteSettledConfirm": "Delete this completed claim? Its documents stay in the vault, but it will no longer count in this year's totals.",
   "claimSubmittedOn": "Submitted on",
   "claimSettledOn": "Settled on",
   "claimCreatedOn": "Created on",
@@ -650,6 +681,19 @@
   "@claimGlanceTitle": {
     "placeholders": {"count": {"type": "int"}}
   },
+  "claimGlanceWithInsurer": "{count} {count, plural, =1{claim} other{claims}} with the insurer",
+  "@claimGlanceWithInsurer": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimGlanceGettingReady": "{count} getting ready",
+  "@claimGlanceGettingReady": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "claimGlanceAwaiting": "{amount} awaiting",
+  "@claimGlanceAwaiting": {
+    "placeholders": {"amount": {"type": "String"}}
+  },
+  "claimGlanceTeaser": "Track an insurance claim →",
   "policyTitle": "Insurance policy",
   "policySettingsSub": "Insurer, policy number, claim window",
   "policyInsurerLabel": "Insurer",
@@ -735,7 +779,7 @@
   "importDocuments": "Import documents",
   "importPhotos": "Import photos",
   "importPdfFiles": "Import PDF files",
-  "importEmptyMessage": "Add scanned photos or PDF files.\nRecora will read each one for you.",
+  "importEmptyMessage": "Add scanned photos or PDF files.\nRecora reads lab reports for you; other documents are stored as they are.",
   "nItemsToImport": "{count, plural, =0{No documents} =1{1 document} other{{count} documents}}",
   "@nItemsToImport": {
     "placeholders": {"count": {"type": "int"}}

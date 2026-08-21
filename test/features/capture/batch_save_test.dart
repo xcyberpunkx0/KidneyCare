@@ -101,6 +101,8 @@ void main() {
 
     final labs = await db.labDao.getAll();
     expect(labs, hasLength(1));
+    // Extraction no longer feeds the medicine list.
+    expect(await db.select(db.medications).get(), isEmpty);
   });
 
   test('single-page save keeps the classic layout with no page rows',
@@ -120,5 +122,55 @@ void main() {
 
     expect(await db.documentDao.getById(id), isNull);
     expect(await db.documentDao.pagesFor(id), isEmpty);
+  });
+
+  test('saveManual stores the typed details and touches nothing else',
+      () async {
+    final result = await repository.saveManual(
+      pages: [page(1)],
+      type: DocumentType.prescription,
+      title: "Dr Mehta's prescription",
+      doctor: 'Dr Mehta',
+      documentDate: DateTime(2026, 8, 12),
+    );
+    final id = result.when(
+      ok: (id) => id,
+      err: (failure) => fail('save failed: ${failure.message}'),
+    );
+
+    final document = await db.documentDao.getById(id);
+    expect(document, isNotNull);
+    expect(document!.type, DocumentType.prescription);
+    expect(document.title, "Dr Mehta's prescription");
+    expect(document.doctor, 'Dr Mehta');
+    expect(document.documentDate, DateTime(2026, 8, 12));
+    expect(document.ocrText, isEmpty);
+    expect(document.originalPath, 'scans/$id.jpg');
+
+    // No AI artifacts: no lab values, no medicines.
+    expect(await db.labDao.getAll(), isEmpty);
+    expect(await db.select(db.medications).get(), isEmpty);
+
+    final events = await db.select(db.timelineEvents).get();
+    expect(events, hasLength(1));
+    expect(events.single.documentId, id);
+  });
+
+  test('saveManual with several pages writes ordered page rows',
+      () async {
+    final result = await repository.saveManual(
+      pages: [page(1), page(2)],
+      type: DocumentType.bill,
+      title: 'Pharmacy bill',
+      documentDate: DateTime(2026, 8, 1),
+    );
+    final id = result.when(
+      ok: (id) => id,
+      err: (failure) => fail('save failed: ${failure.message}'),
+    );
+
+    final pages = await db.documentDao.pagesFor(id);
+    expect(pages, hasLength(2));
+    expect([for (final p in pages) p.pageIndex], [0, 1]);
   });
 }

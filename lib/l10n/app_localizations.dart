@@ -566,11 +566,23 @@ abstract class AppLocalizations {
   /// **'{count} active'**
   String nActive(int count);
 
-  /// No description provided for @withFoodGroup.
+  /// No description provided for @dialysisDaysGroup.
   ///
   /// In en, this message translates to:
-  /// **'WITH FOOD'**
-  String get withFoodGroup;
+  /// **'DIALYSIS DAYS'**
+  String get dialysisDaysGroup;
+
+  /// No description provided for @weeklyGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEKLY'**
+  String get weeklyGroup;
+
+  /// No description provided for @aroundMealsGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'AROUND MEALS'**
+  String get aroundMealsGroup;
 
   /// No description provided for @byTheClockGroup.
   ///
@@ -674,17 +686,23 @@ abstract class AppLocalizations {
   /// **'e.g. Dr. Menon'**
   String get prescribedByHint;
 
-  /// No description provided for @whenTaken.
+  /// No description provided for @foodRelationLabel.
   ///
   /// In en, this message translates to:
-  /// **'WHEN IS IT TAKEN?'**
-  String get whenTaken;
+  /// **'FOOD & MEDICINE'**
+  String get foodRelationLabel;
 
-  /// No description provided for @timingCuesHint.
+  /// No description provided for @timeOfDayLabel.
   ///
   /// In en, this message translates to:
-  /// **'Timing cues (shown as icons on the card)'**
-  String get timingCuesHint;
+  /// **'TIME OF DAY'**
+  String get timeOfDayLabel;
+
+  /// No description provided for @howOftenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'HOW OFTEN?'**
+  String get howOftenLabel;
 
   /// No description provided for @instructions.
   ///
@@ -781,6 +799,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'EXTRACTED TEXT'**
   String get extractedText;
+
+  /// No description provided for @shareDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Share document'**
+  String get shareDocument;
+
+  /// No description provided for @whatIsThisDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'What is this document?'**
+  String get whatIsThisDocument;
+
+  /// No description provided for @typePickAiHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab reports are read by AI so values land in the charts. Everything else is stored exactly as photographed.'**
+  String get typePickAiHint;
+
+  /// No description provided for @aiReadBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'AI reads it'**
+  String get aiReadBadge;
+
+  /// No description provided for @manualDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept exactly as photographed — nothing is read or changed.'**
+  String get manualDetailsHint;
+
+  /// No description provided for @docTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TITLE'**
+  String get docTitleLabel;
+
+  /// No description provided for @docTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Dr Mehta\'s prescription'**
+  String get docTitleHint;
+
+  /// No description provided for @docDoctorOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCTOR (OPTIONAL)'**
+  String get docDoctorOptionalLabel;
+
+  /// No description provided for @docDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCUMENT DATE'**
+  String get docDateLabel;
+
+  /// No description provided for @saveDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to vault'**
+  String get saveDocument;
+
+  /// No description provided for @changeDocType.
+  ///
+  /// In en, this message translates to:
+  /// **'Change document type'**
+  String get changeDocType;
+
+  /// No description provided for @applyTypeToAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply to all pages'**
+  String get applyTypeToAll;
 
   /// No description provided for @fillFrame.
   ///
@@ -1706,65 +1796,71 @@ abstract class AppLocalizations {
   /// **'Symptom'**
   String get eventSymptom;
 
-  /// No description provided for @groupWithFood.
-  ///
-  /// In en, this message translates to:
-  /// **'With food'**
-  String get groupWithFood;
-
-  /// No description provided for @groupByClock.
-  ///
-  /// In en, this message translates to:
-  /// **'By the clock'**
-  String get groupByClock;
-
-  /// No description provided for @groupWeekly.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get groupWeekly;
-
-  /// No description provided for @cueMorning.
-  ///
-  /// In en, this message translates to:
-  /// **'Morning'**
-  String get cueMorning;
-
-  /// No description provided for @cueNoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Noon'**
-  String get cueNoon;
-
-  /// No description provided for @cueNight.
-  ///
-  /// In en, this message translates to:
-  /// **'Night'**
-  String get cueNight;
-
-  /// No description provided for @cueBeforeFood.
+  /// No description provided for @foodBeforeFood.
   ///
   /// In en, this message translates to:
   /// **'Before food'**
-  String get cueBeforeFood;
+  String get foodBeforeFood;
 
-  /// No description provided for @cueAfterFood.
-  ///
-  /// In en, this message translates to:
-  /// **'After food'**
-  String get cueAfterFood;
-
-  /// No description provided for @cueWithFood.
+  /// No description provided for @foodWithFood.
   ///
   /// In en, this message translates to:
   /// **'With food'**
-  String get cueWithFood;
+  String get foodWithFood;
 
-  /// No description provided for @cueDialysisDayOnly.
+  /// No description provided for @foodAfterFood.
   ///
   /// In en, this message translates to:
-  /// **'Dialysis day only'**
-  String get cueDialysisDayOnly;
+  /// **'After food'**
+  String get foodAfterFood;
+
+  /// No description provided for @foodNoRelation.
+  ///
+  /// In en, this message translates to:
+  /// **'Doesn\'t matter'**
+  String get foodNoRelation;
+
+  /// No description provided for @timeMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get timeMorning;
+
+  /// No description provided for @timeNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Noon'**
+  String get timeNoon;
+
+  /// No description provided for @timeNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get timeNight;
+
+  /// No description provided for @freqDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get freqDaily;
+
+  /// No description provided for @freqWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get freqWeekly;
+
+  /// No description provided for @freqEveryNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Every few days'**
+  String get freqEveryNDays;
+
+  /// No description provided for @freqDialysisDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Dialysis days only'**
+  String get freqDialysisDays;
 
   /// No description provided for @dayMon.
   ///
@@ -1961,14 +2057,20 @@ abstract class AppLocalizations {
   /// No description provided for @claimsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No claims yet. Bundle bills from the vault into a claim and track it to settlement.'**
+  /// **'1. Scan hospital bills into the vault\n2. Bundle them into a claim\n3. Track it until the insurer pays'**
   String get claimsEmpty;
 
-  /// No description provided for @claimsYtdLine.
+  /// No description provided for @claimsYtdClaimed.
   ///
   /// In en, this message translates to:
-  /// **'{claimed} claimed · {recovered} recovered this year'**
-  String claimsYtdLine(String claimed, String recovered);
+  /// **'Claimed this year'**
+  String get claimsYtdClaimed;
+
+  /// No description provided for @claimsYtdRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered this year'**
+  String get claimsYtdRecovered;
 
   /// No description provided for @unclaimedBillsChip.
   ///
@@ -1979,19 +2081,19 @@ abstract class AppLocalizations {
   /// No description provided for @claimSectionAttention.
   ///
   /// In en, this message translates to:
-  /// **'Needs attention'**
+  /// **'Needs your attention'**
   String get claimSectionAttention;
 
   /// No description provided for @claimSectionInProgress.
   ///
   /// In en, this message translates to:
-  /// **'In progress'**
+  /// **'Waiting for the insurer'**
   String get claimSectionInProgress;
 
   /// No description provided for @claimSectionHistory.
   ///
   /// In en, this message translates to:
-  /// **'Settled & rejected'**
+  /// **'Completed'**
   String get claimSectionHistory;
 
   /// No description provided for @claimDocCount.
@@ -2003,25 +2105,25 @@ abstract class AppLocalizations {
   /// No description provided for @claimStatusDraft.
   ///
   /// In en, this message translates to:
-  /// **'Draft'**
+  /// **'Getting ready'**
   String get claimStatusDraft;
 
   /// No description provided for @claimStatusSubmitted.
   ///
   /// In en, this message translates to:
-  /// **'Submitted'**
+  /// **'With insurer'**
   String get claimStatusSubmitted;
 
   /// No description provided for @claimStatusApproved.
   ///
   /// In en, this message translates to:
-  /// **'Approved'**
+  /// **'Paid in full'**
   String get claimStatusApproved;
 
   /// No description provided for @claimStatusPartiallySettled.
   ///
   /// In en, this message translates to:
-  /// **'Partially settled'**
+  /// **'Partly paid'**
   String get claimStatusPartiallySettled;
 
   /// No description provided for @claimStatusRejected.
@@ -2029,6 +2131,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rejected'**
   String get claimStatusRejected;
+
+  /// No description provided for @claimMoneyWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed {amount} · waiting on insurer'**
+  String claimMoneyWaiting(String amount);
+
+  /// No description provided for @claimMoneyRecoveredOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{recovered} of {claimed} recovered'**
+  String claimMoneyRecoveredOf(String recovered, String claimed);
+
+  /// No description provided for @claimMoneyRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} recovered'**
+  String claimMoneyRecovered(String amount);
+
+  /// No description provided for @claimMoneyRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} claimed · nothing paid'**
+  String claimMoneyRejected(String amount);
 
   /// No description provided for @claimNew.
   ///
@@ -2174,6 +2300,12 @@ abstract class AppLocalizations {
   /// **'Delete this claim? Its documents stay in the vault.'**
   String get claimDeleteConfirm;
 
+  /// No description provided for @claimDeleteSettledConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this completed claim? Its documents stay in the vault, but it will no longer count in this year\'s totals.'**
+  String get claimDeleteSettledConfirm;
+
   /// No description provided for @claimSubmittedOn.
   ///
   /// In en, this message translates to:
@@ -2245,6 +2377,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CLAIMS · {count}'**
   String claimGlanceTitle(int count);
+
+  /// No description provided for @claimGlanceWithInsurer.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, =1{claim} other{claims}} with the insurer'**
+  String claimGlanceWithInsurer(int count);
+
+  /// No description provided for @claimGlanceGettingReady.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} getting ready'**
+  String claimGlanceGettingReady(int count);
+
+  /// No description provided for @claimGlanceAwaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} awaiting'**
+  String claimGlanceAwaiting(String amount);
+
+  /// No description provided for @claimGlanceTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Track an insurance claim →'**
+  String get claimGlanceTeaser;
 
   /// No description provided for @policyTitle.
   ///
@@ -2549,7 +2705,7 @@ abstract class AppLocalizations {
   /// No description provided for @importEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Add scanned photos or PDF files.\nRecora will read each one for you.'**
+  /// **'Add scanned photos or PDF files.\nRecora reads lab reports for you; other documents are stored as they are.'**
   String get importEmptyMessage;
 
   /// No description provided for @nItemsToImport.

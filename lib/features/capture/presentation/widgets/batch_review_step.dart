@@ -5,12 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../shared/domain/document_type.dart';
 import '../controllers/batch_import_controller.dart';
+import 'manual_details_step.dart';
 import 'review_step.dart';
 
 /// Reviews the queue one document at a time: the shared [ReviewStep]
-/// once the current item's extraction is ready, a waiting state while it
-/// is still being read, and a retry/skip card when it failed.
+/// once a lab report's extraction is ready, a details form for non-lab
+/// documents, a waiting state while extraction runs, and a retry/skip
+/// card when it failed.
 class BatchReviewStep extends ConsumerWidget {
   const BatchReviewStep({super.key});
 
@@ -43,6 +46,21 @@ class BatchReviewStep extends ConsumerWidget {
           onEdit: controller.editField,
           onChooseAlternative: controller.chooseAlternative,
           onSave: controller.saveCurrent,
+        ),
+      BatchItemStatus.ready ||
+      BatchItemStatus.saved when item.type != DocumentType.labReport =>
+        ManualDetailsStep(
+          // Keyed per item so the form starts blank for each document.
+          key: ValueKey('manual-${item.id}'),
+          type: item.type,
+          saving: state.saving,
+          header: header,
+          saveLabel: l10n.saveAndNext,
+          onSave: (title, doctor, date) => controller.saveCurrentManual(
+            title: title,
+            doctor: doctor,
+            documentDate: date,
+          ),
         ),
       BatchItemStatus.failed => _FailedCard(
           header: header,

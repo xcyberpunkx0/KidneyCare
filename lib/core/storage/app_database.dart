@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -60,7 +61,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration {
@@ -93,6 +94,67 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 8) {
           await m.createTable(documentPages);
+        }
+        if (from < 9) {
+          // The old schedule (group + timing cues) becomes three
+          // independent axes: food relation, time of day, frequency.
+          await m.addColumn(medications, medications.foodRelation);
+          await m.addColumn(medications, medications.timeOfDayJson);
+          await m.addColumn(medications, medications.frequency);
+
+          final rows = await customSelect(
+            'SELECT id, schedule_group, timing_cues_json, interval_days '
+            'FROM medications',
+          ).get();
+          for (final row in rows) {
+            final group = row.read<String>('schedule_group');
+            final cues =
+                (jsonDecode(row.read<String>('timing_cues_json')) as List)
+                    .cast<String>();
+            final intervalDays = row.read<int?>('interval_days');
+
+            final String food;
+            if (cues.contains('beforeFood')) {
+              food = 'beforeFood';
+            } else if (cues.contains('afterFood')) {
+              food = 'afterFood';
+            } else if (cues.contains('withFood') || group == 'withFood') {
+              food = 'withFood';
+            } else {
+              food = 'noRelation';
+            }
+
+            final timesOfDay = [
+              for (final cue in cues)
+                if (cue == 'morning' || cue == 'noon' || cue == 'night') cue,
+            ];
+
+            // dialysisDayOnly outranks the weekly group: the EPO shot
+            // was stored as weekly + dialysis cue with no interval.
+            final String frequency;
+            if (cues.contains('dialysisDayOnly')) {
+              frequency = 'dialysisDaysOnly';
+            } else if (group == 'weekly') {
+              frequency = intervalDays != null ? 'everyNDays' : 'weekly';
+            } else {
+              frequency = 'daily';
+            }
+
+            await customStatement(
+              'UPDATE medications SET food_relation = ?, '
+              'time_of_day_json = ?, frequency = ? WHERE id = ?',
+              [
+                food,
+                jsonEncode(timesOfDay),
+                frequency,
+                row.read<String>('id'),
+              ],
+            );
+          }
+
+          // Rebuild the table without schedule_group / timing_cues_json.
+          // ignore: experimental_member_use
+          await m.alterTable(TableMigration(medications));
         }
       },
     );

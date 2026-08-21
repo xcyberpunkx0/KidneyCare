@@ -57,6 +57,17 @@ class _GatedRepository implements CaptureRepository {
   }) async {
     return const Result.ok('doc-1');
   }
+
+  @override
+  Future<Result<String>> saveManual({
+    required List<ScanPage> pages,
+    required DocumentType type,
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) async {
+    return const Result.ok('doc-manual-1');
+  }
 }
 
 class _FakePhotoPicker extends PhotoPicker {

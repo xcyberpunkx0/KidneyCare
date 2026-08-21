@@ -10,7 +10,6 @@ import '../../../../core/storage/app_database.dart';
 import '../../../../core/storage/database_provider.dart';
 import '../../../../core/utils/result.dart';
 import '../../../../shared/domain/document_type.dart';
-import '../../../../shared/domain/med_schedule.dart';
 import '../../../../shared/domain/timeline_event_type.dart';
 import '../../domain/entities/extraction.dart';
 import '../../domain/repositories/capture_repository.dart';
@@ -39,123 +38,130 @@ class CaptureRepositoryImpl implements CaptureRepository {
     required ExtractionResult reviewed,
   }) {
     return Result.guard(() async {
-      final documentId = _uuid.v4();
-
-      // Single-page documents keep the original storage layout; multi-page
-      // ones store every page and additionally get DocumentPages rows.
-      final String originalPath;
-      final String previewPath;
-      List<String> pagePaths = const [];
-      if (pages.length == 1) {
-        final scan = await _imageStore.persist(pages.single.bytes, documentId);
-        originalPath = scan.originalPath;
-        previewPath = scan.previewPath;
-      } else {
-        final stored = await _imageStore.persistPages(pages, documentId);
-        pagePaths = stored.pagePaths;
-        originalPath = stored.pagePaths.first;
-        previewPath = stored.previewPath;
-      }
-      final now = DateTime.now();
-
-      await _db.transaction(() async {
-        if (pagePaths.length > 1) {
-          await _db.documentDao.insertPages([
-            for (var i = 0; i < pagePaths.length; i++)
-              DocumentPagesCompanion(
+      // Only lab reports go through extraction now, so the saved type is
+      // pinned here rather than trusted from the model's classification.
+      final documentId = await _persistDocument(
+        pages: pages,
+        type: DocumentType.labReport,
+        title: reviewed.title,
+        hospital: reviewed.hospital,
+        doctor: reviewed.doctor,
+        documentDate: reviewed.documentDate,
+        ocrText: reviewed.ocrText,
+        tags: reviewed.tags,
+        writeExtras: (documentId) async {
+          await _db.labDao.insertAll([
+            for (final lab in reviewed.labValues)
+              LabResultsCompanion(
                 id: Value(_uuid.v4()),
+                metricCode: Value(lab.metricCode),
+                value: Value(lab.value),
+                takenAt: Value(reviewed.documentDate),
                 documentId: Value(documentId),
-                pageIndex: Value(i),
-                originalPath: Value(pagePaths[i]),
               ),
           ]);
-        }
-        await _db.documentDao.upsert(DocumentsCompanion(
-          id: Value(documentId),
-          type: Value(reviewed.documentType),
-          title: Value(reviewed.title),
-          hospital: Value(reviewed.hospital),
-          doctor: Value(reviewed.doctor),
-          documentDate: Value(reviewed.documentDate),
-          capturedAt: Value(now),
-          originalPath: Value(originalPath),
-          previewPath: Value(previewPath),
-          ocrText: Value(reviewed.ocrText),
-          tagsJson: Value(jsonEncode(reviewed.tags)),
-        ));
-
-        await _db.labDao.insertAll([
-          for (final lab in reviewed.labValues)
-            LabResultsCompanion(
-              id: Value(_uuid.v4()),
-              metricCode: Value(lab.metricCode),
-              value: Value(lab.value),
-              takenAt: Value(reviewed.documentDate),
-              documentId: Value(documentId),
-            ),
-        ]);
-
-        for (final medicine in reviewed.medicines) {
-          if (medicine.name.isEmpty) continue;
-          await _db.medicationDao.upsert(MedicationsCompanion(
-            id: Value('med-${medicine.name.toLowerCase().replaceAll(' ', '-')}'),
-            name: Value(medicine.name),
-            dose: Value(medicine.dose),
-            frequencyCode: Value(
-                medicine.frequency.isEmpty ? '—' : medicine.frequency),
-            purpose: const Value(''),
-            doctor: Value(reviewed.doctor),
-            scheduleGroup: Value(_scheduleGroupFor(medicine)),
-            timingCuesJson: Value(jsonEncode(_cuesFor(medicine))),
-            scheduleNote: Value(medicine.instruction),
-            startDate: Value(reviewed.documentDate),
-            sourceDocumentId: Value(documentId),
-          ));
-        }
-
-        await _db.timelineDao.insert(TimelineEventsCompanion(
-          id: Value(_uuid.v4()),
-          type: Value(_timelineTypeFor(reviewed.documentType)),
-          title: Value(reviewed.title),
-          subtitle: Value([
-            if (reviewed.hospital.isNotEmpty) reviewed.hospital,
-            if (reviewed.doctor.isNotEmpty) reviewed.doctor,
-          ].join(' · ')),
-          occurredAt: Value(reviewed.documentDate),
-          documentId: Value(documentId),
-        ));
-      });
+        },
+      );
       return documentId;
     });
   }
 
-  MedScheduleGroup _scheduleGroupFor(ExtractedMedicine medicine) {
-    final instruction = medicine.instruction.toLowerCase();
-    if (instruction.contains('week')) return MedScheduleGroup.weekly;
-    if (instruction.contains('food') || instruction.contains('meal')) {
-      return MedScheduleGroup.withFood;
-    }
-    return MedScheduleGroup.byClock;
+  @override
+  Future<Result<String>> saveManual({
+    required List<ScanPage> pages,
+    required DocumentType type,
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) {
+    return Result.guard(() {
+      return _persistDocument(
+        pages: pages,
+        type: type,
+        title: title,
+        hospital: '',
+        doctor: doctor,
+        documentDate: documentDate,
+        ocrText: '',
+        tags: const [],
+      );
+    });
   }
 
-  List<String> _cuesFor(ExtractedMedicine medicine) {
-    final instruction = medicine.instruction.toLowerCase();
-    return [
-      if (instruction.contains('before food') ||
-          instruction.contains('empty stomach'))
-        MedTimingCue.beforeFood.name
-      else if (instruction.contains('after food') ||
-          instruction.contains('after meal'))
-        MedTimingCue.afterFood.name
-      else if (instruction.contains('food') || instruction.contains('meal'))
-        MedTimingCue.withFood.name,
-      if (instruction.contains('morning')) MedTimingCue.morning.name,
-      if (instruction.contains('noon')) MedTimingCue.noon.name,
-      if (instruction.contains('night') || instruction.contains('bedtime'))
-        MedTimingCue.night.name,
-      if (instruction.contains('dialysis'))
-        MedTimingCue.dialysisDayOnly.name,
-    ];
+  /// Stores the page images and writes the document plus its timeline
+  /// entry in one transaction; [writeExtras] runs inside it for rows
+  /// that must live or die with the document.
+  Future<String> _persistDocument({
+    required List<ScanPage> pages,
+    required DocumentType type,
+    required String title,
+    required String hospital,
+    required String doctor,
+    required DateTime documentDate,
+    required String ocrText,
+    required List<String> tags,
+    Future<void> Function(String documentId)? writeExtras,
+  }) async {
+    final documentId = _uuid.v4();
+
+    // Single-page documents keep the original storage layout; multi-page
+    // ones store every page and additionally get DocumentPages rows.
+    final String originalPath;
+    final String previewPath;
+    List<String> pagePaths = const [];
+    if (pages.length == 1) {
+      final scan = await _imageStore.persist(pages.single.bytes, documentId);
+      originalPath = scan.originalPath;
+      previewPath = scan.previewPath;
+    } else {
+      final stored = await _imageStore.persistPages(pages, documentId);
+      pagePaths = stored.pagePaths;
+      originalPath = stored.pagePaths.first;
+      previewPath = stored.previewPath;
+    }
+    final now = DateTime.now();
+
+    await _db.transaction(() async {
+      if (pagePaths.length > 1) {
+        await _db.documentDao.insertPages([
+          for (var i = 0; i < pagePaths.length; i++)
+            DocumentPagesCompanion(
+              id: Value(_uuid.v4()),
+              documentId: Value(documentId),
+              pageIndex: Value(i),
+              originalPath: Value(pagePaths[i]),
+            ),
+        ]);
+      }
+      await _db.documentDao.upsert(DocumentsCompanion(
+        id: Value(documentId),
+        type: Value(type),
+        title: Value(title),
+        hospital: Value(hospital),
+        doctor: Value(doctor),
+        documentDate: Value(documentDate),
+        capturedAt: Value(now),
+        originalPath: Value(originalPath),
+        previewPath: Value(previewPath),
+        ocrText: Value(ocrText),
+        tagsJson: Value(jsonEncode(tags)),
+      ));
+
+      await writeExtras?.call(documentId);
+
+      await _db.timelineDao.insert(TimelineEventsCompanion(
+        id: Value(_uuid.v4()),
+        type: Value(_timelineTypeFor(type)),
+        title: Value(title),
+        subtitle: Value([
+          if (hospital.isNotEmpty) hospital,
+          if (doctor.isNotEmpty) doctor,
+        ].join(' · ')),
+        occurredAt: Value(documentDate),
+        documentId: Value(documentId),
+      ));
+    });
+    return documentId;
   }
 
   TimelineEventType _timelineTypeFor(DocumentType type) {
