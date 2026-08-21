@@ -407,6 +407,44 @@ class AppLocalizationsHi extends AppLocalizations {
   String get extractedText => 'निकाला गया टेक्स्ट';
 
   @override
+  String get shareDocument => 'दस्तावेज़ साझा करें';
+
+  @override
+  String get whatIsThisDocument => 'यह कौन-सा दस्तावेज़ है?';
+
+  @override
+  String get typePickAiHint =>
+      'लैब रिपोर्ट AI से पढ़ी जाती हैं ताकि वैल्यू चार्ट में आ जाएँ। बाकी सब जैसा फ़ोटो लिया गया वैसा ही रखा जाता है।';
+
+  @override
+  String get aiReadBadge => 'AI पढ़ेगा';
+
+  @override
+  String get manualDetailsHint =>
+      'जैसा फ़ोटो लिया गया वैसा ही रखा जाएगा — कुछ भी पढ़ा या बदला नहीं जाता।';
+
+  @override
+  String get docTitleLabel => 'शीर्षक';
+
+  @override
+  String get docTitleHint => 'जैसे डॉ. मेहता का पर्चा';
+
+  @override
+  String get docDoctorOptionalLabel => 'डॉक्टर (वैकल्पिक)';
+
+  @override
+  String get docDateLabel => 'दस्तावेज़ की तारीख़';
+
+  @override
+  String get saveDocument => 'वॉल्ट में सहेजें';
+
+  @override
+  String get changeDocType => 'दस्तावेज़ का प्रकार बदलें';
+
+  @override
+  String get applyTypeToAll => 'सभी पेजों पर लागू करें';
+
+  @override
   String get fillFrame => 'दस्तावेज़ को फ़्रेम में पूरा रखें';
 
   @override
@@ -1396,7 +1434,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get importEmptyMessage =>
-      'स्कैन की गई फ़ोटो या PDF फ़ाइलें जोड़ें।\nRecora हर एक को आपके लिए पढ़ेगा।';
+      'स्कैन की गई फ़ोटो या PDF फ़ाइलें जोड़ें।\nRecora लैब रिपोर्ट पढ़ता है; बाकी दस्तावेज़ जैसे हैं वैसे ही रखे जाते हैं।';
 
   @override
   String nItemsToImport(int count) {

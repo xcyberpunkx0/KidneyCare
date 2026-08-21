@@ -5,17 +5,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/photo_picker.dart';
 import '../../../../core/services/scan_page.dart';
 import '../../../../core/utils/app_failure.dart';
+import '../../../../shared/domain/document_type.dart';
 import '../../data/repository_impl/capture_repository_impl.dart';
 import '../../domain/entities/extraction.dart';
 import 'review_draft.dart';
 
-enum CaptureStep { camera, cropping, extracting, review, saving, saved }
+enum CaptureStep {
+  typePick,
+  camera,
+  cropping,
+  extracting,
+  review,
+  details,
+  saving,
+  saved,
+}
 
 /// Immutable state of the capture flow.
 @immutable
 class CaptureFlowState {
   const CaptureFlowState({
-    this.step = CaptureStep.camera,
+    this.step = CaptureStep.typePick,
+    this.documentType,
     this.pickedBytes,
     this.croppedBytes,
     this.extraction,
@@ -25,6 +36,11 @@ class CaptureFlowState {
   });
 
   final CaptureStep step;
+
+  /// What the caregiver said this document is. Chosen before the camera;
+  /// only lab reports are sent for AI extraction.
+  final DocumentType? documentType;
+
   final Uint8List? pickedBytes;
   final Uint8List? croppedBytes;
   final ExtractionResult? extraction;
@@ -62,6 +78,7 @@ class CaptureFlowState {
 
   CaptureFlowState copyWith({
     CaptureStep? step,
+    DocumentType? documentType,
     Uint8List? pickedBytes,
     Uint8List? croppedBytes,
     ExtractionResult? extraction,
@@ -72,6 +89,7 @@ class CaptureFlowState {
   }) {
     return CaptureFlowState(
       step: step ?? this.step,
+      documentType: documentType ?? this.documentType,
       pickedBytes: pickedBytes ?? this.pickedBytes,
       croppedBytes: croppedBytes ?? this.croppedBytes,
       extraction: extraction ?? this.extraction,
@@ -86,6 +104,14 @@ class CaptureFlowState {
 class CaptureFlowController extends Notifier<CaptureFlowState> {
   @override
   CaptureFlowState build() => const CaptureFlowState();
+
+  void selectType(DocumentType type) {
+    state = state.copyWith(
+      step: CaptureStep.camera,
+      documentType: type,
+      clearFailure: true,
+    );
+  }
 
   Future<void> takePhoto() => _pick(camera: true);
 
@@ -108,10 +134,24 @@ class CaptureFlowController extends Notifier<CaptureFlowState> {
   }
 
   void retake() {
-    state = const CaptureFlowState();
+    // Back to the camera, keeping the chosen document type.
+    state = CaptureFlowState(
+      step: CaptureStep.camera,
+      documentType: state.documentType,
+    );
   }
 
   Future<void> confirmCrop(Uint8List croppedBytes) async {
+    if (state.documentType != DocumentType.labReport) {
+      // Non-lab documents are kept as photographed: straight to the
+      // details form, no AI involved.
+      state = state.copyWith(
+        step: CaptureStep.details,
+        croppedBytes: croppedBytes,
+        clearFailure: true,
+      );
+      return;
+    }
     state = state.copyWith(
       step: CaptureStep.extracting,
       croppedBytes: croppedBytes,
@@ -174,6 +214,31 @@ class CaptureFlowController extends Notifier<CaptureFlowState> {
       ok: (_) => state = state.copyWith(step: CaptureStep.saved),
       err: (failure) => state =
           state.copyWith(step: CaptureStep.review, failure: failure),
+    );
+  }
+
+  /// Persists a non-lab document with the typed details.
+  Future<void> saveManual({
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) async {
+    final bytes = state.croppedBytes;
+    final type = state.documentType;
+    if (bytes == null || type == null) return;
+
+    state = state.copyWith(step: CaptureStep.saving, clearFailure: true);
+    final result = await ref.read(captureRepositoryProvider).saveManual(
+          pages: [ScanPage.jpeg(bytes)],
+          type: type,
+          title: title,
+          doctor: doctor,
+          documentDate: documentDate,
+        );
+    result.when(
+      ok: (_) => state = state.copyWith(step: CaptureStep.saved),
+      err: (failure) => state =
+          state.copyWith(step: CaptureStep.details, failure: failure),
     );
   }
 

@@ -782,6 +782,78 @@ abstract class AppLocalizations {
   /// **'EXTRACTED TEXT'**
   String get extractedText;
 
+  /// No description provided for @shareDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Share document'**
+  String get shareDocument;
+
+  /// No description provided for @whatIsThisDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'What is this document?'**
+  String get whatIsThisDocument;
+
+  /// No description provided for @typePickAiHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab reports are read by AI so values land in the charts. Everything else is stored exactly as photographed.'**
+  String get typePickAiHint;
+
+  /// No description provided for @aiReadBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'AI reads it'**
+  String get aiReadBadge;
+
+  /// No description provided for @manualDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept exactly as photographed — nothing is read or changed.'**
+  String get manualDetailsHint;
+
+  /// No description provided for @docTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TITLE'**
+  String get docTitleLabel;
+
+  /// No description provided for @docTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Dr Mehta\'s prescription'**
+  String get docTitleHint;
+
+  /// No description provided for @docDoctorOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCTOR (OPTIONAL)'**
+  String get docDoctorOptionalLabel;
+
+  /// No description provided for @docDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCUMENT DATE'**
+  String get docDateLabel;
+
+  /// No description provided for @saveDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to vault'**
+  String get saveDocument;
+
+  /// No description provided for @changeDocType.
+  ///
+  /// In en, this message translates to:
+  /// **'Change document type'**
+  String get changeDocType;
+
+  /// No description provided for @applyTypeToAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply to all pages'**
+  String get applyTypeToAll;
+
   /// No description provided for @fillFrame.
   ///
   /// In en, this message translates to:
@@ -2549,7 +2621,7 @@ abstract class AppLocalizations {
   /// No description provided for @importEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Add scanned photos or PDF files.\nRecora will read each one for you.'**
+  /// **'Add scanned photos or PDF files.\nRecora reads lab reports for you; other documents are stored as they are.'**
   String get importEmptyMessage;
 
   /// No description provided for @nItemsToImport.

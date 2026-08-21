@@ -14,19 +14,18 @@ class GeminiExtractionDatasource {
   final GeminiClient _client;
 
   static const _systemInstruction = '''
-You extract structured data from photos of Indian medical documents
-(prescriptions, lab reports, discharge summaries, hospital bills,
-handwritten notes) for a dialysis patient's medical vault.
+You extract structured data from photos of Indian laboratory reports
+for a dialysis patient's medical vault.
 
 Return ONLY a JSON object with this exact shape:
 {
-  "document_type": "labReport" | "prescription" | "dischargeSummary" | "bill" | "handwrittenNote" | "scan",
+  "document_type": "labReport",
   "title": "short human title, e.g. 'Monthly blood panel'",
   "hospital": "clinic/lab/hospital name or empty string",
   "doctor": "doctor name with specialty if printed, else empty",
   "document_date": "YYYY-MM-DD or null if not visible",
   "tags": ["up to 4 short topic tags"],
-  "ocr_text": "the legible text of the document, condensed",
+  "ocr_text": "the legible text of the report, condensed",
   "fields": [
     {
       "key": "machine_key",
@@ -37,9 +36,6 @@ Return ONLY a JSON object with this exact shape:
       "alternatives": ["plausible alternative readings, max 2"]
     }
   ],
-  "medicines": [
-    {"name": "Drug strength", "dose": "e.g. 400 mg", "frequency": "e.g. 1-0-1", "instruction": "e.g. with food"}
-  ],
   "lab_values": [
     {"metric_code": "hb|k|cr|alb|phos|ca|wt|bps|bpd", "value": 9.4}
   ]
@@ -47,12 +43,11 @@ Return ONLY a JSON object with this exact shape:
 
 Rules:
 - Every important datum appears in "fields" so the caregiver can verify it.
-- Confidence must be honest; illegible handwriting is low confidence.
-- "medicines" only for prescriptions/discharge summaries.
+- Confidence must be honest; illegible print is low confidence.
 - "lab_values" only when numeric lab results are printed. Use only the
   listed metric_code values; skip metrics not in the list.
 - Dates in ISO format. Never invent data that is not on the paper.
-- When several images are provided, they are the pages of ONE document,
+- When several images are provided, they are the pages of ONE report,
   in order. Combine them into a single JSON object.''';
 
   Future<ExtractionDto> extract(List<ScanPage> pages) async {

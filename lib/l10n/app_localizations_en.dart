@@ -410,6 +410,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get extractedText => 'EXTRACTED TEXT';
 
   @override
+  String get shareDocument => 'Share document';
+
+  @override
+  String get whatIsThisDocument => 'What is this document?';
+
+  @override
+  String get typePickAiHint =>
+      'Lab reports are read by AI so values land in the charts. Everything else is stored exactly as photographed.';
+
+  @override
+  String get aiReadBadge => 'AI reads it';
+
+  @override
+  String get manualDetailsHint =>
+      'Kept exactly as photographed — nothing is read or changed.';
+
+  @override
+  String get docTitleLabel => 'TITLE';
+
+  @override
+  String get docTitleHint => 'e.g. Dr Mehta\'s prescription';
+
+  @override
+  String get docDoctorOptionalLabel => 'DOCTOR (OPTIONAL)';
+
+  @override
+  String get docDateLabel => 'DOCUMENT DATE';
+
+  @override
+  String get saveDocument => 'Save to vault';
+
+  @override
+  String get changeDocType => 'Change document type';
+
+  @override
+  String get applyTypeToAll => 'Apply to all pages';
+
+  @override
   String get fillFrame => 'Fill the frame with the document';
 
   @override
@@ -1401,7 +1439,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importEmptyMessage =>
-      'Add scanned photos or PDF files.\nRecora will read each one for you.';
+      'Add scanned photos or PDF files.\nRecora reads lab reports for you; other documents are stored as they are.';
 
   @override
   String nItemsToImport(int count) {
