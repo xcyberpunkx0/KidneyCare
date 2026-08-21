@@ -38,10 +38,11 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
             frequencyCode: Value(medication.frequencyCode),
             purpose: Value(medication.purpose),
             doctor: Value(medication.doctor),
-            scheduleGroup: Value(medication.scheduleGroup),
-            timingCuesJson: Value(
-              jsonEncode([for (final cue in medication.timingCues) cue.name]),
+            foodRelation: Value(medication.foodRelation),
+            timeOfDayJson: Value(
+              jsonEncode([for (final t in medication.timesOfDay) t.name]),
             ),
+            frequency: Value(medication.frequency),
             scheduleNote: Value(medication.scheduleNote),
             startDate: Value(medication.startDate),
             intervalDays: Value(medication.intervalDays),
@@ -81,10 +82,11 @@ class MedicationsRepositoryImpl implements MedicationsRepository {
               frequencyCode: Value(medication.frequencyCode),
               purpose: Value(medication.purpose),
               doctor: Value(medication.doctor),
-              scheduleGroup: Value(medication.scheduleGroup),
-              timingCuesJson: Value(
-                jsonEncode([for (final cue in medication.timingCues) cue.name]),
+              foodRelation: Value(medication.foodRelation),
+              timeOfDayJson: Value(
+                jsonEncode([for (final t in medication.timesOfDay) t.name]),
               ),
+              frequency: Value(medication.frequency),
               scheduleNote: Value(medication.scheduleNote),
               intervalDays: Value(medication.intervalDays),
             ),

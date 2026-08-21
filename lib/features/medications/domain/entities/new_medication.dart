@@ -7,8 +7,9 @@ class NewMedication {
     required this.frequencyCode,
     required this.purpose,
     required this.doctor,
-    required this.scheduleGroup,
-    required this.timingCues,
+    required this.foodRelation,
+    required this.timesOfDay,
+    required this.frequency,
     required this.scheduleNote,
     required this.startDate,
     this.intervalDays,
@@ -22,12 +23,13 @@ class NewMedication {
 
   final String purpose;
   final String doctor;
-  final MedScheduleGroup scheduleGroup;
-  final Set<MedTimingCue> timingCues;
+  final MedFoodRelation foodRelation;
+  final Set<MedTimeOfDay> timesOfDay;
+  final MedFrequency frequency;
   final String scheduleNote;
   final DateTime startDate;
 
-  /// Gap in days for medicines given every few days; null for daily
-  /// patterns.
+  /// Gap in days when [frequency] is [MedFrequency.everyNDays]; null
+  /// otherwise.
   final int? intervalDays;
 }

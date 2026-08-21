@@ -291,7 +291,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get withFoodGroup => 'WITH FOOD';
+  String get dialysisDaysGroup => 'DIALYSIS DAYS';
+
+  @override
+  String get weeklyGroup => 'WEEKLY';
+
+  @override
+  String get aroundMealsGroup => 'AROUND MEALS';
 
   @override
   String get byTheClockGroup => 'BY THE CLOCK';
@@ -351,10 +357,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prescribedByHint => 'e.g. Dr. Menon';
 
   @override
-  String get whenTaken => 'WHEN IS IT TAKEN?';
+  String get foodRelationLabel => 'FOOD & MEDICINE';
 
   @override
-  String get timingCuesHint => 'Timing cues (shown as icons on the card)';
+  String get timeOfDayLabel => 'TIME OF DAY';
+
+  @override
+  String get howOftenLabel => 'HOW OFTEN?';
 
   @override
   String get instructions => 'INSTRUCTIONS';
@@ -946,34 +955,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventSymptom => 'Symptom';
 
   @override
-  String get groupWithFood => 'With food';
+  String get foodBeforeFood => 'Before food';
 
   @override
-  String get groupByClock => 'By the clock';
+  String get foodWithFood => 'With food';
 
   @override
-  String get groupWeekly => 'Weekly';
+  String get foodAfterFood => 'After food';
 
   @override
-  String get cueMorning => 'Morning';
+  String get foodNoRelation => 'Doesn\'t matter';
 
   @override
-  String get cueNoon => 'Noon';
+  String get timeMorning => 'Morning';
 
   @override
-  String get cueNight => 'Night';
+  String get timeNoon => 'Noon';
 
   @override
-  String get cueBeforeFood => 'Before food';
+  String get timeNight => 'Night';
 
   @override
-  String get cueAfterFood => 'After food';
+  String get freqDaily => 'Every day';
 
   @override
-  String get cueWithFood => 'With food';
+  String get freqWeekly => 'Once a week';
 
   @override
-  String get cueDialysisDayOnly => 'Dialysis day only';
+  String get freqEveryNDays => 'Every few days';
+
+  @override
+  String get freqDialysisDays => 'Dialysis days only';
 
   @override
   String get dayMon => 'Mon';

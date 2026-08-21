@@ -566,11 +566,23 @@ abstract class AppLocalizations {
   /// **'{count} active'**
   String nActive(int count);
 
-  /// No description provided for @withFoodGroup.
+  /// No description provided for @dialysisDaysGroup.
   ///
   /// In en, this message translates to:
-  /// **'WITH FOOD'**
-  String get withFoodGroup;
+  /// **'DIALYSIS DAYS'**
+  String get dialysisDaysGroup;
+
+  /// No description provided for @weeklyGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'WEEKLY'**
+  String get weeklyGroup;
+
+  /// No description provided for @aroundMealsGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'AROUND MEALS'**
+  String get aroundMealsGroup;
 
   /// No description provided for @byTheClockGroup.
   ///
@@ -674,17 +686,23 @@ abstract class AppLocalizations {
   /// **'e.g. Dr. Menon'**
   String get prescribedByHint;
 
-  /// No description provided for @whenTaken.
+  /// No description provided for @foodRelationLabel.
   ///
   /// In en, this message translates to:
-  /// **'WHEN IS IT TAKEN?'**
-  String get whenTaken;
+  /// **'FOOD & MEDICINE'**
+  String get foodRelationLabel;
 
-  /// No description provided for @timingCuesHint.
+  /// No description provided for @timeOfDayLabel.
   ///
   /// In en, this message translates to:
-  /// **'Timing cues (shown as icons on the card)'**
-  String get timingCuesHint;
+  /// **'TIME OF DAY'**
+  String get timeOfDayLabel;
+
+  /// No description provided for @howOftenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'HOW OFTEN?'**
+  String get howOftenLabel;
 
   /// No description provided for @instructions.
   ///
@@ -1778,65 +1796,71 @@ abstract class AppLocalizations {
   /// **'Symptom'**
   String get eventSymptom;
 
-  /// No description provided for @groupWithFood.
-  ///
-  /// In en, this message translates to:
-  /// **'With food'**
-  String get groupWithFood;
-
-  /// No description provided for @groupByClock.
-  ///
-  /// In en, this message translates to:
-  /// **'By the clock'**
-  String get groupByClock;
-
-  /// No description provided for @groupWeekly.
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get groupWeekly;
-
-  /// No description provided for @cueMorning.
-  ///
-  /// In en, this message translates to:
-  /// **'Morning'**
-  String get cueMorning;
-
-  /// No description provided for @cueNoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Noon'**
-  String get cueNoon;
-
-  /// No description provided for @cueNight.
-  ///
-  /// In en, this message translates to:
-  /// **'Night'**
-  String get cueNight;
-
-  /// No description provided for @cueBeforeFood.
+  /// No description provided for @foodBeforeFood.
   ///
   /// In en, this message translates to:
   /// **'Before food'**
-  String get cueBeforeFood;
+  String get foodBeforeFood;
 
-  /// No description provided for @cueAfterFood.
-  ///
-  /// In en, this message translates to:
-  /// **'After food'**
-  String get cueAfterFood;
-
-  /// No description provided for @cueWithFood.
+  /// No description provided for @foodWithFood.
   ///
   /// In en, this message translates to:
   /// **'With food'**
-  String get cueWithFood;
+  String get foodWithFood;
 
-  /// No description provided for @cueDialysisDayOnly.
+  /// No description provided for @foodAfterFood.
   ///
   /// In en, this message translates to:
-  /// **'Dialysis day only'**
-  String get cueDialysisDayOnly;
+  /// **'After food'**
+  String get foodAfterFood;
+
+  /// No description provided for @foodNoRelation.
+  ///
+  /// In en, this message translates to:
+  /// **'Doesn\'t matter'**
+  String get foodNoRelation;
+
+  /// No description provided for @timeMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get timeMorning;
+
+  /// No description provided for @timeNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Noon'**
+  String get timeNoon;
+
+  /// No description provided for @timeNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get timeNight;
+
+  /// No description provided for @freqDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get freqDaily;
+
+  /// No description provided for @freqWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a week'**
+  String get freqWeekly;
+
+  /// No description provided for @freqEveryNDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Every few days'**
+  String get freqEveryNDays;
+
+  /// No description provided for @freqDialysisDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Dialysis days only'**
+  String get freqDialysisDays;
 
   /// No description provided for @dayMon.
   ///

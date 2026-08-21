@@ -33,8 +33,9 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
   final _doctor = TextEditingController();
   final _note = TextEditingController();
   final _interval = TextEditingController(text: '7');
-  MedScheduleGroup _group = MedScheduleGroup.withFood;
-  Set<MedTimingCue> _cues = {MedTimingCue.withFood};
+  MedFoodRelation _food = MedFoodRelation.withFood;
+  Set<MedTimeOfDay> _times = {MedTimeOfDay.morning};
+  MedFrequency _freq = MedFrequency.daily;
 
   bool get _isEditing => widget.medicationId != null;
 
@@ -55,21 +56,22 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
       _purpose.text = med.purpose;
       _doctor.text = med.doctor;
       _note.text = med.scheduleNote;
-      _group = med.scheduleGroup;
-      _cues = _decodeCues(med.timingCuesJson);
+      _food = med.foodRelation;
+      _times = _decodeTimes(med.timeOfDayJson);
+      _freq = med.frequency;
       if (med.intervalDays != null) {
         _interval.text = '${med.intervalDays}';
       }
     });
   }
 
-  Set<MedTimingCue> _decodeCues(String json) {
+  Set<MedTimeOfDay> _decodeTimes(String json) {
     final raw = jsonDecode(json);
     if (raw is! List) return {};
     return {
       for (final name in raw.whereType<String>())
-        if (MedTimingCue.values.asNameMap().containsKey(name))
-          MedTimingCue.values.byName(name),
+        if (MedTimeOfDay.values.asNameMap().containsKey(name))
+          MedTimeOfDay.values.byName(name),
     };
   }
 
@@ -96,11 +98,12 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
           : _frequency.text.trim(),
       purpose: _purpose.text.trim(),
       doctor: _doctor.text.trim(),
-      scheduleGroup: _group,
-      timingCues: Set.of(_cues),
+      foodRelation: _food,
+      timesOfDay: Set.of(_times),
+      frequency: _freq,
       scheduleNote: _note.text.trim(),
       startDate: DateTime.now(),
-      intervalDays: _group == MedScheduleGroup.weekly
+      intervalDays: _freq == MedFrequency.everyNDays
           ? int.tryParse(_interval.text.trim())
           : null,
     );
@@ -194,48 +197,57 @@ class _AddMedicationPageState extends ConsumerState<AddMedicationPage> {
             ),
             const SizedBox(height: 9),
             LabeledFieldCard(
-              label: l10n.whenTaken,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              label: l10n.foodRelationLabel,
+              child: Wrap(
+                spacing: 7,
+                runSpacing: 7,
                 children: [
-                  Wrap(
-                    spacing: 7,
-                    runSpacing: 7,
-                    children: [
-                      for (final group in MedScheduleGroup.values)
-                        AppChoiceChip(
-                          label: group.localizedLabel(l10n),
-                          selected: _group == group,
-                          onTap: () => setState(() => _group = group),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    l10n.timingCuesHint,
-                    style: typo.caption.copyWith(color: colors.muted),
-                  ),
-                  const SizedBox(height: 7),
-                  Wrap(
-                    spacing: 7,
-                    runSpacing: 7,
-                    children: [
-                      for (final cue in MedTimingCue.values)
-                        AppChoiceChip(
-                          label: cue.localizedLabel(l10n),
-                          selected: _cues.contains(cue),
-                          onTap: () => setState(() {
-                            _cues.contains(cue)
-                                ? _cues.remove(cue)
-                                : _cues.add(cue);
-                          }),
-                        ),
-                    ],
-                  ),
+                  for (final food in MedFoodRelation.values)
+                    AppChoiceChip(
+                      label: food.localizedLabel(l10n),
+                      selected: _food == food,
+                      onTap: () => setState(() => _food = food),
+                    ),
                 ],
               ),
             ),
-            if (_group == MedScheduleGroup.weekly) ...[
+            const SizedBox(height: 9),
+            LabeledFieldCard(
+              label: l10n.timeOfDayLabel,
+              child: Wrap(
+                spacing: 7,
+                runSpacing: 7,
+                children: [
+                  for (final time in MedTimeOfDay.values)
+                    AppChoiceChip(
+                      label: time.localizedLabel(l10n),
+                      selected: _times.contains(time),
+                      onTap: () => setState(() {
+                        _times.contains(time)
+                            ? _times.remove(time)
+                            : _times.add(time);
+                      }),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 9),
+            LabeledFieldCard(
+              label: l10n.howOftenLabel,
+              child: Wrap(
+                spacing: 7,
+                runSpacing: 7,
+                children: [
+                  for (final freq in MedFrequency.values)
+                    AppChoiceChip(
+                      label: freq.localizedLabel(l10n),
+                      selected: _freq == freq,
+                      onTap: () => setState(() => _freq = freq),
+                    ),
+                ],
+              ),
+            ),
+            if (_freq == MedFrequency.everyNDays) ...[
               const SizedBox(height: 9),
               LabeledFieldCard(
                 label: l10n.repeatEveryDays,

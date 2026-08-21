@@ -290,7 +290,13 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get withFoodGroup => 'खाने के साथ';
+  String get dialysisDaysGroup => 'डायलिसिस के दिन';
+
+  @override
+  String get weeklyGroup => 'साप्ताहिक';
+
+  @override
+  String get aroundMealsGroup => 'खाने के आसपास';
 
   @override
   String get byTheClockGroup => 'समय से';
@@ -348,10 +354,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get prescribedByHint => 'जैसे डॉ. मेनन';
 
   @override
-  String get whenTaken => 'कब लेनी है?';
+  String get foodRelationLabel => 'खाना और दवा';
 
   @override
-  String get timingCuesHint => 'समय के संकेत (कार्ड पर आइकन बनते हैं)';
+  String get timeOfDayLabel => 'दिन का समय';
+
+  @override
+  String get howOftenLabel => 'कितनी बार?';
 
   @override
   String get instructions => 'निर्देश';
@@ -940,34 +949,37 @@ class AppLocalizationsHi extends AppLocalizations {
   String get eventSymptom => 'लक्षण';
 
   @override
-  String get groupWithFood => 'खाने के साथ';
+  String get foodBeforeFood => 'खाने से पहले';
 
   @override
-  String get groupByClock => 'समय से';
+  String get foodWithFood => 'खाने के साथ';
 
   @override
-  String get groupWeekly => 'साप्ताहिक';
+  String get foodAfterFood => 'खाने के बाद';
 
   @override
-  String get cueMorning => 'सुबह';
+  String get foodNoRelation => 'कभी भी चलेगा';
 
   @override
-  String get cueNoon => 'दोपहर';
+  String get timeMorning => 'सुबह';
 
   @override
-  String get cueNight => 'रात';
+  String get timeNoon => 'दोपहर';
 
   @override
-  String get cueBeforeFood => 'खाने से पहले';
+  String get timeNight => 'रात';
 
   @override
-  String get cueAfterFood => 'खाने के बाद';
+  String get freqDaily => 'रोज़';
 
   @override
-  String get cueWithFood => 'खाने के साथ';
+  String get freqWeekly => 'हफ़्ते में एक बार';
 
   @override
-  String get cueDialysisDayOnly => 'सिर्फ़ डायलिसिस के दिन';
+  String get freqEveryNDays => 'हर कुछ दिनों में';
+
+  @override
+  String get freqDialysisDays => 'सिर्फ़ डायलिसिस के दिन';
 
   @override
   String get dayMon => 'सोम';

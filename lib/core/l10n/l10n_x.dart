@@ -44,23 +44,29 @@ extension TimelineEventTypeL10n on TimelineEventType {
       };
 }
 
-extension MedScheduleGroupL10n on MedScheduleGroup {
+extension MedFoodRelationL10n on MedFoodRelation {
   String localizedLabel(AppLocalizations l10n) => switch (this) {
-        MedScheduleGroup.withFood => l10n.groupWithFood,
-        MedScheduleGroup.byClock => l10n.groupByClock,
-        MedScheduleGroup.weekly => l10n.groupWeekly,
+        MedFoodRelation.beforeFood => l10n.foodBeforeFood,
+        MedFoodRelation.withFood => l10n.foodWithFood,
+        MedFoodRelation.afterFood => l10n.foodAfterFood,
+        MedFoodRelation.noRelation => l10n.foodNoRelation,
       };
 }
 
-extension MedTimingCueL10n on MedTimingCue {
+extension MedTimeOfDayL10n on MedTimeOfDay {
   String localizedLabel(AppLocalizations l10n) => switch (this) {
-        MedTimingCue.morning => l10n.cueMorning,
-        MedTimingCue.noon => l10n.cueNoon,
-        MedTimingCue.night => l10n.cueNight,
-        MedTimingCue.beforeFood => l10n.cueBeforeFood,
-        MedTimingCue.afterFood => l10n.cueAfterFood,
-        MedTimingCue.withFood => l10n.cueWithFood,
-        MedTimingCue.dialysisDayOnly => l10n.cueDialysisDayOnly,
+        MedTimeOfDay.morning => l10n.timeMorning,
+        MedTimeOfDay.noon => l10n.timeNoon,
+        MedTimeOfDay.night => l10n.timeNight,
+      };
+}
+
+extension MedFrequencyL10n on MedFrequency {
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+        MedFrequency.daily => l10n.freqDaily,
+        MedFrequency.weekly => l10n.freqWeekly,
+        MedFrequency.everyNDays => l10n.freqEveryNDays,
+        MedFrequency.dialysisDaysOnly => l10n.freqDialysisDays,
       };
 }
 
