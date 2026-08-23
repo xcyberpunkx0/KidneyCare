@@ -2213,7 +2213,7 @@ abstract class AppLocalizations {
   /// No description provided for @claimPickDocumentsSub.
   ///
   /// In en, this message translates to:
-  /// **'Unclaimed bills are pre-selected'**
+  /// **'Optional — unclaimed bills are pre-selected'**
   String get claimPickDocumentsSub;
 
   /// No description provided for @claimDocumentsSection.
@@ -2324,11 +2324,17 @@ abstract class AppLocalizations {
   /// **'Created on'**
   String get claimCreatedOn;
 
-  /// No description provided for @claimNoDocsError.
+  /// No description provided for @claimNoDocuments.
   ///
   /// In en, this message translates to:
-  /// **'Attach at least one document before submitting.'**
-  String get claimNoDocsError;
+  /// **'No documents attached'**
+  String get claimNoDocuments;
+
+  /// No description provided for @claimImportedPhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill photo'**
+  String get claimImportedPhotoTitle;
 
   /// No description provided for @claimApprovedExceedsWarning.
   ///

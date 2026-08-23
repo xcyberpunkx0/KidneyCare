@@ -126,12 +126,6 @@ class ClaimsRepositoryImpl implements ClaimsRepository {
         throw const ValidationFailure(
             message: 'Only a draft claim can be submitted.');
       }
-      final docCount =
-          await _db.claimDao.countDocumentsForClaim(claimId);
-      if (docCount == 0) {
-        throw const ValidationFailure(
-            message: 'Attach at least one document before submitting.');
-      }
       await _db.transaction(() async {
         await _db.claimDao.upsertClaim(claim.toCompanion(true).copyWith(
               status: const Value(ClaimStatus.submitted),

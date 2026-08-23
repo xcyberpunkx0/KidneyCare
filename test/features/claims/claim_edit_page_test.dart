@@ -4,11 +4,19 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:recora/core/services/photo_picker.dart';
+import 'package:recora/core/services/scan_page.dart';
 import 'package:recora/core/storage/app_database.dart';
 import 'package:recora/core/storage/database_provider.dart';
 import 'package:recora/core/theme/app_theme.dart';
+import 'package:recora/core/utils/result.dart';
+import 'package:recora/features/capture/data/repository_impl/capture_repository_impl.dart';
+import 'package:recora/features/capture/domain/entities/extraction.dart';
+import 'package:recora/features/capture/domain/repositories/capture_repository.dart';
 import 'package:recora/features/claims/presentation/pages/claim_edit_page.dart';
 import 'package:recora/l10n/app_localizations.dart';
 import 'package:recora/shared/domain/claim_status.dart';
@@ -32,9 +40,59 @@ GoRouter _router() => GoRouter(
       ],
     );
 
-Widget _host(AppDatabase db, GoRouter router) {
+/// Writes the imported pages straight into the test database so the
+/// claim form's vault stream picks the new document up, like the real
+/// capture repository would.
+class _FakeCaptureRepository implements CaptureRepository {
+  _FakeCaptureRepository(this.db);
+
+  final AppDatabase db;
+  var _seq = 0;
+
+  @override
+  Future<Result<ExtractionResult>> extract(List<ScanPage> pages) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<String>> saveReviewed({
+    required List<ScanPage> pages,
+    required ExtractionResult reviewed,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Result<String>> saveManual({
+    required List<ScanPage> pages,
+    required DocumentType type,
+    required String title,
+    String doctor = '',
+    required DateTime documentDate,
+  }) async {
+    final id = 'imported-${++_seq}';
+    await db.documentDao.upsert(DocumentsCompanion(
+      id: Value(id),
+      type: Value(type),
+      title: Value(title),
+      documentDate: Value(documentDate),
+      capturedAt: Value(documentDate),
+    ));
+    return Result.ok(id);
+  }
+}
+
+class _FakePhotoPicker extends PhotoPicker {
+  _FakePhotoPicker(this.photos) : super(ImagePicker());
+
+  final List<Uint8List> photos;
+
+  @override
+  Future<List<Uint8List>> pickManyFromGallery() async => photos;
+}
+
+Widget _host(AppDatabase db, GoRouter router,
+    {List<Override> overrides = const []}) {
   return ProviderScope(
-    overrides: [databaseProvider.overrideWithValue(db)],
+    overrides: [databaseProvider.overrideWithValue(db), ...overrides],
     child: MaterialApp.router(
       theme: AppTheme.light(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -47,9 +105,9 @@ Widget _host(AppDatabase db, GoRouter router) {
 /// Pumps the app at `/base` then pushes the claim editor on top, the same
 /// way the FAB on the claims list does via `context.pushNamed('claimEdit')`.
 Future<GoRouter> _pumpToClaimEditor(WidgetTester tester, AppDatabase db,
-    {String? claimId}) async {
+    {String? claimId, List<Override> overrides = const []}) async {
   final router = _router();
-  await tester.pumpWidget(_host(db, router));
+  await tester.pumpWidget(_host(db, router, overrides: overrides));
   await tester.pumpAndSettle();
   unawaited(router.pushNamed(
     'claimEdit',
@@ -182,6 +240,35 @@ void main() {
         .getSingle();
     expect(claim.policyId, 'p1');
     expect(find.text('base'), findsOneWidget);
+    await _unmount(tester);
+  });
+
+  testWidgets(
+      'importing a photo adds a checked vault document and saving links it',
+      (tester) async {
+    await _pumpToClaimEditor(tester, db, overrides: [
+      captureRepositoryProvider
+          .overrideWithValue(_FakeCaptureRepository(db)),
+      photoPickerProvider.overrideWithValue(_FakePhotoPicker([
+        Uint8List.fromList([1]),
+      ])),
+    ]);
+
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Claim title'), 'Small claim');
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Import photos'));
+    await tester.pumpAndSettle();
+
+    final checkbox = tester.widget<CheckboxListTile>(
+        find.widgetWithText(CheckboxListTile, 'Bill photo'));
+    expect(checkbox.value, isTrue);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
+
+    final links = await db.select(db.claimDocuments).get();
+    expect(links, hasLength(1));
+    expect(links.first.documentId, 'imported-1');
     await _unmount(tester);
   });
 }

@@ -52,12 +52,12 @@ void main() {
     expect(unclaimed.map((d) => d.id), ['b1']);
   });
 
-  test('attach is idempotent and countDocumentsForClaim counts', () async {
+  test('attach is idempotent', () async {
     await addDocument('b1', DocumentType.bill, DateTime(2026, 8, 10));
     await addClaim('c1');
     await db.claimDao.attachDocument('c1', 'b1');
     await db.claimDao.attachDocument('c1', 'b1');
-    expect(await db.claimDao.countDocumentsForClaim('c1'), 1);
+    expect(await db.claimDao.getDocumentsForClaim('c1'), hasLength(1));
   });
 
   test('deleteClaimCascade removes links and checklist, keeps documents',

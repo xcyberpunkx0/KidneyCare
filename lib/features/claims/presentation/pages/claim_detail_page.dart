@@ -35,16 +35,8 @@ class ClaimDetailPage extends ConsumerWidget {
     );
   }
 
-  Future<void> _markSubmitted(BuildContext context, WidgetRef ref,
-      Claim claim, List<Document> documents) async {
-    // The repo also guards this, but a snackbar with the localized
-    // message beats surfacing the repo's English failure text.
-    if (documents.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.claimNoDocsError)),
-      );
-      return;
-    }
+  Future<void> _markSubmitted(
+      BuildContext context, WidgetRef ref, Claim claim) async {
     final entered =
         await showDialog<({int paise, String ref, DateTime submittedOn})>(
       context: context,
@@ -198,6 +190,12 @@ class ClaimDetailPage extends ConsumerWidget {
               ),
             ),
             SectionHeader(title: l10n.claimDocumentsSection),
+            if (documents.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(l10n.claimNoDocuments,
+                    style: typo.caption.copyWith(color: colors.muted)),
+              ),
             for (final doc in documents)
               AppCard(
                 onTap: () => context.pushNamed('documentViewer',
@@ -230,8 +228,7 @@ class ClaimDetailPage extends ConsumerWidget {
             const SizedBox(height: 20),
             switch (claim.status) {
               ClaimStatus.draft => FilledButton(
-                  onPressed: () =>
-                      _markSubmitted(context, ref, claim, documents),
+                  onPressed: () => _markSubmitted(context, ref, claim),
                   child: Text(l10n.claimMarkSubmitted),
                 ),
               ClaimStatus.submitted => FilledButton(

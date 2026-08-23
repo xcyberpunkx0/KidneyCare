@@ -40,12 +40,12 @@ void main() {
     final id = result.valueOrNull!;
     final checklist = await db.claimDao.watchChecklist(id).first;
     expect(checklist.map((i) => i.label), ['Claim form', 'Original bills']);
-    expect(await db.claimDao.countDocumentsForClaim(id), 1);
+    expect(await db.claimDao.getDocumentsForClaim(id), hasLength(1));
   });
 
-  test('markSubmitted refuses a documentless draft', () async {
+  test('markSubmitted succeeds with zero documents', () async {
     final created = await repo.createClaim(
-      title: 'Empty',
+      title: 'Small claim',
       policyId: null,
       documentIds: [],
       checklistLabels: [],
@@ -56,7 +56,9 @@ void main() {
       claimedAmountPaise: 1000000,
       insurerRef: '',
     );
-    expect(result.failureOrNull, isA<ValidationFailure>());
+    expect(result.isOk, isTrue);
+    final claim = (await db.claimDao.getClaimById(created.valueOrNull!))!;
+    expect(claim.status, ClaimStatus.submitted);
   });
 
   test('submit then outcome walks the lifecycle and writes timeline events',
