@@ -59,15 +59,6 @@ class ClaimDao extends DatabaseAccessor<AppDatabase> with _$ClaimDaoMixin {
   Stream<List<ClaimDocument>> watchAllLinks() =>
       select(claimDocuments).watch();
 
-  Future<int> countDocumentsForClaim(String claimId) async {
-    final count = claimDocuments.documentId.count();
-    final query = selectOnly(claimDocuments)
-      ..addColumns([count])
-      ..where(claimDocuments.claimId.equals(claimId));
-    final row = await query.getSingle();
-    return row.read(count) ?? 0;
-  }
-
   Stream<List<ClaimChecklistItem>> watchChecklist(String claimId) {
     final query = select(claimChecklistItems)
       ..where((t) => t.claimId.equals(claimId))

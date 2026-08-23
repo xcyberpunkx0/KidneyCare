@@ -191,6 +191,38 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
             Text(l10n.claimPickDocuments, style: typo.cardTitle),
             Text(l10n.claimPickDocumentsSub,
                 style: typo.caption.copyWith(color: colors.muted)),
+            const SizedBox(height: 8),
+            // Documents not yet in the vault come in from the device here
+            // and land pre-selected; everything already stored is picked
+            // from the checkbox list below.
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.photo_library_outlined, size: 18),
+                    label: Text(l10n.importPhotos),
+                    onPressed: state.importing
+                        ? null
+                        : () => ref
+                            .read(claimEditControllerProvider.notifier)
+                            .importPhotosFromDevice(
+                                defaultTitle: l10n.claimImportedPhotoTitle),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.picture_as_pdf_outlined, size: 18),
+                    label: Text(l10n.importPdfFiles),
+                    onPressed: state.importing
+                        ? null
+                        : () => ref
+                            .read(claimEditControllerProvider.notifier)
+                            .importPdfsFromDevice(),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 6),
             for (final doc in ordered)
               CheckboxListTile(
@@ -217,7 +249,7 @@ class _ClaimEditPageState extends ConsumerState<ClaimEditPage> {
             ],
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: state.saving ? null : _save,
+              onPressed: state.saving || state.importing ? null : _save,
               child: Text(state.saving ? l10n.saving : l10n.save),
             ),
           ],

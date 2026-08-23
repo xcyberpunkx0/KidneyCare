@@ -1188,7 +1188,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get claimPickDocuments => 'दस्तावेज़ जोड़ें';
 
   @override
-  String get claimPickDocumentsSub => 'बिना क्लेम वाले बिल पहले से चुने हैं';
+  String get claimPickDocumentsSub =>
+      'वैकल्पिक — बिना क्लेम वाले बिल पहले से चुने हैं';
 
   @override
   String get claimDocumentsSection => 'दस्तावेज़';
@@ -1247,8 +1248,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get claimCreatedOn => 'बनाने की तारीख़';
 
   @override
-  String get claimNoDocsError =>
-      'जमा करने से पहले कम से कम एक दस्तावेज़ जोड़ें।';
+  String get claimNoDocuments => 'कोई दस्तावेज़ नहीं जुड़ा';
+
+  @override
+  String get claimImportedPhotoTitle => 'बिल की फ़ोटो';
 
   @override
   String get claimApprovedExceedsWarning =>

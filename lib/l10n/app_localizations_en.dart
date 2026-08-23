@@ -1193,7 +1193,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get claimPickDocuments => 'Attach documents';
 
   @override
-  String get claimPickDocumentsSub => 'Unclaimed bills are pre-selected';
+  String get claimPickDocumentsSub =>
+      'Optional — unclaimed bills are pre-selected';
 
   @override
   String get claimDocumentsSection => 'Documents';
@@ -1252,8 +1253,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get claimCreatedOn => 'Created on';
 
   @override
-  String get claimNoDocsError =>
-      'Attach at least one document before submitting.';
+  String get claimNoDocuments => 'No documents attached';
+
+  @override
+  String get claimImportedPhotoTitle => 'Bill photo';
 
   @override
   String get claimApprovedExceedsWarning =>
