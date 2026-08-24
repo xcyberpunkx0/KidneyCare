@@ -6,6 +6,7 @@ import '../../../../core/l10n/l10n_x.dart';
 import '../../../../core/services/gemini_key_store.dart';
 import '../../../../core/services/reminder_service.dart';
 import '../../../../core/services/vault_export.dart';
+import '../../../../core/services/vault_restore.dart';
 import '../../../../core/services/visit_summary_pdf.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -15,7 +16,7 @@ import '../../../../core/widgets/app_choice_chip.dart';
 import '../controllers/locale_controller.dart';
 
 /// Settings: patient details, emergency card, reminders, doctor-visit
-/// summary, encrypted-vault backup export, and app info.
+/// summary, encrypted-vault backup export and restore, and app info.
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
@@ -47,6 +48,53 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       err: (failure) => ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(failure.message))),
     );
+  }
+
+  /// Restore replaces the whole vault, so it asks first. A cancelled file
+  /// picker is silent; success reports what came back.
+  Future<void> _restoreBackup() async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: dialogContext.colors.card,
+        title: Text(
+          l10n.restoreConfirmTitle,
+          style: dialogContext.typo.cardTitle,
+        ),
+        content: Text(l10n.restoreConfirmBody, style: dialogContext.typo.body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.restoreConfirmAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _busy = true);
+    final result = await ref.read(vaultRestoreProvider).pickAndRestore();
+    if (!mounted) return;
+    setState(() => _busy = false);
+    final message = result.when(
+      ok: (summary) => summary == null
+          ? null
+          : l10n.restoreDone(
+              summary.medications,
+              summary.documents,
+              summary.labResults,
+            ),
+      err: (failure) => failure.message,
+    );
+    if (message != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   @override
@@ -162,6 +210,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               onTap: _busy
                   ? null
                   : () => _run(ref.read(vaultExportProvider).exportAndShare),
+            ),
+            const SizedBox(height: 9),
+            SettingsTile(
+              icon: Icons.settings_backup_restore_outlined,
+              title: _busy ? l10n.restoring : l10n.restoreBackup,
+              subtitle: l10n.restoreBackupSub,
+              onTap: _busy ? null : _restoreBackup,
             ),
             const SizedBox(height: 9),
             SettingsTile(

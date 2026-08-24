@@ -649,6 +649,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportBackupSub => 'Share the full record as a JSON file';
 
   @override
+  String get restoreBackup => 'Restore from backup';
+
+  @override
+  String get restoreBackupSub =>
+      'Bring a KidneyCare JSON backup onto this device';
+
+  @override
+  String get restoreConfirmTitle => 'Replace everything on this device?';
+
+  @override
+  String get restoreConfirmBody =>
+      'The record on this phone will be replaced by the backup. Scanned pictures are not part of a backup, so restored documents keep their details but not their images.';
+
+  @override
+  String get restoreConfirmAction => 'Restore';
+
+  @override
+  String get restoring => 'Restoring…';
+
+  @override
+  String restoreDone(int medications, int documents, int labs) {
+    return 'Backup restored: $medications medicines, $documents documents, $labs lab results';
+  }
+
+  @override
   String get encryptionTitle => 'On-device encryption';
 
   @override
