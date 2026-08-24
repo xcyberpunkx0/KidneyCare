@@ -644,6 +644,31 @@ class AppLocalizationsHi extends AppLocalizations {
   String get exportBackupSub => 'पूरा रिकॉर्ड JSON फ़ाइल के रूप में भेजें';
 
   @override
+  String get restoreBackup => 'बैकअप से वापस लाएँ';
+
+  @override
+  String get restoreBackupSub =>
+      'KidneyCare की JSON बैकअप फ़ाइल इस फ़ोन पर लाएँ';
+
+  @override
+  String get restoreConfirmTitle => 'इस फ़ोन का सारा रिकॉर्ड बदलें?';
+
+  @override
+  String get restoreConfirmBody =>
+      'इस फ़ोन का रिकॉर्ड बैकअप से बदल दिया जाएगा। स्कैन की गई तस्वीरें बैकअप में नहीं होतीं, इसलिए दस्तावेज़ों की जानकारी तो वापस आएगी पर उनकी तस्वीरें नहीं।';
+
+  @override
+  String get restoreConfirmAction => 'वापस लाएँ';
+
+  @override
+  String get restoring => 'वापस ला रहे हैं…';
+
+  @override
+  String restoreDone(int medications, int documents, int labs) {
+    return 'बैकअप वापस आ गया: $medications दवाएँ, $documents दस्तावेज़, $labs लैब नतीजे';
+  }
+
+  @override
   String get encryptionTitle => 'डिवाइस पर एन्क्रिप्शन';
 
   @override

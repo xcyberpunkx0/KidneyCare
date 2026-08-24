@@ -412,6 +412,20 @@
   "visitSummarySub": "A one-page PDF of medicines, labs and recent events",
   "exportBackup": "Export vault backup",
   "exportBackupSub": "Share the full record as a JSON file",
+  "restoreBackup": "Restore from backup",
+  "restoreBackupSub": "Bring a KidneyCare JSON backup onto this device",
+  "restoreConfirmTitle": "Replace everything on this device?",
+  "restoreConfirmBody": "The record on this phone will be replaced by the backup. Scanned pictures are not part of a backup, so restored documents keep their details but not their images.",
+  "restoreConfirmAction": "Restore",
+  "restoring": "Restoring…",
+  "restoreDone": "Backup restored: {medications} medicines, {documents} documents, {labs} lab results",
+  "@restoreDone": {
+    "placeholders": {
+      "medications": {"type": "int"},
+      "documents": {"type": "int"},
+      "labs": {"type": "int"}
+    }
+  },
   "encryptionTitle": "On-device encryption",
   "encryptionSub": "The vault database is encrypted with SQLCipher; the key never leaves this device",
   "language": "Language",

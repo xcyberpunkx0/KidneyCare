@@ -1214,6 +1214,48 @@ abstract class AppLocalizations {
   /// **'Share the full record as a JSON file'**
   String get exportBackupSub;
 
+  /// No description provided for @restoreBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get restoreBackup;
+
+  /// No description provided for @restoreBackupSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring a KidneyCare JSON backup onto this device'**
+  String get restoreBackupSub;
+
+  /// No description provided for @restoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace everything on this device?'**
+  String get restoreConfirmTitle;
+
+  /// No description provided for @restoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The record on this phone will be replaced by the backup. Scanned pictures are not part of a backup, so restored documents keep their details but not their images.'**
+  String get restoreConfirmBody;
+
+  /// No description provided for @restoreConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restoreConfirmAction;
+
+  /// No description provided for @restoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring…'**
+  String get restoring;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored: {medications} medicines, {documents} documents, {labs} lab results'**
+  String restoreDone(int medications, int documents, int labs);
+
   /// No description provided for @encryptionTitle.
   ///
   /// In en, this message translates to:
